@@ -216,6 +216,10 @@ public class ServerStream implements IServer{
 		}
 	}
 	
+	public void sendJoined()
+	{
+		
+	}
 	public void sendUserList()
 	{
 		String list = "";
@@ -226,6 +230,8 @@ public class ServerStream implements IServer{
 			list += (i == this.users.size() - 1 ? ";" : "");
 		}
 		Message msg = new Message(MessageType.USER_LIST, this.controller.getCurrentTimestamp(), this.nickname, list);
+		Message.printMessage(msg);
+		
 	}
 	
 	private boolean checkDuplicateNickname(String nickname)
@@ -237,4 +243,12 @@ public class ServerStream implements IServer{
 		}
 		return false;
 	}
+	
+	/* "[] User Mikyll has been kicked from the room"
+	 * "[] User Mikyll has joined the room"
+	 * "[] Mikyll: ciao"
+	 * "[] User Mikyll has left the room"
+	 * "[] "-" user ready
+	 */
+	 */
 }
