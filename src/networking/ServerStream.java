@@ -33,7 +33,7 @@ public class ServerStream implements IServer{
 		this.nickname = nickname;
 		
 		this.users = new ArrayList<User>();
-		this.users.add(new User(nickname, 1));
+		this.users.add(new User(nickname));
 		this.writers = new ArrayList<ObjectOutputStream>();
 		this.writers.add(null);
 		
@@ -139,8 +139,10 @@ public class ServerStream implements IServer{
 								this.output.writeObject(mReply);
 								
 								users.add(new User(incomingMsg.getNickname()));
-								controller.addToTextAreaChat(mReply.getTimestamp() + " " + incomingMsg.getNickname() + " has joined the room");
+								writers.add(this.output);
+								controller.addToTextArea(mReply.getTimestamp() + " " + incomingMsg.getNickname() + " has joined the room");
 								
+								// send updated user list
 								mReply = new Message(MessageType.USER_LIST, controller.getCurrentTimestamp(), nickname, "");
 								this.output.writeObject(mReply);
 								
@@ -200,13 +202,30 @@ public class ServerStream implements IServer{
 	public void sendMessage(String content)
 	{
 		Message msg = new Message(MessageType.CHAT, this.controller.getCurrentTimestamp(), this.nickname, content);
-		this.controller.addToTextAreaChat(msg);		
+		this.controller.addToTextArea(msg.getTimestamp() + " " + msg.getNickname() + ": " + msg.getContent());		
+	
+		
 	}
 	
 	// forward the message to each connected client, except the one that sent the message first
-	public void forwardMessage(String nickname, Message msg)
+	public void forwardMessage(Message msg)
 	{
-		
+		for(User u : this.users)
+		{
+			
+		}
+	}
+	
+	public void sendUserList()
+	{
+		String list = "";
+		for(int i = 0; i < this.users.size(); i++)
+		{
+			User u = this.users.get(i);
+			list += u.getNickname() + "," + u.isReady();
+			list += (i == this.users.size() - 1 ? ";" : "");
+		}
+		Message msg = new Message(MessageType.USER_LIST, this.controller.getCurrentTimestamp(), this.nickname, list);
 	}
 	
 	private boolean checkDuplicateNickname(String nickname)
