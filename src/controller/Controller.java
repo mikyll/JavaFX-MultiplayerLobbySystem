@@ -4,6 +4,7 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -183,10 +184,19 @@ public class Controller {
 		// alert (show reply message content, example room full)
 		// set not visibile loading hbox
 	}
-	public void updateUserList(Message message)
+	public void updateUserList(String s)
 	{
-		System.out.println("Client: received updated user list. " + message.getContent()); // test
+		//System.out.println("Client: received updated user list. " + message.getContent()); // test
 		// update user list
+		
+		if(this.client != null)
+		{
+			
+		}
+		else if(this.server != null)
+		{
+			
+		}
 	}
 	public void kickedFromServer(Message message)
 	{
@@ -215,6 +225,23 @@ public class Controller {
 	
 	public void addUser(User u)
 	{
+		if(this.client != null)
+		{
+			this.listViewUsersC.getItems().add(u.getNickname());
+			int i = this.listViewUsersC.getItems().size();
+			Label l = this.listViewReadyC.getItems().get(i - 1);
+			l.setStyle("-fx-background-color: red");
+			l.setVisible(true);
+		}
+		else if(this.server != null)
+		{
+			this.listViewUsersS.getItems().add(u.getNickname());
+			int i = this.listViewUsersS.getItems().size();
+			Label l = this.listViewReadyS.getItems().get(i - 1);
+			l.setStyle("-fx-background-color: red");
+			l.setVisible(true);
+			this.listViewKickS.getItems().get(i - 1).setVisible(true);
+		}
 		//add user to user list
 		
 		// add user to user list; add ready label; add 

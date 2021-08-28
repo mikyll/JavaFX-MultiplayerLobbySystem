@@ -11,6 +11,7 @@ import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import model.User;
 import model.chat.*;
@@ -110,6 +111,7 @@ public class ClientStream implements IClient {
 								
 								break;
 							}
+							// case user join:
 							default:
 							{
 								System.out.println("Client: invalid message type received: " + incomingMsg.getMsgType());
@@ -252,9 +254,19 @@ public class ClientStream implements IClient {
 		}
 	}
 	
-	public void extractUserList(String s)
+	public List<User> extractUserList(String s)
 	{
-		ArrayList<User> list = new ArrayList<User>();
+		List<User> list = new ArrayList<User>();
 		
+		String[] sTmp = s.split(";");
+		for(int i = 0; i < sTmp.length; i++)
+		{
+			String[] sNickReady = sTmp[i].split(",");
+			User u = new User(sNickReady[0]);
+			u.setReady(Boolean.parseBoolean(sNickReady[1]));
+			list.add(u);
+		}
+		
+		return list;
 	}
 }
