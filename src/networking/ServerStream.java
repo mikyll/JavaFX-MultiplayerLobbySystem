@@ -203,23 +203,23 @@ public class ServerStream implements IServer{
 	{
 		Message msg = new Message(MessageType.CHAT, this.controller.getCurrentTimestamp(), this.nickname, content);
 		this.controller.addToTextArea(msg.getTimestamp() + " " + msg.getNickname() + ": " + msg.getContent());		
-	
 		
 	}
 	
 	// forward the message to each connected client, except the one that sent the message first
 	public void forwardMessage(Message msg)
 	{
-		for(User u : this.users)
+		for(int i = 1; i < this.users.size(); i++)
 		{
-			
+			if(!msg.getNickname().equals(this.users.get(i).getNickname()))
+				try {
+					this.writers.get(i).writeObject(msg);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 		}
 	}
 	
-	public void sendJoined()
-	{
-		
-	}
 	public void sendUserList()
 	{
 		String list = "";
@@ -249,6 +249,6 @@ public class ServerStream implements IServer{
 	 * "[] Mikyll: ciao"
 	 * "[] User Mikyll has left the room"
 	 * "[] "-" user ready
-	 */
+	 * ""
 	 */
 }

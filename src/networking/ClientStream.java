@@ -9,7 +9,10 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+
+import model.User;
 import model.chat.*;
 
 import controller.Controller;
@@ -75,24 +78,45 @@ public class ClientStream implements IClient {
 				this.is = this.socket.getInputStream();
 				this.input = new ObjectInputStream(this.is);
 				
-				/*this.is = this.socket.getInputStream();
-				this.input = new ObjectInputStream(this.is);
-				this.os = this.socket.getOutputStream();
-				this.output = new ObjectOutputStream(this.os);*/
-				
 				System.out.println("Client: scrivo messaggio sulla socket");
 				Message msg = new Message(MessageType.CONNECT, controller.getCurrentTimestamp(), nickname, "");
 				this.output.writeObject(msg);
 				System.out.println("Client: messaggio scritto sulla socket");
 				
-				// test
-				msg = (Message) this.input.readObject();
-				System.out.println(msg.getMsgType().toString() + ", " + msg.getTimestamp() + ", " + msg.getNickname() + ", " + msg.getContent());
-				//printMessage(msg);
 				
 				while(this.socket.isConnected())
 				{
-					System.out.println("Ciao");
+					Message incomingMsg = (Message) this.input.readObject();
+					if(incomingMsg != null)
+					{
+						switch(incomingMsg.getMsgType())
+						{
+							case CONNECT_FAILED:
+							{
+								// stop loading icon
+								// show alert
+								break;
+							}
+							case CONNECT_OK:
+							{
+								// show message in chat
+								controller.addToTextArea(incomingMsg.getTimestamp() + " " + incomingMsg.getNickname() + " has joined the room");
+								
+								
+								// get user list from OK
+								
+								// stop loading icon
+								// switch view
+								
+								break;
+							}
+							default:
+							{
+								System.out.println("Client: invalid message type received: " + incomingMsg.getMsgType());
+								break;
+							}
+						}
+					}
 					try {
 						this.sleep(1000);
 						this.output.writeObject(new Message(MessageType.CONNECT, controller.getCurrentTimestamp(), nickname, ""));
@@ -228,4 +252,9 @@ public class ClientStream implements IClient {
 		}
 	}
 	
+	public void extractUserList(String s)
+	{
+		ArrayList<User> list = new ArrayList<User>();
+		
+	}
 }
