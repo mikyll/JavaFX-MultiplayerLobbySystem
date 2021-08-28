@@ -119,7 +119,7 @@ public class Controller {
 			this.client.sendMessage(msg);
 		}
 	}
-	public void kickUser(ActionEvent event)
+	@FXML public void kickUser(ActionEvent event)
 	{
 		System.out.println(event.getSource());
 	}
@@ -177,6 +177,9 @@ public class Controller {
 		this.vboxLogin.setVisible(false);
 		this.vboxChatServer.setVisible(true);
 	}
+	
+	
+	
 	public void connectionFailed(Message message)
 	{
 		System.out.println("Client: connection to server failed. " + message.getContent());
@@ -242,8 +245,35 @@ public class Controller {
 			l.setVisible(true);
 			this.listViewKickS.getItems().get(i - 1).setVisible(true);
 		}
-		//add user to user list
-		
-		// add user to user list; add ready label; add 
+	}
+	public void removeUser(User u)
+	{
+		if(this.client != null)
+		{
+			for(int i = 0; i < this.listViewUsersC.getItems().size(); i++)
+			{
+				if(this.listViewUsersC.getItems().get(i).equals(u.getNickname()))
+				{
+					this.listViewUsersC.getItems().remove(i);
+					Label l = this.listViewReadyC.getItems().get(i);
+					l.setStyle("-fx-background-color: red");
+					l.setVisible(false);
+				}
+			}
+		}
+		else if(this.server != null)
+		{
+			for(int i = 0; i < this.listViewUsersS.getItems().size(); i++)
+			{
+				if(this.listViewUsersS.getItems().get(i).equals(u.getNickname()))
+				{
+					this.listViewUsersS.getItems().remove(i);
+					Label l = this.listViewReadyS.getItems().get(i);
+					l.setStyle("-fx-background-color: red");
+					l.setVisible(false);
+					this.listViewKickS.getItems().get(i).setVisible(false);
+				}
+			}
+		}
 	}
 }
