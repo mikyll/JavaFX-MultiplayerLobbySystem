@@ -40,53 +40,72 @@ public class ClientStream implements IClient {
 	
 	// provare a usare una classe privata come questa
 	private class ClientListener extends Thread {
-		private Socket listener;
+		private Socket socket;
+		private String address;
+		private int port;
 		
-		private ObjectInputStream input;
 		private OutputStream os;
         private ObjectOutputStream output;
         private InputStream is;
+        private ObjectInputStream input;
 		
         // riguardare e sistemare!!!
 		public ClientListener(String address, int port)
 		{
-			try {
-				this.listener = new Socket(address, port);
+			this.address = address;
+			this.port = port;
+			/*try {
+				this.socket = new Socket(address, port);
+				
 			} catch (UnknownHostException e) {
 				e.printStackTrace();
 			} catch (IOException e) {
 				e.printStackTrace();
-			}
+			}*/
 		}
 		@Override
 		public void run()
 		{
+			System.out.println("Client: run");
 			try {
-				this.is = this.listener.getInputStream();
-				this.input = new ObjectInputStream(this.is);
-				this.os = this.listener.getOutputStream();
-				this.output = new ObjectOutputStream(this.os);
+				this.socket = new Socket(address, port);
 				
+				this.os = this.socket.getOutputStream();
+				this.output = new ObjectOutputStream(this.os);
+				this.is = this.socket.getInputStream();
+				this.input = new ObjectInputStream(this.is);
+				
+				/*this.is = this.socket.getInputStream();
+				this.input = new ObjectInputStream(this.is);
+				this.os = this.socket.getOutputStream();
+				this.output = new ObjectOutputStream(this.os);*/
+				
+				System.out.println("Client: scrivo messaggio sulla socket");
 				Message msg = new Message(MessageType.CONNECT, controller.getCurrentTimestamp(), nickname, "");
 				this.output.writeObject(msg);
+				System.out.println("Client: messaggio scritto sulla socket");
+				
 				// test
 				msg = (Message) this.input.readObject();
 				System.out.println(msg.getMsgType().toString() + ", " + msg.getTimestamp() + ", " + msg.getNickname() + ", " + msg.getContent());
 				//printMessage(msg);
 				
-				while(this.listener.isConnected())
+				while(this.socket.isConnected())
 				{
 					System.out.println("Ciao");
 					try {
 						this.sleep(1000);
+						this.output.writeObject(new Message(MessageType.CONNECT, controller.getCurrentTimestamp(), nickname, ""));
 					} catch (InterruptedException e) {
 						
 						e.printStackTrace();
 					}
 				}
-			} catch(SocketException socketException) {
-				System.out.println("");
+			} catch(SocketException e) {
+				System.out.println("Socket exception");
+				e.printStackTrace();
 			} catch (IOException e) {
+				System.out.println("Errore stream");
 				e.printStackTrace();
 			} catch (ClassNotFoundException e) {
 				e.printStackTrace();

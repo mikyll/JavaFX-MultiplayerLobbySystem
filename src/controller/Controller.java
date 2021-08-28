@@ -131,7 +131,21 @@ public class Controller {
 		}
 	}
 	
-	public void addToTextAreaChat(Message message)
+	public void addToTextArea(String text)
+	{
+		// client
+		if(this.client != null)
+		{
+			this.textAreaChatC.setText(text);
+			
+		}
+		// server
+		else if(this.server != null)
+		{
+			this.textAreaChatS.setText(text);
+		}
+	}
+	public void addToTextArea(Message message)
 	{
 		// client
 		if(this.client != null)

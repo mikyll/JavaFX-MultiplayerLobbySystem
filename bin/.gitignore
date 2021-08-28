@@ -1,6 +1,3 @@
-/application/
-/controller/
-/model/
-/module-info.class
 /networking/
-/view/
+/model/
+/controller/

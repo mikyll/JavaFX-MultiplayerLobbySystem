@@ -3,7 +3,7 @@ package model;
 public class User {
 	private String nickname;
 	private boolean isReady;
-	private int id;
+	//private int id;
 	
 	
 	public User(String nickname)
@@ -11,12 +11,12 @@ public class User {
 		this.nickname = nickname;
 		this.isReady = false;
 	}
-	public User(String nickname, int id)
+	/*public User(String nickname, int id)
 	{
 		this.nickname = nickname;
 		this.isReady = false;
 		this.id = id;
-	}
+	}*/
 
 	public String getNickname() {
 		return nickname;
@@ -34,12 +34,12 @@ public class User {
 		this.isReady = isReady;
 	}
 
-	public int getId() {
+	/*public int getId() {
 		return id;
 	}
 
 	public void setId(int id) {
 		this.id = id;
-	}
+	}*/
 	
 }

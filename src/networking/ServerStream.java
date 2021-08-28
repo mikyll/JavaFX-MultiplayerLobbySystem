@@ -18,6 +18,7 @@ import model.chat.MessageType;
 public class ServerStream implements IServer{
 	
 	private static final int PORT = 9001;
+	private int maxNumUsers = 6;
 	
 	private Controller controller;
 	private String nickname;
@@ -81,10 +82,11 @@ public class ServerStream implements IServer{
 		private Socket socket;
 		private User user;
 		
+		private InputStream is;
 		private ObjectInputStream input;
 		private OutputStream os;
         private ObjectOutputStream output;
-        private InputStream is;
+        
         
 		public Handler(Socket socket)
 		{
@@ -95,19 +97,17 @@ public class ServerStream implements IServer{
 		@Override
 		public void run()
 		{
+			System.out.println("Listening");
 			try {
 				this.is = this.socket.getInputStream();
 				this.input = new ObjectInputStream(this.is);
 				this.os = this.socket.getOutputStream();
 				this.output = new ObjectOutputStream(this.os);
 				
-				// test
-				Message msg = (Message) this.input.readObject();
-				printMessage(msg);
-				
-				
-				
 				// check qui oppure nel while (forse meglio nel while?)
+				
+				Message m = (Message) this.input.readObject();
+				System.out.println("Server messaggio ricevuto");
 				
 				while(this.socket.isConnected())
 				{
@@ -118,7 +118,32 @@ public class ServerStream implements IServer{
 						{
 							case CONNECT:
 							{
+								System.out.println("Server: connect message received");
 								// check if the connection can happen
+								Message mReply;
+								if(users.size() == maxNumUsers)
+								{
+									mReply = new Message(MessageType.CONNECT_FAILED, controller.getCurrentTimestamp(), "", "The room is full");
+								}
+								else if(checkDuplicateNickname(incomingMsg.getNickname()))
+								{
+									mReply = new Message(MessageType.CONNECT_FAILED, controller.getCurrentTimestamp(), "", "Nickname '" + incomingMsg.getNickname() + "' already present");
+								}
+								/*else if() // room is closed
+								{
+								
+								}
+								*/
+								
+								mReply = new Message(MessageType.CONNECT_OK, controller.getCurrentTimestamp(), nickname, incomingMsg.getNickname() + " has successfully connected");
+								this.output.writeObject(mReply);
+								
+								users.add(new User(incomingMsg.getNickname()));
+								controller.addToTextAreaChat(mReply.getTimestamp() + " " + incomingMsg.getNickname() + " has joined the room");
+								
+								mReply = new Message(MessageType.USER_LIST, controller.getCurrentTimestamp(), nickname, "");
+								this.output.writeObject(mReply);
+								
 								// add user and writer
 								// update user list
 								// update text area "User has successfully connected"
@@ -156,12 +181,13 @@ public class ServerStream implements IServer{
 							}
 						}
 					}
-					printMessage(incomingMsg);
+					Message.printMessage(incomingMsg);
 				}
 				
-			} catch(SocketException socketException) {
-				System.out.println("");
+			} catch(SocketException e) {
+				e.printStackTrace();
 			} catch (IOException e) {
+				System.out.println("Errore stream");
 				e.printStackTrace();
 			} catch (ClassNotFoundException e) {
 				e.printStackTrace();
@@ -188,15 +214,8 @@ public class ServerStream implements IServer{
 		for(User u : this.users)
 		{
 			if(u.getNickname().equals(nickname))
-				return true;
+				return true; // nickname already present
 		}
 		return false;
 	}
-	
-	private void printMessage(Message msg)
-	{
-		System.out.println(msg.getTimestamp() + " " + msg.getNickname() + "(" + msg.getMsgType().toString() + "): " + msg.getContent());
-	}
-	
-	
 }
