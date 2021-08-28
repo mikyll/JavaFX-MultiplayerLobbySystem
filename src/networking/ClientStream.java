@@ -111,7 +111,13 @@ public class ClientStream implements IClient {
 								
 								break;
 							}
-							// case user join:
+							case USER_JOINED:
+							{
+								controller.addToTextArea(incomingMsg.getTimestamp() + " " + incomingMsg.getNickname() + " has joined the room");;
+								controller.addUser(new User(incomingMsg.getNickname()));
+								
+								break;
+							}
 							default:
 							{
 								System.out.println("Client: invalid message type received: " + incomingMsg.getMsgType());

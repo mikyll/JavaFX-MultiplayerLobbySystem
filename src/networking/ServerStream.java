@@ -135,16 +135,18 @@ public class ServerStream implements IServer{
 								}
 								*/
 								
-								mReply = new Message(MessageType.CONNECT_OK, controller.getCurrentTimestamp(), nickname, incomingMsg.getNickname() + " has successfully connected");
+								// send back connect_ok, containing the updated user list
+								mReply = new Message(MessageType.CONNECT_OK, controller.getCurrentTimestamp(), nickname, getUserList());
 								this.output.writeObject(mReply);
 								
 								users.add(new User(incomingMsg.getNickname()));
 								writers.add(this.output);
 								controller.addToTextArea(mReply.getTimestamp() + " " + incomingMsg.getNickname() + " has joined the room");
 								
-								// send updated user list
-								mReply = new Message(MessageType.USER_LIST, controller.getCurrentTimestamp(), nickname, "");
-								this.output.writeObject(mReply);
+								// forward to other users the new user joined
+								mReply.setMsgType(MessageType.USER_JOINED);
+								mReply.setNickname(incomingMsg.getNickname());
+								forwardMessage(mReply);
 								
 								// add user and writer
 								// update user list
@@ -242,6 +244,19 @@ public class ServerStream implements IServer{
 				return true; // nickname already present
 		}
 		return false;
+	}
+	
+	private String getUserList()
+	{
+		String list = "";
+		for(int i = 0; i < this.users.size(); i++)
+		{
+			User u = this.users.get(i);
+			list += u.getNickname() + "," + u.isReady();
+			list += (i == this.users.size() - 1 ? ";" : "");
+		}
+		
+		return list;
 	}
 	
 	/* "[] User Mikyll has been kicked from the room"

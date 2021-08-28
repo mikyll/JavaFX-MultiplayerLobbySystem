@@ -109,7 +109,7 @@ public class Controller {
 	}
 	@FXML public void toggleReady(ActionEvent event)
 	{
-		
+		// set a 5 sec timer that disables the button, so that users can't spam the toggle
 	}
 	@FXML public void sendMessageC(ActionEvent event) 
 	{
@@ -187,7 +187,7 @@ public class Controller {
 		// alert (show reply message content, example room full)
 		// set not visibile loading hbox
 	}
-	public void updateUserList(String s)
+	public void updateReady(User u)
 	{
 		//System.out.println("Client: received updated user list. " + message.getContent()); // test
 		// update user list
