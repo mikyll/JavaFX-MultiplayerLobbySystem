@@ -1,0 +1,1 @@
+jlink --module-path "C:\Program Files\Java\javafx-jmods-11.0.2";bin --add-modules=chat --output fxjreWin --compress=2 --strip-debug --no-header-files --no-man-pages

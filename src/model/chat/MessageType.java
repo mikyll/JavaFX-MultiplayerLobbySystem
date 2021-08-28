@@ -1,0 +1,5 @@
+package model.chat;
+
+public enum MessageType {
+	CONNECT, CONNECT_OK, CONNECT_FAILED, USER_LIST, READY, DISCONNECT, KICK, CHAT, START_GAME
+}

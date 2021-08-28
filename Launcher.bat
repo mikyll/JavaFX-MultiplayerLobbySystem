@@ -1,0 +1,1 @@
+fxjreWin\bin\java -m chat/application.Main
