@@ -102,7 +102,7 @@ public class ClientStream implements IClient {
 							{
 								// show message in chat
 								controller.addToTextArea(incomingMsg.getTimestamp() + " " + nickname + " has joined the room");
-								extractUserList
+								controller.updateUserList(extractUserList(incomingMsg.getContent()));
 								
 								// get user list from OK
 								
@@ -110,6 +110,10 @@ public class ClientStream implements IClient {
 								// switch view
 								
 								break;
+							}
+							case CHAT:
+							{
+								
 							}
 							case USER_JOINED:
 							{
@@ -124,13 +128,6 @@ public class ClientStream implements IClient {
 								break;
 							}
 						}
-					}
-					try {
-						this.sleep(1000);
-						this.output.writeObject(new Message(MessageType.CONNECT, controller.getCurrentTimestamp(), nickname, ""));
-					} catch (InterruptedException e) {
-						
-						e.printStackTrace();
 					}
 				}
 			} catch(SocketException e) {

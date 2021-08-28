@@ -281,7 +281,13 @@ public class Controller {
 	{
 		if(this.client != null)
 		{
-			this.listViewUsersC.setItems(FXCollections.observableList(users));
+			for(int i = 0; i < users.size(); i++)
+			{
+				this.listViewUsersC.getItems().add(users.get(i).getNickname());
+				Label l = this.listViewReadyC.getItems().get(i);
+				l.setStyle(users.get(i).isReady() ? "-fx-background-color: lime" : "-fx-background-color: red");
+				l.setVisible(true);
+			}
 		}
 		else if(this.server != null)
 		{
