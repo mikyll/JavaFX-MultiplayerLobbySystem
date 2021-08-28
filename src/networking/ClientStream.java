@@ -101,8 +101,8 @@ public class ClientStream implements IClient {
 							case CONNECT_OK:
 							{
 								// show message in chat
-								controller.addToTextArea(incomingMsg.getTimestamp() + " " + incomingMsg.getNickname() + " has joined the room");
-								
+								controller.addToTextArea(incomingMsg.getTimestamp() + " " + nickname + " has joined the room");
+								extractUserList
 								
 								// get user list from OK
 								

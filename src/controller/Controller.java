@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -274,6 +275,17 @@ public class Controller {
 					this.listViewKickS.getItems().get(i).setVisible(false);
 				}
 			}
+		}
+	}
+	public void updateUserList(List<User> users)
+	{
+		if(this.client != null)
+		{
+			this.listViewUsersC.setItems(FXCollections.observableList(users));
+		}
+		else if(this.server != null)
+		{
+			
 		}
 	}
 }
