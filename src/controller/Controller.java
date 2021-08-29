@@ -117,6 +117,18 @@ public class Controller {
 	}
 	@FXML public void toggleReady(ActionEvent event)
 	{
+		if(this.buttonReady.getText().equalsIgnoreCase("Ready"))
+		{
+			this.buttonReady.setText("Not ready");
+			this.buttonReady.setStyle("-fx-background-color: red");
+			this.client.sendReady(false);
+		}
+		else
+		{
+			this.buttonReady.setText("Ready");
+			this.buttonReady.setStyle("-fx-background-color: lime");
+			this.client.sendReady(true);
+		}
 		// set a 5 sec timer that disables the button, so that users can't spam the toggle
 	}
 	@FXML public void sendMessageC(ActionEvent event) 
