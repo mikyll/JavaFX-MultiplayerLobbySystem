@@ -100,6 +100,19 @@ public class Controller {
 		// connetti a stanza già esistente -> client
 		this.client = new ClientStream(this, this.textFieldIP.getText(), 9001, this.textFieldNickname.getText());
 		
+		Label l;
+		Button b;
+		// popolate the listView with the controls but set them invisibile
+		for(int i = 0; i < 6; i++)
+		{
+			l = new Label();
+			l.setPrefSize(25, 25);
+			l.setStyle("-fx-background-color: red");
+			l.setVisible(false);
+			
+			this.listViewReadyC.getItems().add(l);
+		}
+		
 		this.showConnectingBox(true);
 	}
 	@FXML public void toggleReady(ActionEvent event)
@@ -280,7 +293,7 @@ public class Controller {
 				this.listViewUsersC.getItems().add(users.get(i).getNickname());
 				Label l = this.listViewReadyC.getItems().get(i);
 				l.setStyle(users.get(i).isReady() ? "-fx-background-color: lime" : "-fx-background-color: red");
-				l.setVisible(true);
+				l.setVisible(i == 0 ? false : true);
 			}
 		}
 		else if(this.server != null)

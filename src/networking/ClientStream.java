@@ -37,6 +37,7 @@ public class ClientStream implements IClient {
 		this.controller = controller;
 		this.address = address;
 		this.port = port;
+		this.nickname = nickname;
 		
 		this.clientListener = new ClientListener(address, port);
 		this.clientListener.start();
