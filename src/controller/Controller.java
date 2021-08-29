@@ -157,6 +157,19 @@ public class Controller {
 	@FXML public void kickUser(ActionEvent event)
 	{
 		System.out.println(event.getSource() + ", " + event.getTarget() + ", " + event.getEventType());
+		
+		// get the button index
+		for(int i = 1; i < this.listViewUsersS.getItems().size(); i++)
+		{
+			if(this.listViewKickS.getItems().get(i).equals(event.getTarget()))
+				System.out.println(i);
+		}
+		
+		// get the button index, remove the corresponding User,
+		
+		
+		// send Kick message
+	
 	}
 	@FXML public void sendMessageS(ActionEvent event) 
 	{

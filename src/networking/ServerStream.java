@@ -274,7 +274,13 @@ public class ServerStream implements IServer{
 		}
 		Message msg = new Message(MessageType.USER_LIST, this.controller.getCurrentTimestamp(), this.nickname, list);
 		Message.printMessage(msg);
+	}
+	
+	public void kickUser(String nickname)
+	{
+		// send kick to everyone (the nickname indicates which user is getting kicked)
 		
+		// remove user and writer
 	}
 	
 	private boolean checkDuplicateNickname(String nickname)
