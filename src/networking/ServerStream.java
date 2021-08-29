@@ -178,6 +178,8 @@ public class ServerStream implements IServer{
 							{
 								// upadate ready user
 								controller.updateReady(incomingMsg.getNickname(), Boolean.parseBoolean(incomingMsg.getContent()));
+								
+								// update the user
 								for(User u : users)
 								{
 									if(u.getNickname().equals(incomingMsg.getNickname()))
@@ -187,9 +189,7 @@ public class ServerStream implements IServer{
 									}
 								}
 								
-								// NB: devo aggiornare lo User relativo, altrimenti chi si connette lo vede storto
-								
-								// send the updated user list
+								// forward the reaady to other users
 								forwardMessage(incomingMsg);
 								
 								break;
@@ -198,6 +198,9 @@ public class ServerStream implements IServer{
 							{
 								// remove the user
 								// remove the writer
+								
+								// update controller list view
+								
 								// close the connection
 								
 								break;

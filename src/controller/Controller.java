@@ -74,6 +74,7 @@ public class Controller {
 		this.textAreaChatS.setText(this.getCurrentTimestamp() + " " + this.textFieldNickname.getText() + " created the room");
 		this.setServerAddress();
 		
+		// create new room -> start server
 		this.server = new ServerStream(this, this.textFieldNickname.getText());
 		
 		this.listViewUsersS.getItems().add(this.textFieldNickname.getText());
@@ -92,6 +93,7 @@ public class Controller {
 			b.setPrefSize(70, 20);
 			b.setStyle("-fx-font-size: 15.0");
 			b.setVisible(false);
+			b.setOnAction(this::kickUser);
 			this.listViewKickS.getItems().add(b);
 		}
 		
@@ -100,7 +102,7 @@ public class Controller {
 	
 	@FXML public void selectJER(ActionEvent event) 
 	{
-		// connetti a stanza già esistente -> client
+		// connect to existing room -> start client
 		this.client = new ClientStream(this, this.textFieldIP.getText(), 9001, this.textFieldNickname.getText());
 		
 		Label l;
