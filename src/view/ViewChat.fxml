@@ -46,7 +46,7 @@
                   <Label prefHeight="18.0" prefWidth="130.0" text="Connecting to server..." textFill="WHITE" />
                   <ImageView fitHeight="20.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../../../../../../Programmi/GitHub/Cluedo/Implementazione/src/resources/icons/icon-loading2.gif" />
+                        <Image url="@icon-loading2.gif" />
                      </image>
                   </ImageView>
                </children>

@@ -106,21 +106,25 @@ public class ServerStream implements IServer{
 				
 				// check qui oppure nel while (forse meglio nel while?)
 				
-				Message m = (Message) this.input.readObject();
-				System.out.println("Server messaggio ricevuto");
+				/*Message m = (Message) this.input.readObject();
+				System.out.println("Server messaggio ricevuto");*/
 				
 				while(this.socket.isConnected())
 				{
 					Message incomingMsg = (Message) this.input.readObject();
+					System.out.println("Server: message received");
 					if(incomingMsg != null)
 					{
+						Message.printMessage(incomingMsg); // test
 						switch(incomingMsg.getMsgType())
 						{
 							case CONNECT:
 							{
 								System.out.println("Server: connect message received");
-								// check if the connection can happen
+								
 								Message mReply;
+								
+								// check if the connection can happen
 								if(users.size() == maxNumUsers)
 								{
 									mReply = new Message(MessageType.CONNECT_FAILED, controller.getCurrentTimestamp(), "", "The room is full");
@@ -134,9 +138,11 @@ public class ServerStream implements IServer{
 								
 								}
 								*/
-								
+								else 
+								{
+									mReply = new Message(MessageType.CONNECT_OK, controller.getCurrentTimestamp(), nickname, getUserList());
+								}
 								// send back connect_ok, containing the updated user list
-								mReply = new Message(MessageType.CONNECT_OK, controller.getCurrentTimestamp(), nickname, getUserList());
 								this.output.writeObject(mReply);
 								
 								users.add(new User(incomingMsg.getNickname()));
@@ -158,6 +164,7 @@ public class ServerStream implements IServer{
 							}
 							case CHAT:
 							{
+								controller.addToTextArea(incomingMsg);
 								// update textArea
 								// forward the chat message
 								

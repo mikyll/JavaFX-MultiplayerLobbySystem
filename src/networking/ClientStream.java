@@ -88,8 +88,10 @@ public class ClientStream implements IClient {
 				while(this.socket.isConnected())
 				{
 					Message incomingMsg = (Message) this.input.readObject();
+					System.out.println("Client: message received");
 					if(incomingMsg != null)
 					{
+						Message.printMessage(incomingMsg); // test
 						switch(incomingMsg.getMsgType())
 						{
 							case CONNECT_FAILED:
@@ -103,7 +105,6 @@ public class ClientStream implements IClient {
 							{
 								// show message in chat
 								controller.addToTextArea(incomingMsg.getTimestamp() + " " + nickname + " has joined the room");
-								controller.updateUserList(extractUserList(incomingMsg.getContent()));
 								
 								// get user list from OK
 								controller.updateUserList(extractUserList(incomingMsg.getContent()));
