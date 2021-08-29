@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
+import java.net.BindException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
@@ -37,24 +38,26 @@ public class ServerStream implements IServer{
 		this.writers = new ArrayList<ObjectOutputStream>();
 		this.writers.add(null);
 		
-		this.serverListener = new ServerListener(PORT);
-		this.serverListener.start();
-		
+		try {
+			this.serverListener = new ServerListener(PORT);
+			this.serverListener.start();
+			this.controller.switchToChatS();
+		} catch (IOException e) {
+			System.out.println("Server: ServerSocket creation failed");
+			if(e instanceof BindException)
+				System.out.println("Server: another socket is already binded to this address and port");
+		}
 	}
 	
 	private class ServerListener extends Thread {
 		
 		private ServerSocket listener;
 		
-		public ServerListener(int port)
+		public ServerListener(int port) throws IOException
 		{
+			this.listener = new ServerSocket(port);
 			System.out.println("Server: listening for connections on port " + PORT);
-			try {
-				this.listener = new ServerSocket(port);
-			} catch (IOException e) {
-				System.out.println("Server: ServerSocket creation failed");
-				e.printStackTrace();
-			}
+			
 		}
 		
 		@Override

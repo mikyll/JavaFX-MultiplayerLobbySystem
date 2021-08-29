@@ -72,6 +72,7 @@ public class ClientStream implements IClient {
 				is = this.socket.getInputStream();
 				input = new ObjectInputStream(is);
 				
+				
 				// send CONNECT message
 				Message msg = new Message(MessageType.CONNECT, controller.getCurrentTimestamp(), nickname, "");
 				output.writeObject(msg);
@@ -121,6 +122,8 @@ public class ClientStream implements IClient {
 							case USER_JOINED:
 							{
 								controller.addToTextArea(incomingMsg.getTimestamp() + " " + incomingMsg.getNickname() + " has joined the room");;
+								
+								// add the user and update the list
 								controller.addUser(new User(incomingMsg.getNickname()));
 								
 								break;

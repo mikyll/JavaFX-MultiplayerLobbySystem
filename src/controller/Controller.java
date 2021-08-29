@@ -96,8 +96,6 @@ public class Controller {
 			b.setOnAction(this::kickUser);
 			this.listViewKickS.getItems().add(b);
 		}
-		
-		this.switchToChatS();
 	}
 	
 	@FXML public void selectJER(ActionEvent event) 
