@@ -123,6 +123,12 @@ public class ClientStream implements IClient {
 								
 								break;
 							}
+							case READY:
+							{
+								controller.updateReady(incomingMsg.getNickname(), Boolean.parseBoolean(incomingMsg.getContent()));
+								
+								break;
+							}
 							case KICK:
 							{
 								// alert

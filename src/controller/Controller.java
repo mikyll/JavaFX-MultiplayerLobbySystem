@@ -117,17 +117,26 @@ public class Controller {
 	}
 	@FXML public void toggleReady(ActionEvent event)
 	{
+		int i;
+		for(i = 0; i < this.listViewUsersC.getItems().size(); i++)
+		{
+			if(this.listViewUsersC.getItems().get(i).equals(this.textFieldNickname.getText()))
+				break;
+		}
 		if(this.buttonReady.getText().equalsIgnoreCase("Ready"))
 		{
 			this.buttonReady.setText("Not ready");
 			this.buttonReady.setStyle("-fx-background-color: red");
 			this.client.sendReady(false);
+			this.listViewReadyC.getItems().get(i).setStyle("-fx-background-color: red");;
 		}
 		else
 		{
 			this.buttonReady.setText("Ready");
 			this.buttonReady.setStyle("-fx-background-color: lime");
 			this.client.sendReady(true);
+			this.listViewReadyC.getItems().get(i).setStyle("-fx-background-color: lime");;
+			
 		}
 		// set a 5 sec timer that disables the button, so that users can't spam the toggle
 	}
@@ -207,18 +216,32 @@ public class Controller {
 		// alert (show reply message content, example room full)
 		// set not visibile loading hbox
 	}
-	public void updateReady(User u)
+	public void updateReady(String nickname, boolean ready)
 	{
 		//System.out.println("Client: received updated user list. " + message.getContent()); // test
 		// update user list
 		
 		if(this.client != null)
 		{
-			
+			for(int i = 0; i < this.listViewUsersC.getItems().size(); i++)
+			{
+				if(nickname.equals(this.listViewUsersC.getItems().get(i)))
+				{
+					this.listViewReadyC.getItems().get(i).setStyle(ready ? "-fx-background-color: lime" : "-fx-background-color: red");
+					break;
+				}
+			}
 		}
 		else if(this.server != null)
 		{
-			
+			for(int i = 0; i < this.listViewUsersS.getItems().size(); i++)
+			{
+				if(nickname.equals(this.listViewUsersS.getItems().get(i)))
+				{
+					this.listViewReadyS.getItems().get(i).setStyle(ready ? "-fx-background-color: lime" : "-fx-background-color: red");
+					break;
+				}
+			}
 		}
 	}
 	public void kickedFromServer(Message message)

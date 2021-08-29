@@ -178,8 +178,11 @@ public class ServerStream implements IServer{
 							}
 							case READY:
 							{
-								// update user list
+								// upadate ready user
+								controller.updateReady(incomingMsg.getNickname(), Boolean.parseBoolean(incomingMsg.getContent()));
+								
 								// send the updated user list
+								forwardMessage(incomingMsg);
 								
 								break;
 							}
@@ -202,6 +205,7 @@ public class ServerStream implements IServer{
 				}
 				
 			} catch(SocketException e) {
+				// "Connection reset" when the other endpoint disconnects
 				e.printStackTrace();
 			} catch (IOException e) {
 				System.out.println("Errore stream");
