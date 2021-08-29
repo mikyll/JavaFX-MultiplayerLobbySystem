@@ -140,14 +140,14 @@ public class ServerStream implements IServer{
 								*/
 								else 
 								{
+									users.add(new User(incomingMsg.getNickname()));
+									writers.add(this.output);
 									mReply = new Message(MessageType.CONNECT_OK, controller.getCurrentTimestamp(), nickname, getUserList());
 									Message.printMessage(mReply); // test
 								}
 								// send back connect_ok, containing the updated user list
 								this.output.writeObject(mReply);
 								
-								users.add(new User(incomingMsg.getNickname()));
-								writers.add(this.output);
 								controller.addToTextArea(mReply.getTimestamp() + " " + incomingMsg.getNickname() + " has joined the room");
 								
 								// forward to other users the new user joined
@@ -271,7 +271,7 @@ public class ServerStream implements IServer{
 		{
 			User u = this.users.get(i);
 			list += u.getNickname() + "," + u.isReady();
-			list += (i == this.users.size() - 1 ? ";" : "");
+			list += (i == this.users.size() - 1 ? "" : ";");
 		}
 		
 		return list;
