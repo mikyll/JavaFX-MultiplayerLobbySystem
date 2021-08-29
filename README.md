@@ -16,6 +16,9 @@ to add:
 - fix exception print stack (handle them in a more proper way).
 - add timer after sending READY message
 - add arrow to identify which user a particular client is
+- refactor: use only one listView and put an HBox inside it(?)
+- fix gui components to have proper dimension
+- add on close function to disconnect and stop the threads before closing the app
 
 references:
 - [JavaFX-Chat](https://github.com/DomHeal/JavaFX-Chat)
