@@ -63,7 +63,7 @@ public class ClientStream implements IClient {
 		@Override
 		public void run()
 		{
-			System.out.println("Client: run");
+			System.out.println("Client: running. Nickname: " + nickname);
 			try {
 				this.socket = new Socket(address, port);
 				
@@ -133,9 +133,25 @@ public class ClientStream implements IClient {
 							}
 							case KICK:
 							{
-								// alert
-								// close connection
-								// switch view
+								// this user got kicked out
+								if(incomingMsg.getNickname().equals(nickname))
+								{
+									// close connection
+									this.socket.close();
+									
+									// switch view
+									controller.switchToMP();
+									
+									// show alert
+									controller.showAlert(incomingMsg);
+								}
+								else // another user got kicked
+								{
+									controller.removeUser(incomingMsg.getNickname());
+									
+									// add to chat
+									controller.addToTextArea(incomingMsg.getTimestamp() + " User '" + incomingMsg.getNickname() + "' has been kicked out");
+								}
 								
 								break;
 							}

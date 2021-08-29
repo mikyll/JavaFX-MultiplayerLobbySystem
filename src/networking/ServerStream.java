@@ -279,8 +279,31 @@ public class ServerStream implements IServer{
 	public void kickUser(String nickname)
 	{
 		// send kick to everyone (the nickname indicates which user is getting kicked)
+		Message msg = new Message(MessageType.KICK, controller.getCurrentTimestamp(), nickname, "You have been kicked out from the server");
+		for(int i = 1; i < this.writers.size(); i++)
+		{
+			try {
+				this.writers.get(i).writeObject(msg);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 		
 		// remove user and writer
+		int i;
+		for(i = 0; i < this.users.size(); i++)
+		{
+			if(this.users.get(i).getNickname().equals(nickname))
+			{
+				this.users.remove(i);
+				this.writers.remove(i);
+				break;
+			}
+		}
+		
+		this.controller.removeUser(nickname);
+		
+		this.controller.addToTextArea(msg.getTimestamp() + " User " + msg.getNickname() + " has been kicked out");
 	}
 	
 	private boolean checkDuplicateNickname(String nickname)

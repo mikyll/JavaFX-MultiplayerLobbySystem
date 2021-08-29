@@ -155,21 +155,19 @@ public class Controller {
 		this.textFieldChatC.setText("");
 	}
 	@FXML public void kickUser(ActionEvent event)
-	{
-		System.out.println(event.getSource() + ", " + event.getTarget() + ", " + event.getEventType());
-		
+	{	
 		// get the button index
 		for(int i = 1; i < this.listViewUsersS.getItems().size(); i++)
 		{
 			if(this.listViewKickS.getItems().get(i).equals(event.getTarget()))
-				System.out.println(i);
+			{
+				System.out.println("Server: kicked user " + this.listViewUsersS.getItems().get(i));
+				
+				// send Kick message
+				this.server.kickUser(this.listViewUsersS.getItems().get(i));
+				break;
+			}
 		}
-		
-		// get the button index, remove the corresponding User,
-		
-		
-		// send Kick message
-	
 	}
 	@FXML public void sendMessageS(ActionEvent event) 
 	{
@@ -310,34 +308,36 @@ public class Controller {
 		});
 		
 	}
-	public void removeUser(User u)
+	public void removeUser(String nickname)
 	{
 		if(this.client != null)
 		{
 			for(int i = 0; i < this.listViewUsersC.getItems().size(); i++)
 			{
-				if(this.listViewUsersC.getItems().get(i).equals(u.getNickname()))
+				if(this.listViewUsersC.getItems().get(i).equals(nickname))
 				{
 					this.listViewUsersC.getItems().remove(i);
-					Label l = this.listViewReadyC.getItems().get(i);
-					l.setStyle("-fx-background-color: red");
-					l.setVisible(false);
+					break;
 				}
 			}
+			Label l = this.listViewReadyC.getItems().get(this.listViewUsersC.getItems().size());
+			l.setStyle("-fx-background-color: red");
+			l.setVisible(false);
 		}
 		else if(this.server != null)
 		{
 			for(int i = 0; i < this.listViewUsersS.getItems().size(); i++)
 			{
-				if(this.listViewUsersS.getItems().get(i).equals(u.getNickname()))
+				if(this.listViewUsersS.getItems().get(i).equals(nickname))
 				{
 					this.listViewUsersS.getItems().remove(i);
-					Label l = this.listViewReadyS.getItems().get(i);
-					l.setStyle("-fx-background-color: red");
-					l.setVisible(false);
-					this.listViewKickS.getItems().get(i).setVisible(false);
+					break;
 				}
 			}
+			Label l = this.listViewReadyS.getItems().get(this.listViewUsersS.getItems().size());
+			l.setStyle("-fx-background-color: red");
+			l.setVisible(false);
+			this.listViewKickS.getItems().get(this.listViewUsersS.getItems().size()).setVisible(false);
 		}
 	}
 	public void updateUserList(List<User> users)
