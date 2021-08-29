@@ -310,35 +310,38 @@ public class Controller {
 	}
 	public void removeUser(String nickname)
 	{
-		if(this.client != null)
-		{
-			for(int i = 0; i < this.listViewUsersC.getItems().size(); i++)
+		Platform.runLater(() -> {
+			if(this.client != null)
 			{
-				if(this.listViewUsersC.getItems().get(i).equals(nickname))
+				for(int i = 0; i < this.listViewUsersC.getItems().size(); i++)
 				{
-					this.listViewUsersC.getItems().remove(i);
-					break;
+					if(this.listViewUsersC.getItems().get(i).equals(nickname))
+					{
+						this.listViewUsersC.getItems().remove(i);
+						break;
+					}
 				}
+				Label l = this.listViewReadyC.getItems().get(this.listViewUsersC.getItems().size());
+				l.setStyle("-fx-background-color: red");
+				l.setVisible(false);
 			}
-			Label l = this.listViewReadyC.getItems().get(this.listViewUsersC.getItems().size());
-			l.setStyle("-fx-background-color: red");
-			l.setVisible(false);
-		}
-		else if(this.server != null)
-		{
-			for(int i = 0; i < this.listViewUsersS.getItems().size(); i++)
+			else if(this.server != null)
 			{
-				if(this.listViewUsersS.getItems().get(i).equals(nickname))
+				for(int i = 0; i < this.listViewUsersS.getItems().size(); i++)
 				{
-					this.listViewUsersS.getItems().remove(i);
-					break;
+					if(this.listViewUsersS.getItems().get(i).equals(nickname))
+					{
+						this.listViewUsersS.getItems().remove(i);
+						break;
+					}
 				}
+				Label l = this.listViewReadyS.getItems().get(this.listViewUsersS.getItems().size());
+				l.setStyle("-fx-background-color: red");
+				l.setVisible(false);
+				this.listViewKickS.getItems().get(this.listViewUsersS.getItems().size()).setVisible(false);
 			}
-			Label l = this.listViewReadyS.getItems().get(this.listViewUsersS.getItems().size());
-			l.setStyle("-fx-background-color: red");
-			l.setVisible(false);
-			this.listViewKickS.getItems().get(this.listViewUsersS.getItems().size()).setVisible(false);
-		}
+		});
+		
 	}
 	public void updateUserList(List<User> users)
 	{
