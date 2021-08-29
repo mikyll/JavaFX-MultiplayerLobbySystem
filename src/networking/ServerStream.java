@@ -80,7 +80,6 @@ public class ServerStream implements IServer{
 	
 	private class Handler extends Thread {
 		private Socket socket;
-		private User user;
 		
 		private InputStream is;
 		private ObjectInputStream input;
@@ -180,6 +179,16 @@ public class ServerStream implements IServer{
 							{
 								// upadate ready user
 								controller.updateReady(incomingMsg.getNickname(), Boolean.parseBoolean(incomingMsg.getContent()));
+								for(User u : users)
+								{
+									if(u.getNickname().equals(incomingMsg.getNickname()))
+									{
+										u.setReady(Boolean.parseBoolean(incomingMsg.getContent()));
+										break;
+									}
+								}
+								
+								// NB: devo aggiornare lo User relativo, altrimenti chi si connette lo vede storto
 								
 								// send the updated user list
 								forwardMessage(incomingMsg);
