@@ -1,4 +1,12 @@
 # ChatClientServer
+
+JavaFX lobby system for a game using socket TCP (can be extended to UDP).
+
+Features:
+- chat;
+- ready button;
+- kick user button (only the server, which created the room, can do this).
+
 Chat support using JavaFX and socket TCP (stream) to be used for Cluedo app
 
 
