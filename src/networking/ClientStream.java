@@ -78,6 +78,7 @@ public class ClientStream implements IClient {
 				System.out.println("Client: messaggio scritto sulla socket");
 				
 				
+				
 				while(this.socket.isConnected())
 				{
 					Message incomingMsg = (Message) input.readObject();
@@ -112,6 +113,8 @@ public class ClientStream implements IClient {
 							case CHAT:
 							{
 								controller.addToTextArea(incomingMsg);
+								
+								break;
 							}
 							case USER_JOINED:
 							{

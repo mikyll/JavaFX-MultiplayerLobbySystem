@@ -140,8 +140,11 @@ public class ServerStream implements IServer{
 								*/
 								else 
 								{
-									users.add(new User(incomingMsg.getNickname()));
+									User u = new User(incomingMsg.getNickname());
+									users.add(u);
 									writers.add(this.output);
+									controller.addUser(u);
+									
 									mReply = new Message(MessageType.CONNECT_OK, controller.getCurrentTimestamp(), nickname, getUserList());
 									Message.printMessage(mReply); // test
 								}
@@ -165,9 +168,11 @@ public class ServerStream implements IServer{
 							}
 							case CHAT:
 							{
-								controller.addToTextArea(incomingMsg);
 								// update textArea
+								controller.addToTextArea(incomingMsg);
+								
 								// forward the chat message
+								forwardMessage(incomingMsg);
 								
 								break;
 							}
