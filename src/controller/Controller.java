@@ -99,14 +99,8 @@ public class Controller {
 	{
 		// connetti a stanza già esistente -> client
 		this.client = new ClientStream(this, this.textFieldIP.getText(), 9001, this.textFieldNickname.getText());
-		//ClientStream cs = new ClientStream(this, this.textFieldIP.getText(), 9001, this.textFieldNickname.getText());
 		
 		this.showConnectingBox(true);
-		
-		this.switchToChatC(); // questo lo fa il client
-		/*Thread t = new Thread(cs);
-		t.start();*/
-		// register callback (swich vbox from waiting one to connected) on connection accepted(?)
 	}
 	@FXML public void toggleReady(ActionEvent event)
 	{
@@ -138,13 +132,13 @@ public class Controller {
 		// client
 		if(this.client != null)
 		{
-			this.textAreaChatC.setText(text);
+			this.textAreaChatC.setText(this.textAreaChatC.getText() + "\n" + text);
 			
 		}
 		// server
 		else if(this.server != null)
 		{
-			this.textAreaChatS.setText(text);
+			this.textAreaChatS.setText(this.textAreaChatS.getText() + "\n" + text);
 		}
 	}
 	public void addToTextArea(Message message)

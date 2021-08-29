@@ -94,6 +94,7 @@ public class ClientStream implements IClient {
 						{
 							case CONNECT_FAILED:
 							{
+								controller.showConnectingBox(false);
 								// stop loading icon
 								// show alert
 								break;
@@ -105,20 +106,31 @@ public class ClientStream implements IClient {
 								controller.updateUserList(extractUserList(incomingMsg.getContent()));
 								
 								// get user list from OK
+								controller.updateUserList(extractUserList(incomingMsg.getContent()));
 								
 								// stop loading icon
+								controller.showConnectingBox(false);
+								controller.switchToChatC();
 								// switch view
 								
 								break;
 							}
 							case CHAT:
 							{
-								
+								controller.addToTextArea(incomingMsg);
 							}
 							case USER_JOINED:
 							{
 								controller.addToTextArea(incomingMsg.getTimestamp() + " " + incomingMsg.getNickname() + " has joined the room");;
 								controller.addUser(new User(incomingMsg.getNickname()));
+								
+								break;
+							}
+							case KICK:
+							{
+								// alert
+								// close connection
+								// switch view
 								
 								break;
 							}
