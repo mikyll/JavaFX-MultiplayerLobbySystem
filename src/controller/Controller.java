@@ -156,7 +156,7 @@ public class Controller {
 	}
 	@FXML public void kickUser(ActionEvent event)
 	{
-		System.out.println(event.getSource());
+		System.out.println(event.getSource() + ", " + event.getTarget() + ", " + event.getEventType());
 	}
 	@FXML public void sendMessageS(ActionEvent event) 
 	{

@@ -126,10 +126,12 @@ public class ServerStream implements IServer{
 								if(users.size() == maxNumUsers)
 								{
 									mReply = new Message(MessageType.CONNECT_FAILED, controller.getCurrentTimestamp(), "", "The room is full");
+									this.output.writeObject(mReply);
 								}
 								else if(checkDuplicateNickname(incomingMsg.getNickname()))
 								{
 									mReply = new Message(MessageType.CONNECT_FAILED, controller.getCurrentTimestamp(), "", "Nickname '" + incomingMsg.getNickname() + "' already present");
+									this.output.writeObject(mReply);
 								}
 								/*else if() // room is closed
 								{
@@ -138,26 +140,28 @@ public class ServerStream implements IServer{
 								*/
 								else 
 								{
+									// add user and writer to list
 									User u = new User(incomingMsg.getNickname());
 									users.add(u);
 									writers.add(this.output);
 									controller.addUser(u);
 									
+									// send back connect_ok, containing the updated user list
 									mReply = new Message(MessageType.CONNECT_OK, controller.getCurrentTimestamp(), nickname, getUserList());
+									this.output.writeObject(mReply);
 									Message.printMessage(mReply); // test
+									// add message to chat
+									controller.addToTextArea(mReply.getTimestamp() + " " + incomingMsg.getNickname() + " has joined the room");
+									
+									// forward to other users the new user joined
+									mReply.setMsgType(MessageType.USER_JOINED);
+									mReply.setNickname(incomingMsg.getNickname());
+									forwardMessage(mReply);
 								}
-								// send back connect_ok, containing the updated user list
-								this.output.writeObject(mReply);
 								
-								controller.addToTextArea(mReply.getTimestamp() + " " + incomingMsg.getNickname() + " has joined the room");
 								
-								// forward to other users the new user joined
-								mReply.setMsgType(MessageType.USER_JOINED);
-								mReply.setNickname(incomingMsg.getNickname());
-								forwardMessage(mReply);
 								
-								// add user and writer
-								// update user list
+								
 								// update text area "User has successfully connected"
 								// reply to the user with CONNECTION_OK
 								// send updated USER_LIST to everyone
