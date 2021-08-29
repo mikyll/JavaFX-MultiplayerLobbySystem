@@ -90,9 +90,12 @@ public class ClientStream implements IClient {
 						{
 							case CONNECT_FAILED:
 							{
-								controller.showConnectingBox(false);
 								// stop loading icon
+								controller.showConnectingBox(false);
+								
 								// show alert
+								controller.showAlert(incomingMsg);
+								
 								break;
 							}
 							case CONNECT_OK:
@@ -105,8 +108,10 @@ public class ClientStream implements IClient {
 								
 								// stop loading icon
 								controller.showConnectingBox(false);
-								controller.switchToChatC();
+								
 								// switch view
+								controller.switchToChatC();
+								
 								
 								break;
 							}

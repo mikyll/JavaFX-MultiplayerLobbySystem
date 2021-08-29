@@ -6,9 +6,12 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
@@ -271,23 +274,26 @@ public class Controller {
 	
 	public void addUser(User u)
 	{
-		if(this.client != null)
-		{
-			this.listViewUsersC.getItems().add(u.getNickname());
-			int i = this.listViewUsersC.getItems().size();
-			Label l = this.listViewReadyC.getItems().get(i - 1);
-			l.setStyle("-fx-background-color: red");
-			l.setVisible(true);
-		}
-		else if(this.server != null)
-		{
-			this.listViewUsersS.getItems().add(u.getNickname());
-			int i = this.listViewUsersS.getItems().size();
-			Label l = this.listViewReadyS.getItems().get(i - 1);
-			l.setStyle("-fx-background-color: red");
-			l.setVisible(true);
-			this.listViewKickS.getItems().get(i - 1).setVisible(true);
-		}
+		Platform.runLater(() -> {
+			if(this.client != null)
+			{
+				this.listViewUsersC.getItems().add(u.getNickname());
+				int i = this.listViewUsersC.getItems().size();
+				Label l = this.listViewReadyC.getItems().get(i - 1);
+				l.setStyle("-fx-background-color: red");
+				l.setVisible(true);
+			}
+			else if(this.server != null)
+			{
+				this.listViewUsersS.getItems().add(u.getNickname());
+				int i = this.listViewUsersS.getItems().size();
+				Label l = this.listViewReadyS.getItems().get(i - 1);
+				l.setStyle("-fx-background-color: red");
+				l.setVisible(true);
+				this.listViewKickS.getItems().get(i - 1).setVisible(true);
+			}
+		});
+		
 	}
 	public void removeUser(User u)
 	{
@@ -323,17 +329,48 @@ public class Controller {
 	{
 		if(this.client != null)
 		{
-			for(int i = 0; i < users.size(); i++)
-			{
-				this.listViewUsersC.getItems().add(users.get(i).getNickname());
-				Label l = this.listViewReadyC.getItems().get(i);
-				l.setStyle(users.get(i).isReady() ? "-fx-background-color: lime" : "-fx-background-color: red");
-				l.setVisible(i == 0 ? false : true);
-			}
+			Platform.runLater(() -> {
+				for(int i = 0; i < users.size(); i++)
+				{
+					this.listViewUsersC.getItems().add(users.get(i).getNickname());
+					Label l = this.listViewReadyC.getItems().get(i);
+					l.setStyle(users.get(i).isReady() ? "-fx-background-color: lime" : "-fx-background-color: red");
+					l.setVisible(i == 0 ? false : true);
+				}
+			});
 		}
 		else if(this.server != null)
 		{
 			
 		}
+	}
+	public void showAlert(Message msg)
+	{
+		Platform.runLater(() -> {
+				String header;
+				switch(msg.getMsgType())
+				{
+					case CONNECT_FAILED:
+					{
+						header = "Connection failed";
+						break;
+					}
+					case KICK:
+					{
+						header = "Disconnected from server";
+						break;
+					}
+					default:
+					{
+						header = "";
+					}
+				}
+				Alert a = new Alert(AlertType.INFORMATION);
+				a.setTitle("Information Dialog");
+				a.setHeaderText(header);
+				a.setContentText(msg.getContent());
+				a.show();
+		});
+		
 	}
 }
