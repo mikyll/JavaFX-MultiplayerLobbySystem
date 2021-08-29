@@ -141,6 +141,7 @@ public class ServerStream implements IServer{
 								else 
 								{
 									mReply = new Message(MessageType.CONNECT_OK, controller.getCurrentTimestamp(), nickname, getUserList());
+									Message.printMessage(mReply); // test
 								}
 								// send back connect_ok, containing the updated user list
 								this.output.writeObject(mReply);
@@ -211,8 +212,18 @@ public class ServerStream implements IServer{
 	public void sendMessage(String content)
 	{
 		Message msg = new Message(MessageType.CHAT, this.controller.getCurrentTimestamp(), this.nickname, content);
-		this.controller.addToTextArea(msg.getTimestamp() + " " + msg.getNickname() + ": " + msg.getContent());		
+		this.controller.addToTextArea(msg);		
 		
+		// send the message to each user except the server
+		for(int i = 1; i < this.users.size(); i++)
+		{
+			try {
+				this.writers.get(i).writeObject(msg);
+			} catch (IOException e) {
+				// remove the writer at index i?
+				e.printStackTrace();
+			}
+		}
 	}
 	
 	// forward the message to each connected client, except the one that sent the message first

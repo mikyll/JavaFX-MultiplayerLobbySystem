@@ -27,10 +27,10 @@ public class ClientStream implements IClient {
 	private Socket socket;
 	private String nickname;
 	
-	private ObjectOutputStream oos;
+	private OutputStream os;
+    private ObjectOutputStream output;
     private InputStream is;
     private ObjectInputStream input;
-    private OutputStream outputStream;
 	
 	public ClientStream(Controller controller, String address, int port, String nickname)
 	{
@@ -49,24 +49,16 @@ public class ClientStream implements IClient {
 		private String address;
 		private int port;
 		
-		private OutputStream os;
+		/*private OutputStream os;
         private ObjectOutputStream output;
         private InputStream is;
-        private ObjectInputStream input;
+        private ObjectInputStream input;*/
 		
         // riguardare e sistemare!!!
 		public ClientListener(String address, int port)
 		{
 			this.address = address;
 			this.port = port;
-			/*try {
-				this.socket = new Socket(address, port);
-				
-			} catch (UnknownHostException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}*/
 		}
 		@Override
 		public void run()
@@ -75,20 +67,20 @@ public class ClientStream implements IClient {
 			try {
 				this.socket = new Socket(address, port);
 				
-				this.os = this.socket.getOutputStream();
-				this.output = new ObjectOutputStream(this.os);
-				this.is = this.socket.getInputStream();
-				this.input = new ObjectInputStream(this.is);
+				os = this.socket.getOutputStream();
+				output = new ObjectOutputStream(os);
+				is = this.socket.getInputStream();
+				input = new ObjectInputStream(is);
 				
 				System.out.println("Client: scrivo messaggio sulla socket");
 				Message msg = new Message(MessageType.CONNECT, controller.getCurrentTimestamp(), nickname, "");
-				this.output.writeObject(msg);
+				output.writeObject(msg);
 				System.out.println("Client: messaggio scritto sulla socket");
 				
 				
 				while(this.socket.isConnected())
 				{
-					Message incomingMsg = (Message) this.input.readObject();
+					Message incomingMsg = (Message) input.readObject();
 					System.out.println("Client: message received");
 					if(incomingMsg != null)
 					{
@@ -155,97 +147,11 @@ public class ClientStream implements IClient {
 			}
 		}
 	}
-	/*@Override
-	public void run()
-	{
-		try {
-			this.socket = new Socket(this.address, this.port);
-			
-			this.outputStream = this.socket.getOutputStream();
-			this.oos = new ObjectOutputStream(this.outputStream);
-			this.is = this.socket.getInputStream();
-            this.input = new ObjectInputStream(this.is);
-        } catch (IOException e) {
-        	System.out.println("Client: connection to server failed");
-        }
-		
-		// ricezione primo messaggio mi deve dire l'ID
-		try {
-			Message msg = (Message) this.input.readObject();
-			if(msg.getMsgType().equals(MessageType.CONNECT_FAILED))
-			{
-				// alert
-			}
-		} catch (ClassNotFoundException e1) {
-			e1.printStackTrace();
-		} catch (IOException e1) {
-			e1.printStackTrace();
-		}
-		
-		System.out.println("Connection accepted " + this.socket.getInetAddress() + ":" + this.socket.getPort());
-		
-		try {
-			this.connectToServer();
-			System.out.println("Client: input and output streams ready");
-			
-			// message receiving loop
-			while (socket.isConnected()) {
-                Message message = (Message) this.input.readObject();
-
-                if (message != null) {
-                	System.out.println("Client: message recieved. " + message.getMsgType().toString() + ", " + message.getTimestamp() + ", " + message.getNickname() + ", " + message.getContent());
-                	switch (message.getMsgType()) {
-                        case CONNECT_FAILED:
-                        {
-                        	// casi: il server è pieno, la room è private, il nickname è già utilizzato, oppure c'è già un client connesso con tale IP
-                        	this.controller.connectionFailed(message);
-                            break;
-                        }
-                        case CONNECT_OK:
-                        {
-                        	// successfully connected to server room, show message in chat and send players List
-                        	this.controller.switchToChatC();
-                            break;
-                        }
-                        case USER_LIST:
-                        {
-                        	// update user list
-                        	this.controller.updateUserList(message);
-                        	break;
-                        }
-                        case CHAT:
-                        {
-                        	this.controller.addToTextAreaChat(message);
-                        	break;
-                        }
-                        case KICK:
-                        {
-                        	// server kicked the client from the room
-                        	break;
-                        }
-                        case START_GAME:
-                        {
-                        	// server started the game
-                        	break;
-                        }
-                        default:
-                        {
-                        	break;
-                        }
-                    }
-                }
-            }
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
-            // controller.logoutScene();
-            // put there the disconnection(?)
-        }
-	}*/
 	
 	public void connectToServer() throws IOException
 	{
 		Message msg = new Message(MessageType.CONNECT, this.controller.getCurrentTimestamp(), this.nickname, "");
-		this.oos.writeObject(msg);
+		this.output.writeObject(msg);
 	}
 	
 
@@ -254,8 +160,9 @@ public class ClientStream implements IClient {
 	public void sendMessage(String content)
 	{
 		Message msg = new Message(MessageType.CHAT, this.controller.getCurrentTimestamp(), this.nickname, content);
+		this.controller.addToTextArea(msg);
 		try {
-			this.oos.writeObject(msg);
+			this.output.writeObject(msg);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -265,7 +172,7 @@ public class ClientStream implements IClient {
 	{
 		Message msg = new Message(MessageType.READY, this.controller.getCurrentTimestamp(), this.nickname, "" + ready);
 		try {
-			this.oos.writeObject(msg);
+			this.output.writeObject(msg);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
