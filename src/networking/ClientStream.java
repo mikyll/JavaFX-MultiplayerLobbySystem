@@ -72,12 +72,9 @@ public class ClientStream implements IClient {
 				is = this.socket.getInputStream();
 				input = new ObjectInputStream(is);
 				
-				System.out.println("Client: scrivo messaggio sulla socket");
+				// send CONNECT message
 				Message msg = new Message(MessageType.CONNECT, controller.getCurrentTimestamp(), nickname, "");
 				output.writeObject(msg);
-				System.out.println("Client: messaggio scritto sulla socket");
-				
-				
 				
 				while(this.socket.isConnected())
 				{

@@ -111,7 +111,6 @@ public class ServerStream implements IServer{
 				while(this.socket.isConnected())
 				{
 					Message incomingMsg = (Message) this.input.readObject();
-					System.out.println("Server: message received");
 					if(incomingMsg != null)
 					{
 						Message.printMessage(incomingMsg); // test
@@ -210,7 +209,6 @@ public class ServerStream implements IServer{
 							}
 						}
 					}
-					Message.printMessage(incomingMsg);
 				}
 				
 			} catch(SocketException e) {

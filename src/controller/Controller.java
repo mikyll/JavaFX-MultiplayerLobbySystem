@@ -150,6 +150,7 @@ public class Controller {
 		{
 			this.client.sendMessage(msg);
 		}
+		this.textFieldChatC.setText("");
 	}
 	@FXML public void kickUser(ActionEvent event)
 	{
@@ -162,6 +163,7 @@ public class Controller {
 		{
 			this.server.sendMessage(msg);
 		}
+		this.textFieldChatS.setText("");
 	}
 	
 	public void addToTextArea(String text)
@@ -221,9 +223,7 @@ public class Controller {
 	}
 	public void updateReady(String nickname, boolean ready)
 	{
-		//System.out.println("Client: received updated user list. " + message.getContent()); // test
 		// update user list
-		
 		if(this.client != null)
 		{
 			for(int i = 0; i < this.listViewUsersC.getItems().size(); i++)
