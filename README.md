@@ -14,7 +14,7 @@ to add:
 - automatic textarea scrolling, to last message;
 - ~~update User list in server, when someone send the READY.~~
 - fix exception print stack (handle them in a more proper way).
-
+- add timer after sending READY message
 
 references:
 - [JavaFX-Chat](https://github.com/DomHeal/JavaFX-Chat)
