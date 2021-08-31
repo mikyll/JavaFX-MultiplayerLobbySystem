@@ -81,12 +81,15 @@ public class Controller {
 	
 	@FXML public void validateNickname()
 	{
+		// nickname OK
 		if(checkNickname(this.textFieldNickname.getText()))
 		{
 			this.buttonCNR.setDisable(false);
+			// & address OK
 			if(this.checkIP(this.textFieldIP.getText()))
 				this.buttonJER.setDisable(false);
 		}
+		// nickname NOT
 		else
 		{
 			this.buttonCNR.setDisable(true);
