@@ -360,10 +360,16 @@ public class Controller {
 			
 		}
 	}
-	public void showAlert(Message msg)
+	public void showAlert(AlertType aType, String header, String content)
 	{
 		Platform.runLater(() -> {
-				String header;
+			Alert a = new Alert(aType);
+			a.setTitle("Information Dialog");
+			a.setHeaderText(header);
+			a.setContentText(content);
+			a.show();
+			
+			/*String header;
 				switch(msg.getMsgType())
 				{
 					case CONNECT_FAILED:
@@ -385,7 +391,7 @@ public class Controller {
 				a.setTitle("Information Dialog");
 				a.setHeaderText(header);
 				a.setContentText(msg.getContent());
-				a.show();
+				a.show();*/
 		});
 		
 	}

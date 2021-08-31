@@ -45,7 +45,10 @@ public class ServerStream implements IServer{
 		} catch (IOException e) {
 			System.out.println("Server: ServerSocket creation failed");
 			if(e instanceof BindException)
+			{
 				System.out.println("Server: another socket is already binded to this address and port");
+				// alert
+			}
 		}
 	}
 	

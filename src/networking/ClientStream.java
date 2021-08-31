@@ -17,6 +17,7 @@ import model.User;
 import model.chat.*;
 
 import controller.Controller;
+import javafx.scene.control.Alert.AlertType;
 
 public class ClientStream implements IClient {
 	private Controller controller;
@@ -92,7 +93,7 @@ public class ClientStream implements IClient {
 								controller.showConnectingBox(false);
 								
 								// show alert
-								controller.showAlert(incomingMsg);
+								controller.showAlert(AlertType.INFORMATION, "Connection failed", incomingMsg.getContent());
 								
 								break;
 							}
@@ -146,7 +147,7 @@ public class ClientStream implements IClient {
 									controller.switchToMP();
 									
 									// show alert
-									controller.showAlert(incomingMsg);
+									controller.showAlert(AlertType.INFORMATION, "Disconnected from server", incomingMsg.getContent());
 								}
 								else // another user got kicked
 								{
