@@ -5,6 +5,7 @@ import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -27,6 +28,9 @@ import networking.IServer;
 import networking.ServerStream;
 
 public class Controller {
+	
+	private static final Pattern IP_PATTERN = Pattern.compile("^(([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.){3}([01]?\\d\\d?|2[0-4]\\d|25[0-5])$");
+	
 	// login
 	@FXML private VBox vboxLogin;
 	@FXML private TextField textFieldNickname;
@@ -67,6 +71,34 @@ public class Controller {
 		this.tformatter = new SimpleDateFormat("[HH:mm:ss]");
 		this.switchToMP();
 		this.showConnectingBox(false);
+	}
+	
+	@FXML public void validateNickname()
+	{
+		
+	}
+	private boolean checkNickname()
+	{
+		if(!this.textFieldNickname.getText().isEmpty() && !this.textFieldNickname.getText().isEmpty())
+		{
+			// validate nickname with pattern
+		}
+	}
+	@FXML public void validateAddress()
+	{
+		
+	}
+	private boolean checkIP()
+	{
+		if(!IP_PATTERN.matcher(this.textFieldIP.getText()).matches())
+		{
+			this.buttonJER.setDisable(true);
+			this.labelErrorIP.setVisible(true);
+		}
+		else {
+			this.buttonJER.setDisable(false);
+			this.labelErrorIP.setVisible(false);
+		}
 	}
 	
 	@FXML public void selectCNR(ActionEvent event) 
