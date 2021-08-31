@@ -163,6 +163,7 @@ public class ServerStream implements IServer{
 									mReply = new Message(MessageType.CONNECT_OK, controller.getCurrentTimestamp(), nickname, getUserList());
 									this.output.writeObject(mReply);
 									Message.printMessage(mReply); // test
+									
 									// add message to chat
 									controller.addToTextArea(mReply.getTimestamp() + " " + incomingMsg.getNickname() + " has joined the room");
 									
@@ -171,13 +172,6 @@ public class ServerStream implements IServer{
 									mReply.setNickname(incomingMsg.getNickname());
 									forwardMessage(mReply);
 								}
-								
-								
-								
-								
-								// update text area "User has successfully connected"
-								// reply to the user with CONNECTION_OK
-								// send updated USER_LIST to everyone
 								
 								break;
 							}
@@ -268,11 +262,13 @@ public class ServerStream implements IServer{
 		for(int i = 1; i < this.users.size(); i++)
 		{
 			if(!msg.getNickname().equals(this.users.get(i).getNickname()))
+			{
 				try {
 					this.writers.get(i).writeObject(msg);
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
+			}
 		}
 	}
 	
