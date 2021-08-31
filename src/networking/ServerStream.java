@@ -6,12 +6,15 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.net.BindException;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 
 import controller.Controller;
+import javafx.scene.control.Alert.AlertType;
 import model.User;
 import model.chat.Message;
 import model.chat.MessageType;
@@ -47,7 +50,11 @@ public class ServerStream implements IServer{
 			if(e instanceof BindException)
 			{
 				System.out.println("Server: another socket is already binded to this address and port");
-				// alert
+				try {
+					this.controller.showAlert(AlertType.ERROR, "Room creation failed", "Another socket is already binded to " + InetAddress.getLocalHost().toString().split("/")[1] + ":" + PORT);
+				} catch (UnknownHostException e1) {
+					e1.printStackTrace();
+				}
 			}
 		}
 	}
