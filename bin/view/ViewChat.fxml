@@ -16,7 +16,7 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.Controller">
    <children>
-      <VBox fx:id="vboxLogin" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" spacing="5.0" style="-fx-background-color: black;" visible="false">
+      <VBox fx:id="vboxLogin" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" spacing="5.0" style="-fx-background-color: black;">
          <children>
             <HBox alignment="CENTER_LEFT" prefHeight="30.0" prefWidth="242.0">
                <children>
@@ -25,7 +25,7 @@
                         <Font size="18.0" />
                      </font>
                   </Label>
-                  <TextField fx:id="textFieldNickname" prefHeight="30.0" prefWidth="140.0" />
+                  <TextField fx:id="textFieldNickname" onKeyTyped="#validateNickname" prefHeight="30.0" prefWidth="140.0" />
                </children>
             </HBox>
             <Separator prefHeight="20.0" prefWidth="200.0" visible="false" />
@@ -33,7 +33,7 @@
             <Separator prefHeight="15.0" prefWidth="442.0" visible="false" />
             <VBox alignment="CENTER" prefHeight="105.0" prefWidth="242.0" spacing="5.0">
                <children>
-                  <TextField fx:id="textFieldIP" prefHeight="30.0" prefWidth="140.0" promptText="Remote IP address" />
+                  <TextField fx:id="textFieldIP" onKeyTyped="#validateAddress" prefHeight="30.0" prefWidth="140.0" promptText="Remote IP address" />
                   <Button fx:id="buttonJER" mnemonicParsing="false" onAction="#selectJER" prefHeight="30.0" prefWidth="140.0" text="Join existing room" />
                   <Label fx:id="labelErrorIP" prefHeight="30.0" prefWidth="95.0" text="Invalid IP address." textFill="RED" visible="false" />
                </children>
@@ -56,7 +56,7 @@
             <Insets left="100.0" right="100.0" />
          </padding>
       </VBox>
-      <VBox fx:id="vboxChatServer" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: black;">
+      <VBox fx:id="vboxChatServer" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: black;" visible="false">
          <children>
             <Label fx:id="labelServerIP" prefHeight="20.0" prefWidth="590.0" text="Server IP address: X.X.X.X" textFill="WHITE" />
             <HBox prefHeight="370.0" prefWidth="600.0">
