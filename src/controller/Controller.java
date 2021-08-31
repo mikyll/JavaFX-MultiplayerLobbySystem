@@ -29,7 +29,8 @@ import networking.ServerStream;
 
 public class Controller {
 	
-	private static final Pattern IP_PATTERN = Pattern.compile("^(([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.){3}([01]?\\d\\d?|2[0-4]\\d|25[0-5])$");
+	private static final Pattern PATTERN_NICKNAME = Pattern.compile("^[a-zA-Z0-9]{3,15}$");
+	private static final Pattern PATTERN_IP = Pattern.compile("^(([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.){3}([01]?\\d\\d?|2[0-4]\\d|25[0-5])$");
 	
 	// login
 	@FXML private VBox vboxLogin;
@@ -37,6 +38,7 @@ public class Controller {
 	@FXML private Button buttonCNR;
 	@FXML private TextField textFieldIP;
 	@FXML private Button buttonJER;
+	@FXML private Label labelErrorIP;
 	@FXML private HBox hboxC; // hbox connection
 	
 	// client
@@ -71,34 +73,61 @@ public class Controller {
 		this.tformatter = new SimpleDateFormat("[HH:mm:ss]");
 		this.switchToMP();
 		this.showConnectingBox(false);
+		
+		this.buttonCNR.setDisable(true);
+		this.buttonJER.setDisable(true);
+		this.labelErrorIP.setVisible(false);
 	}
 	
 	@FXML public void validateNickname()
 	{
-		
-	}
-	private boolean checkNickname()
-	{
-		if(!this.textFieldNickname.getText().isEmpty() && !this.textFieldNickname.getText().isEmpty())
+		if(checkNickname(this.textFieldNickname.getText()))
 		{
-			// validate nickname with pattern
+			this.buttonCNR.setDisable(false);
+			if(this.checkIP(this.textFieldIP.getText()))
+				this.buttonJER.setDisable(false);
 		}
+		else
+		{
+			this.buttonCNR.setDisable(true);
+			this.buttonJER.setDisable(true);
+		}
+	}
+	private boolean checkNickname(String text)
+	{
+		// if OK
+		if(PATTERN_NICKNAME.matcher(text).matches())
+			return true;
+		// if NOT
+		else return false;
 	}
 	@FXML public void validateAddress()
 	{
-		
-	}
-	private boolean checkIP()
-	{
-		if(!IP_PATTERN.matcher(this.textFieldIP.getText()).matches())
+		// address OK, nickname OK
+		if(checkIP(this.textFieldIP.getText()) && checkNickname(this.textFieldNickname.getText()))
+		{
+			this.buttonJER.setDisable(false);
+			this.labelErrorIP.setVisible(false);
+		}
+		// address NOT, nickname OK
+		else if(!checkIP(this.textFieldIP.getText()))
 		{
 			this.buttonJER.setDisable(true);
 			this.labelErrorIP.setVisible(true);
 		}
-		else {
-			this.buttonJER.setDisable(false);
+		// address OK, nickname NOT
+		else
+		{
 			this.labelErrorIP.setVisible(false);
 		}
+	}
+	private boolean checkIP(String text)
+	{
+		// if OK
+		if(PATTERN_IP.matcher(text).matches())
+			return true;
+		// if NOT
+		else return false;
 	}
 	
 	@FXML public void selectCNR(ActionEvent event) 
