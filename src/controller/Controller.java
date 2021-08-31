@@ -247,7 +247,6 @@ public class Controller {
 		if(this.client != null)
 		{
 			this.textAreaChatC.setText(this.textAreaChatC.getText() + "\n" + text);
-			
 		}
 		// server
 		else if(this.server != null)
@@ -261,13 +260,11 @@ public class Controller {
 		if(this.client != null)
 		{
 			this.textAreaChatC.setText(this.textAreaChatC.getText() + "\n" + message.getTimestamp() + " " + message.getNickname() + ": " + message.getContent());
-			
 		}
 		// server
 		else if(this.server != null)
 		{
 			this.textAreaChatS.setText(this.textAreaChatS.getText() + "\n" + message.getTimestamp() + " " + message.getNickname() + ": " + message.getContent());
-			
 		}
 	}
 	public void switchToMP()
@@ -287,15 +284,6 @@ public class Controller {
 		this.vboxChatServer.setVisible(true);
 	}
 	
-	
-	
-	public void connectionFailed(Message message)
-	{
-		System.out.println("Client: connection to server failed. " + message.getContent());
-		
-		// alert (show reply message content, example room full)
-		// set not visibile loading hbox
-	}
 	public void updateReady(String nickname, boolean ready)
 	{
 		// update user list
@@ -322,12 +310,7 @@ public class Controller {
 			}
 		}
 	}
-	public void kickedFromServer(Message message)
-	{
-		// alert
-		// switch view
-	}
-	public void setServerAddress()
+	private void setServerAddress()
 	{
 		try {
 			this.labelServerIP.setText("Server IP address: " + InetAddress.getLocalHost().toString().split("/")[1]);
@@ -407,9 +390,9 @@ public class Controller {
 	}
 	public void updateUserList(List<User> users)
 	{
-		if(this.client != null)
-		{
-			Platform.runLater(() -> {
+		Platform.runLater(() -> {
+			if(this.client != null)
+			{
 				for(int i = 0; i < users.size(); i++)
 				{
 					this.listViewUsersC.getItems().add(users.get(i).getNickname());
@@ -417,12 +400,12 @@ public class Controller {
 					l.setStyle(users.get(i).isReady() ? "-fx-background-color: lime" : "-fx-background-color: red");
 					l.setVisible(i == 0 ? false : true);
 				}
-			});
-		}
-		else if(this.server != null)
-		{
-			
-		}
+			}
+			else if(this.server != null)
+			{
+				// for the moment it's never used from the server
+			}
+		});
 	}
 	public void showAlert(AlertType aType, String header, String content)
 	{
@@ -432,31 +415,6 @@ public class Controller {
 			a.setHeaderText(header);
 			a.setContentText(content);
 			a.show();
-			
-			/*String header;
-				switch(msg.getMsgType())
-				{
-					case CONNECT_FAILED:
-					{
-						header = "Connection failed";
-						break;
-					}
-					case KICK:
-					{
-						header = "Disconnected from server";
-						break;
-					}
-					default:
-					{
-						header = "";
-					}
-				}
-				Alert a = new Alert(AlertType.INFORMATION);
-				a.setTitle("Information Dialog");
-				a.setHeaderText(header);
-				a.setContentText(msg.getContent());
-				a.show();*/
 		});
-		
 	}
 }
