@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 import javafx.application.Platform;
-import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -168,7 +167,6 @@ public class Controller {
 		this.client = new ClientStream(this, this.textFieldIP.getText(), 9001, this.textFieldNickname.getText());
 		
 		Label l;
-		Button b;
 		// popolate the listView with the controls but set them invisibile
 		for(int i = 0; i < 6; i++)
 		{
