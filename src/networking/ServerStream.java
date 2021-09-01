@@ -109,17 +109,12 @@ public class ServerStream implements IServer{
 		@Override
 		public void run()
 		{
-			System.out.println("Listening");
 			try {
+				// NB: the order of these is important (server: input -> output)
 				this.is = this.socket.getInputStream();
 				this.input = new ObjectInputStream(this.is);
 				this.os = this.socket.getOutputStream();
 				this.output = new ObjectOutputStream(this.os);
-				
-				// check qui oppure nel while (forse meglio nel while?)
-				
-				/*Message m = (Message) this.input.readObject();
-				System.out.println("Server messaggio ricevuto");*/
 				
 				while(this.socket.isConnected())
 				{
