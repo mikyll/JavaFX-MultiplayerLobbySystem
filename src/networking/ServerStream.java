@@ -83,7 +83,7 @@ public class ServerStream implements IServer{
 				e.printStackTrace();
 			} finally {
 				try {
-					this.listener.close(); // check if it's ok (try/catch)
+					this.listener.close(); // CHECK
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -146,7 +146,8 @@ public class ServerStream implements IServer{
 								
 								}
 								*/
-								else 
+								// the connection can be accepted
+								else
 								{
 									// add user and writer to list
 									User u = new User(incomingMsg.getNickname());
@@ -154,7 +155,7 @@ public class ServerStream implements IServer{
 									writers.add(this.output);
 									controller.addUser(u);
 									
-									// send back connect_ok, containing the updated user list
+									// send back OK message, containing the updated user list
 									mReply = new Message(MessageType.CONNECT_OK, controller.getCurrentTimestamp(), nickname, getUserList());
 									this.output.writeObject(mReply);
 									Message.printMessage(mReply); // test
@@ -255,35 +256,7 @@ public class ServerStream implements IServer{
 		}
 	}
 	
-	// forward the message to each connected client, except the one that sent the message first
-	public void forwardMessage(Message msg)
-	{
-		for(int i = 1; i < this.users.size(); i++)
-		{
-			if(!msg.getNickname().equals(this.users.get(i).getNickname()))
-			{
-				try {
-					this.writers.get(i).writeObject(msg);
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-		}
-	}
-	
-	public void sendUserList()
-	{
-		String list = "";
-		for(int i = 0; i < this.users.size(); i++)
-		{
-			User u = this.users.get(i);
-			list += u.getNickname() + "," + u.isReady();
-			list += (i == this.users.size() - 1 ? ";" : "");
-		}
-		Message msg = new Message(MessageType.USER_LIST, this.controller.getCurrentTimestamp(), this.nickname, list);
-		Message.printMessage(msg);
-	}
-	
+	@Override
 	public void kickUser(String nickname)
 	{
 		// send kick to everyone (the nickname indicates which user is getting kicked)
@@ -314,6 +287,22 @@ public class ServerStream implements IServer{
 		this.controller.addToTextArea(msg.getTimestamp() + " User " + msg.getNickname() + " has been kicked out");
 	}
 	
+	// forward the message to each connected client, except the one that sent the message first
+	private void forwardMessage(Message msg)
+	{
+		for(int i = 1; i < this.users.size(); i++)
+		{
+			if(!msg.getNickname().equals(this.users.get(i).getNickname()))
+			{
+				try {
+					this.writers.get(i).writeObject(msg);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+	
 	private boolean checkDuplicateNickname(String nickname)
 	{
 		for(User u : this.users)
@@ -336,12 +325,4 @@ public class ServerStream implements IServer{
 		
 		return list;
 	}
-	
-	/* "[] User Mikyll has been kicked from the room"
-	 * "[] User Mikyll has joined the room"
-	 * "[] Mikyll: ciao"
-	 * "[] User Mikyll has left the room"
-	 * "[] "-" user ready
-	 * ""
-	 */
 }
