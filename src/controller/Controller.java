@@ -193,15 +193,14 @@ public class Controller {
 			this.buttonReady.setText("Not ready");
 			this.buttonReady.setStyle("-fx-background-color: red");
 			this.client.sendReady(false);
-			this.listViewReadyC.getItems().get(i).setStyle("-fx-background-color: red");;
+			this.listViewReadyC.getItems().get(i).setStyle("-fx-background-color: red");
 		}
 		else
 		{
 			this.buttonReady.setText("Ready");
 			this.buttonReady.setStyle("-fx-background-color: lime");
 			this.client.sendReady(true);
-			this.listViewReadyC.getItems().get(i).setStyle("-fx-background-color: lime");;
-			
+			this.listViewReadyC.getItems().get(i).setStyle("-fx-background-color: lime");
 		}
 		// set a 5 sec timer that disables the button, so that users can't spam the toggle
 	}
