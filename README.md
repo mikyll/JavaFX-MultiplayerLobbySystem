@@ -1,6 +1,6 @@
-# ChatClientServer
+# JavaFX-MultiplayerLobbySystem
 
-JavaFX lobby system for a game using socket TCP (can be extended to UDP).
+JavaFX lobby system for multiplayer games with chat, using socket TCP (can be extended to UDP).
 
 Features:
 - chat;
