@@ -116,12 +116,14 @@ public class ClientStream implements IClient {
 							}
 							case CHAT:
 							{
+								// add the message to the chat textArea
 								controller.addToTextArea(incomingMsg);
 								
 								break;
 							}
 							case USER_JOINED:
 							{
+								// add the message to the chat textArea
 								controller.addToTextArea(incomingMsg.getTimestamp() + " " + incomingMsg.getNickname() + " has joined the room");;
 								
 								// add the user and update the list

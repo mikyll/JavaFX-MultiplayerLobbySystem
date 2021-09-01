@@ -164,7 +164,7 @@ public class ServerStream implements IServer{
 									this.output.writeObject(mReply);
 									Message.printMessage(mReply); // test
 									
-									// add message to chat
+									// add the message to the chat textArea
 									controller.addToTextArea(mReply.getTimestamp() + " " + incomingMsg.getNickname() + " has joined the room");
 									
 									// forward to other users the new user joined
@@ -177,7 +177,7 @@ public class ServerStream implements IServer{
 							}
 							case CHAT:
 							{
-								// update textArea
+								// add the message to the chat textArea
 								controller.addToTextArea(incomingMsg);
 								
 								// forward the chat message
@@ -207,12 +207,16 @@ public class ServerStream implements IServer{
 							}
 							case DISCONNECT:
 							{
-								// remove the user
-								// remove the writer
+								// add the message to the chat textArea
+								//controller.addToTextArea(incomingMsg.getTimestamp() + " " + nickname + " has left the room");
+								
+								// remove user and writer from the list
 								
 								// update controller list view
 								
-								// close the connection
+								// close the connection(?) & writer
+								
+								// stop the thread(?)
 								
 								break;
 							}
