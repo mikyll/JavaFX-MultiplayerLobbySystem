@@ -36,7 +36,6 @@ public class ClientStream implements IClient {
 		this.clientListener.start();
 	}
 	
-	// provare a usare una classe privata come questa
 	private class ClientListener extends Thread {
 		private Socket socket;
 		private String address;
@@ -89,13 +88,11 @@ public class ClientStream implements IClient {
 								// add the message to the chat textArea
 								controller.addToTextArea(incomingMsg.getTimestamp() + " " + nickname + " has joined the room");
 								
-								// get user list from OK
+								// get user list from OK message
 								controller.updateUserList(extractUserList(incomingMsg.getContent()));
 								
-								// stop loading icon
+								// stop loading icon & switch view
 								controller.showConnectingBox(false);
-								
-								// switch view
 								controller.switchToChatC();
 								
 								break;
@@ -137,11 +134,12 @@ public class ClientStream implements IClient {
 									// show alert
 									controller.showAlert(AlertType.INFORMATION, "Disconnected from server", incomingMsg.getContent());
 								}
-								else // another user got kicked
+								// another user got kicked
+								else
 								{
 									controller.removeUser(incomingMsg.getNickname());
 									
-									// add to chat
+									// add the message to the chat textArea
 									controller.addToTextArea(incomingMsg.getTimestamp() + " User '" + incomingMsg.getNickname() + "' has been kicked out");
 								}
 								
@@ -167,15 +165,7 @@ public class ClientStream implements IClient {
 		}
 	}
 	
-	public void connectToServer() throws IOException
-	{
-		Message msg = new Message(MessageType.CONNECT, this.controller.getCurrentTimestamp(), this.nickname, "");
-		this.output.writeObject(msg);
-	}
-	
-
-	
-	// sends a message to the server
+	@Override
 	public void sendMessage(String content)
 	{
 		Message msg = new Message(MessageType.CHAT, this.controller.getCurrentTimestamp(), this.nickname, content);
@@ -187,6 +177,7 @@ public class ClientStream implements IClient {
 		}
 	}
 	
+	@Override
 	public void sendReady(boolean ready)
 	{
 		Message msg = new Message(MessageType.READY, this.controller.getCurrentTimestamp(), this.nickname, "" + ready);
@@ -197,7 +188,7 @@ public class ClientStream implements IClient {
 		}
 	}
 	
-	public List<User> extractUserList(String s)
+	private List<User> extractUserList(String s)
 	{
 		List<User> list = new ArrayList<User>();
 		
