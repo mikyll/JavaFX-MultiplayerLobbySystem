@@ -21,6 +21,7 @@ to add:
 - add on close function to disconnect and stop the threads before closing the app
 - add "start game" button which enables when the room has the minimum users required
 - add open/close checkbox to allow users to join
+- add Datagram (UDP) variant
 
 references:
 - [JavaFX-Chat](https://github.com/DomHeal/JavaFX-Chat)
