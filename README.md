@@ -22,6 +22,7 @@ to add:
 - add "start game" button which enables when the room has the minimum users required
 - add open/close checkbox to allow users to join
 - add Datagram (UDP) variant
+- port forwarding(?)
 
 references:
 - [JavaFX-Chat](https://github.com/DomHeal/JavaFX-Chat)
