@@ -414,4 +414,18 @@ public class Controller {
 			a.show();
 		});
 	}
+	
+	public void closeConnection()
+	{
+		if(this.client != null)
+		{
+			this.client.sendClose();
+		}
+		else if(this.server != null)
+		{
+			this.server.sendClose();
+		}
+        Platform.exit();
+        System.exit(0);
+    }
 }

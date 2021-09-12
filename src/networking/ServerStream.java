@@ -204,11 +204,14 @@ public class ServerStream implements IServer{
 							case DISCONNECT:
 							{
 								// add the message to the chat textArea
-								//controller.addToTextArea(incomingMsg.getTimestamp() + " " + nickname + " has left the room");
+								controller.addToTextArea(incomingMsg.getTimestamp() + " " + nickname + " has left the room");
+								
+								// forward disconnection to others
 								
 								// remove user and writer from the list
 								
 								// update controller list view
+								controller.removeUser(nickname);
 								
 								// close the connection(?) & writer
 								
@@ -260,7 +263,7 @@ public class ServerStream implements IServer{
 	public void kickUser(String nickname)
 	{
 		// send kick to everyone (the nickname indicates which user is getting kicked)
-		Message msg = new Message(MessageType.KICK, controller.getCurrentTimestamp(), nickname, "You have been kicked out from the server");
+		Message msg = new Message(MessageType.KICK, controller.getCurrentTimestamp(), this.nickname, "You have been kicked out from the server");
 		for(int i = 1; i < this.writers.size(); i++)
 		{
 			try {
@@ -324,5 +327,12 @@ public class ServerStream implements IServer{
 		}
 		
 		return list;
+	}
+
+	@Override
+	public void sendClose()
+	{
+		Message msg = new Message(MessageType.KICK, controller.getCurrentTimestamp(), this.nickname, "You've been disconnected: server room closed");
+		this.forwardMessage(msg);		
 	}
 }

@@ -1,5 +1,6 @@
 package application;
 
+import controller.Controller;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -7,6 +8,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 public class Main extends Application{
+	private Controller controller;
 	@Override
 	public void start(Stage stage) {
 		try {
@@ -17,10 +19,17 @@ public class Main extends Application{
 			stage.setTitle("Chat");
 			stage.setScene(scene);
 			stage.show();
+			this.controller = (Controller) loader.getController();
 			
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	@Override
+	public void stop()
+	{
+		this.controller.closeConnection();
 	}
 	
 	public static void main(String[] args) {

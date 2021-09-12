@@ -145,6 +145,12 @@ public class ClientStream implements IClient {
 								
 								break;
 							}
+							case DISCONNECT:
+							{
+								// caso in cui un altro utente si disconnette
+								
+								break;
+							}
 							default:
 							{
 								System.out.println("Client: invalid message type received: " + incomingMsg.getMsgType());
@@ -202,5 +208,16 @@ public class ClientStream implements IClient {
 		}
 		
 		return list;
+	}
+	
+	@Override
+	public void sendClose()
+	{
+		Message msg = new Message(MessageType.DISCONNECT, controller.getCurrentTimestamp(), this.nickname, "");
+		try {
+			this.output.writeObject(msg);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }
