@@ -125,8 +125,8 @@ public class ClientStream implements IClient {
 								// this user got kicked out
 								if(incomingMsg.getNickname().equals(nickname))
 								{
-									// close connection
-									this.socket.close();
+									// close connection (?)
+									//this.socket.close();
 									
 									// switch view
 									controller.switchToMP();
@@ -147,12 +147,26 @@ public class ClientStream implements IClient {
 							}
 							case DISCONNECT:
 							{
+								// the room has been closed (connection lost from the server)
+								if(incomingMsg.getNickname().equals(nickname))
+								{
+									// close connection(?)
+									
+									// switch view
+									controller.switchToMP();
+									
+									// show alert
+									controller.showAlert(AlertType.INFORMATION, "Disconnected from server", incomingMsg.getContent());
+								}
 								// another user disconnected
-								// add the message to the chat textArea
-								controller.addToTextArea(incomingMsg.getTimestamp() + " " + incomingMsg.getNickname() + " has left the room");
-								
-								// controller: remove user from list
-								controller.removeUser(incomingMsg.getNickname());
+								else
+								{
+									// add the message to the chat textArea
+									controller.addToTextArea(incomingMsg.getTimestamp() + " " + incomingMsg.getNickname() + " has left the room");
+									
+									// controller: remove user from list
+									controller.removeUser(incomingMsg.getNickname());
+								}
 								
 								break;
 							}

@@ -248,7 +248,8 @@ public class ServerStream implements IServer{
 					System.out.println("Socket closed");
 				else e.printStackTrace();
 			} catch (IOException e) {
-				// When the server kicks an user, IOException is thrown because the thread which is listening, tries to read from the stream, but it has been closed from the other endpoint
+				// if we close the socket when kick/disconnect is received, then:
+				// when the server kicks an user, IOException is thrown because the thread which is listening, tries to read from the stream, but the socket has been closed from the other endpoint
 				System.out.println("Errore stream (" + this.getId() + ")");
 				e.printStackTrace();
 			} catch (ClassNotFoundException e) {
@@ -348,7 +349,18 @@ public class ServerStream implements IServer{
 	@Override
 	public void sendClose()
 	{
-		Message msg = new Message(MessageType.KICK, controller.getCurrentTimestamp(), this.nickname, "You've been disconnected: server room closed");
-		this.forwardMessage(msg);
+		Message msg = new Message(MessageType.DISCONNECT, controller.getCurrentTimestamp(), this.nickname, "Server room closed");
+
+		// send the message to each user except the server
+		for(int i = 1; i < this.users.size(); i++)
+		{
+			msg.setNickname(this.users.get(i).getNickname());
+			try {
+				this.writers.get(i).writeObject(msg);
+			} catch (IOException e) {
+				// remove the writer at index i?
+				e.printStackTrace();
+			}
+		}
 	}
 }

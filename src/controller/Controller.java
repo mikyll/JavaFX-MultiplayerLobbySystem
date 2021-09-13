@@ -289,6 +289,7 @@ public class Controller {
 	}
 	public void switchToMP()
 	{
+		this.vboxBack.setVisible(false);
 		this.vboxChatClient.setVisible(false);
 		this.vboxChatServer.setVisible(false);
 		this.vboxLogin.setVisible(true);
