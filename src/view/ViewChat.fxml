@@ -125,5 +125,18 @@
             </HBox>
          </children>
       </VBox>
+      <VBox fx:id="vboxBack" alignment="CENTER" layoutY="350.0" prefHeight="50.0" prefWidth="50.0" visible="false">
+         <children>
+            <Button fx:id="buttonBack" mnemonicParsing="false" onAction="#goBack" prefHeight="40.0" prefWidth="40.0">
+               <graphic>
+                  <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@icon-back.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+         </children>
+      </VBox>
    </children>
 </AnchorPane>

@@ -32,6 +32,7 @@ public class Controller {
 	private static final Pattern PATTERN_IP = Pattern.compile("^(([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.){3}([01]?\\d\\d?|2[0-4]\\d|25[0-5])$");
 	
 	// login
+	@FXML private VBox vboxBack;
 	@FXML private VBox vboxLogin;
 	@FXML private TextField textFieldNickname;
 	@FXML private Button buttonCNR;
@@ -180,6 +181,12 @@ public class Controller {
 		
 		this.showConnectingBox(true);
 	}
+	
+	@FXML public void goBack(ActionEvent event)
+	{
+		
+	}
+	
 	@FXML public void toggleReady(ActionEvent event)
 	{
 		int i;
