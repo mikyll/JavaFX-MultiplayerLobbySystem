@@ -206,10 +206,8 @@ public class ServerStream implements IServer{
 								// add the message to the chat textArea
 								controller.addToTextArea(incomingMsg.getTimestamp() + " " + incomingMsg.getNickname() + " has left the room");
 								
-								System.out.println("prima");
 								// forward disconnection to others
 								forwardMessage(incomingMsg);
-								System.out.println("dopo");
 								
 								// update controller list view
 								controller.removeUser(incomingMsg.getNickname());
@@ -305,7 +303,7 @@ public class ServerStream implements IServer{
 		
 		this.controller.removeUser(kickNickname);
 		
-		this.controller.addToTextArea(msg.getTimestamp() + " User " + msg.getNickname() + " has been kicked out");
+		this.controller.addToTextArea(msg.getTimestamp() + " " + msg.getNickname() + " has been kicked out");
 	}
 	
 	// forward the message to each connected client, except the one that sent the message first
