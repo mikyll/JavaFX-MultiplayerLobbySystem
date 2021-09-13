@@ -140,14 +140,19 @@ public class ClientStream implements IClient {
 									controller.removeUser(incomingMsg.getNickname());
 									
 									// add the message to the chat textArea
-									controller.addToTextArea(incomingMsg.getTimestamp() + " User '" + incomingMsg.getNickname() + "' has been kicked out");
+									controller.addToTextArea(incomingMsg.getTimestamp() + " " + incomingMsg.getNickname() + " has been kicked out");
 								}
 								
 								break;
 							}
 							case DISCONNECT:
 							{
-								// caso in cui un altro utente si disconnette
+								// another user disconnected
+								// add the message to the chat textArea
+								controller.addToTextArea(incomingMsg.getTimestamp() + " " + incomingMsg.getNickname() + " has left the room");
+								
+								// controller: remove user from list
+								controller.removeUser(incomingMsg.getNickname());
 								
 								break;
 							}

@@ -102,7 +102,7 @@ public class ServerStream implements IServer{
         
 		public Handler(Socket socket)
 		{
-			System.out.println("Server: connection accepted");
+			System.out.println("Server (" + this.getId() + "): connection accepted");
 			this.socket = socket;
 		}
 		
@@ -196,7 +196,7 @@ public class ServerStream implements IServer{
 									}
 								}
 								
-								// forward the reaady to other users
+								// forward the ready to other users
 								forwardMessage(incomingMsg);
 								
 								break;
@@ -206,14 +206,16 @@ public class ServerStream implements IServer{
 								// add the message to the chat textArea
 								controller.addToTextArea(incomingMsg.getTimestamp() + " " + incomingMsg.getNickname() + " has left the room");
 								
+								System.out.println("prima");
 								// forward disconnection to others
 								forwardMessage(incomingMsg);
+								System.out.println("dopo");
 								
 								// update controller list view
 								controller.removeUser(incomingMsg.getNickname());
 								
 								// remove user and writer from the list
-								for(int i = 0; i < users.size(); i++)
+								for(int i = 1; i < users.size(); i++)
 								{
 									if(users.get(i).getNickname().equals(incomingMsg.getNickname()))
 									{
@@ -227,9 +229,9 @@ public class ServerStream implements IServer{
 								socket.close();
 								
 								// stop the thread(?)
-								interrupt();
+								//interrupt();
 								
-								// breaK;
+								break;
 							}
 							default:
 							{
@@ -248,7 +250,8 @@ public class ServerStream implements IServer{
 					System.out.println("Socket closed");
 				else e.printStackTrace();
 			} catch (IOException e) {
-				System.out.println("Errore stream");
+				// When the server kicks an user, IOException is thrown because the thread which is listening, tries to read from the stream, but it has been closed from the other endpoint
+				System.out.println("Errore stream (" + this.getId() + ")");
 				e.printStackTrace();
 			} catch (ClassNotFoundException e) {
 				e.printStackTrace();
@@ -290,7 +293,7 @@ public class ServerStream implements IServer{
 		}
 		
 		// remove user and writer
-		for(int i = 0; i < this.users.size(); i++)
+		for(int i = 1; i < this.users.size(); i++)
 		{
 			if(this.users.get(i).getNickname().equals(kickNickname))
 			{
