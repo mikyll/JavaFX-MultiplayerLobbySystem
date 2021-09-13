@@ -143,7 +143,7 @@ public class ServerStream implements IServer{
 								}
 								/*else if() // room is closed
 								{
-								
+									
 								}
 								*/
 								// the connection can be accepted
@@ -204,20 +204,32 @@ public class ServerStream implements IServer{
 							case DISCONNECT:
 							{
 								// add the message to the chat textArea
-								controller.addToTextArea(incomingMsg.getTimestamp() + " " + nickname + " has left the room");
+								controller.addToTextArea(incomingMsg.getTimestamp() + " " + incomingMsg.getNickname() + " has left the room");
 								
 								// forward disconnection to others
-								
-								// remove user and writer from the list
+								forwardMessage(incomingMsg);
 								
 								// update controller list view
-								controller.removeUser(nickname);
+								controller.removeUser(incomingMsg.getNickname());
 								
-								// close the connection(?) & writer
+								// remove user and writer from the list
+								for(int i = 0; i < users.size(); i++)
+								{
+									if(users.get(i).getNickname().equals(incomingMsg.getNickname()))
+									{
+										users.remove(i);
+										writers.remove(i);
+										break;
+									}
+								}
+								
+								// close the connection(?)
+								socket.close();
 								
 								// stop the thread(?)
+								interrupt();
 								
-								break;
+								// breaK;
 							}
 							default:
 							{
@@ -230,7 +242,11 @@ public class ServerStream implements IServer{
 				
 			} catch(SocketException e) {
 				// "Connection reset" when the other endpoint disconnects
-				e.printStackTrace();
+				
+				// "java.net.SocketException: Socket closed" - received DISCONNECT
+				if(e.getMessage().contains("Socket closed"))
+					System.out.println("Socket closed");
+				else e.printStackTrace();
 			} catch (IOException e) {
 				System.out.println("Errore stream");
 				e.printStackTrace();
@@ -260,10 +276,10 @@ public class ServerStream implements IServer{
 	}
 	
 	@Override
-	public void kickUser(String nickname)
+	public void kickUser(String kickNickname)
 	{
 		// send kick to everyone (the nickname indicates which user is getting kicked)
-		Message msg = new Message(MessageType.KICK, controller.getCurrentTimestamp(), this.nickname, "You have been kicked out from the server");
+		Message msg = new Message(MessageType.KICK, controller.getCurrentTimestamp(), kickNickname, "You have been kicked out from the server");
 		for(int i = 1; i < this.writers.size(); i++)
 		{
 			try {
@@ -274,10 +290,9 @@ public class ServerStream implements IServer{
 		}
 		
 		// remove user and writer
-		int i;
-		for(i = 0; i < this.users.size(); i++)
+		for(int i = 0; i < this.users.size(); i++)
 		{
-			if(this.users.get(i).getNickname().equals(nickname))
+			if(this.users.get(i).getNickname().equals(kickNickname))
 			{
 				this.users.remove(i);
 				this.writers.remove(i);
@@ -285,7 +300,7 @@ public class ServerStream implements IServer{
 			}
 		}
 		
-		this.controller.removeUser(nickname);
+		this.controller.removeUser(kickNickname);
 		
 		this.controller.addToTextArea(msg.getTimestamp() + " User " + msg.getNickname() + " has been kicked out");
 	}
