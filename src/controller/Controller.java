@@ -135,6 +135,8 @@ public class Controller {
 	
 	@FXML public void selectCNR(ActionEvent event) 
 	{
+		this.vboxBack.setVisible(true);
+		
 		this.textAreaChatS.setText(this.getCurrentTimestamp() + " " + this.textFieldNickname.getText() + " created the room");
 		this.setServerAddress();
 		
@@ -164,6 +166,8 @@ public class Controller {
 	
 	@FXML public void selectJER(ActionEvent event) 
 	{
+		this.vboxBack.setVisible(true);
+		
 		// connect to existing room -> start client
 		this.client = new ClientStream(this, this.textFieldIP.getText(), 9001, this.textFieldNickname.getText());
 		
@@ -184,7 +188,17 @@ public class Controller {
 	
 	@FXML public void goBack(ActionEvent event)
 	{
+		this.vboxBack.setVisible(false);
+		this.switchToMP();
 		
+		if(this.client != null)
+		{
+			this.client.sendClose();
+		}
+		else if(this.server != null)
+		{
+			this.server.sendClose();
+		}
 	}
 	
 	@FXML public void toggleReady(ActionEvent event)
@@ -222,6 +236,8 @@ public class Controller {
 	}
 	@FXML public void kickUser(ActionEvent event)
 	{	
+		this.vboxBack.setVisible(false);
+		
 		// get the button index
 		for(int i = 1; i < this.listViewUsersS.getItems().size(); i++)
 		{

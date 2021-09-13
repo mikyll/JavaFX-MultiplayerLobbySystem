@@ -349,6 +349,6 @@ public class ServerStream implements IServer{
 	public void sendClose()
 	{
 		Message msg = new Message(MessageType.KICK, controller.getCurrentTimestamp(), this.nickname, "You've been disconnected: server room closed");
-		this.forwardMessage(msg);		
+		this.forwardMessage(msg);
 	}
 }
