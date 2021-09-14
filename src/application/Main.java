@@ -2,6 +2,7 @@ package application;
 
 import controller.Controller;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
@@ -18,6 +19,7 @@ public class Main extends Application{
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			stage.setTitle("Chat");
 			stage.setScene(scene);
+			//stage.setResizable(false);
 			stage.show();
 			this.controller = (Controller) loader.getController();
 			
@@ -30,6 +32,8 @@ public class Main extends Application{
 	public void stop()
 	{
 		this.controller.closeConnection();
+		 Platform.exit();
+	     System.exit(0);
 	}
 	
 	public static void main(String[] args) {

@@ -191,14 +191,7 @@ public class Controller {
 		this.vboxBack.setVisible(false);
 		this.switchToMP();
 		
-		if(this.client != null)
-		{
-			this.client.sendClose();
-		}
-		else if(this.server != null)
-		{
-			this.server.sendClose();
-		}
+		this.closeConnection();
 	}
 	
 	@FXML public void toggleReady(ActionEvent event)
@@ -449,7 +442,5 @@ public class Controller {
 		{
 			this.server.sendClose();
 		}
-        Platform.exit();
-        System.exit(0);
     }
 }
