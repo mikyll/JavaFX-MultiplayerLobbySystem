@@ -67,7 +67,6 @@ public class ServerStream implements IServer{
 		{
 			this.listener = new ServerSocket(port);
 			System.out.println("Server: listening for connections on port " + PORT);
-			
 		}
 		
 		@Override
@@ -87,6 +86,16 @@ public class ServerStream implements IServer{
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
+			}
+		}
+		
+		public void closeSocket()
+		{
+			try {
+				this.listener.close();
+			} catch (IOException e) {
+				System.out.println("IOException while closing the socket");
+				e.printStackTrace();
 			}
 		}
 	}
@@ -258,38 +267,40 @@ public class ServerStream implements IServer{
 			
 		}
 	}
-
-	@Override
-	public void sendMessage(String content)
+	
+	private void sendMessage(Message message)
 	{
-		Message msg = new Message(MessageType.CHAT, this.controller.getCurrentTimestamp(), this.nickname, content);
-		this.controller.addToTextArea(msg);		
-		
 		// send the message to each user except the server
 		for(int i = 1; i < this.users.size(); i++)
 		{
 			try {
-				this.writers.get(i).writeObject(msg);
+				this.writers.get(i).writeObject(message);
 			} catch (IOException e) {
-				// remove the writer at index i?
+				System.out.println("IOException while trying to send message to client");
 				e.printStackTrace();
 			}
 		}
 	}
 	
 	@Override
-	public void kickUser(String kickNickname)
+	public void sendChatMessage(String content)
 	{
-		// send kick to everyone (the nickname indicates which user is getting kicked)
+		Message msg = new Message(MessageType.CHAT, this.controller.getCurrentTimestamp(), this.nickname, content);
+		
+		// send the chat message to everyone
+		this.sendMessage(msg);
+		
+		// add the chat message to the textArea
+		this.controller.addToTextArea(msg);
+	}
+	
+	@Override
+	public void sendKickUser(String kickNickname)
+	{
 		Message msg = new Message(MessageType.KICK, controller.getCurrentTimestamp(), kickNickname, "You have been kicked out from the server");
-		for(int i = 1; i < this.writers.size(); i++)
-		{
-			try {
-				this.writers.get(i).writeObject(msg);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
+		
+		// send kick to everyone (the nickname indicates which user is getting kicked)
+		this.sendMessage(msg);
 		
 		// remove user and writer
 		for(int i = 1; i < this.users.size(); i++)
@@ -302,14 +313,37 @@ public class ServerStream implements IServer{
 			}
 		}
 		
+		// remove user from the listView
 		this.controller.removeUser(kickNickname);
 		
+		// add kick message to the textArea
 		this.controller.addToTextArea(msg.getTimestamp() + " " + msg.getNickname() + " has been kicked out");
 	}
 	
-	// forward the message to each connected client, except the one that sent the message first
+	@Override
+	public void sendClose()
+	{
+		Message msg = new Message(MessageType.DISCONNECT, controller.getCurrentTimestamp(), this.nickname, "Server room closed");
+
+		// send the message to each user except the server (NB: it's not a normal sendMessage
+		for(int i = 1; i < this.users.size(); i++)
+		{
+			msg.setNickname(this.users.get(i).getNickname());
+			try {
+				this.writers.get(i).writeObject(msg);
+			} catch (IOException e) {
+				// remove the writer at index i?
+				e.printStackTrace();
+			}
+		}
+		
+		// close the socket
+		this.serverListener.closeSocket();
+	}
+	
 	private void forwardMessage(Message msg)
 	{
+		// forward the message to each connected client, except the one that sent the message first
 		for(int i = 1; i < this.users.size(); i++)
 		{
 			if(!msg.getNickname().equals(this.users.get(i).getNickname()))
@@ -344,23 +378,5 @@ public class ServerStream implements IServer{
 		}
 		
 		return list;
-	}
-
-	@Override
-	public void sendClose()
-	{
-		Message msg = new Message(MessageType.DISCONNECT, controller.getCurrentTimestamp(), this.nickname, "Server room closed");
-
-		// send the message to each user except the server
-		for(int i = 1; i < this.users.size(); i++)
-		{
-			msg.setNickname(this.users.get(i).getNickname());
-			try {
-				this.writers.get(i).writeObject(msg);
-			} catch (IOException e) {
-				// remove the writer at index i?
-				e.printStackTrace();
-			}
-		}
 	}
 }

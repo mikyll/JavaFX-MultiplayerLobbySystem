@@ -1,7 +1,7 @@
 package networking;
 
 public interface IServer {
-	public void sendMessage(String content);
-	public void kickUser(String nickname);
+	public void sendChatMessage(String content);
+	public void sendKickUser(String nickname);
 	public void sendClose();
 }

@@ -223,7 +223,7 @@ public class Controller {
 		String msg = this.textFieldChatC.getText();
 		if(!msg.isEmpty() && !msg.isBlank())
 		{
-			this.client.sendMessage(msg);
+			this.client.sendChatMessage(msg);
 		}
 		this.textFieldChatC.setText("");
 	}
@@ -239,7 +239,7 @@ public class Controller {
 				System.out.println("Server: kicked user " + this.listViewUsersS.getItems().get(i));
 				
 				// send Kick message
-				this.server.kickUser(this.listViewUsersS.getItems().get(i));
+				this.server.sendKickUser(this.listViewUsersS.getItems().get(i));
 				break;
 			}
 		}
@@ -249,7 +249,7 @@ public class Controller {
 		String msg = this.textFieldChatS.getText();
 		if(!msg.isEmpty() && !msg.isBlank())
 		{
-			this.server.sendMessage(msg);
+			this.server.sendChatMessage(msg);
 		}
 		this.textFieldChatS.setText("");
 	}
@@ -437,10 +437,12 @@ public class Controller {
 		if(this.client != null)
 		{
 			this.client.sendClose();
+			this.client = null;
 		}
 		else if(this.server != null)
 		{
 			this.server.sendClose();
+			this.server = null;
 		}
     }
 }

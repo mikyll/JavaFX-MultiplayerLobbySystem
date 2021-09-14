@@ -32,8 +32,8 @@ public class Main extends Application{
 	public void stop()
 	{
 		this.controller.closeConnection();
-		 Platform.exit();
-	     System.exit(0);
+		Platform.exit();
+	    System.exit(0);
 	}
 	
 	public static void main(String[] args) {

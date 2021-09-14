@@ -190,27 +190,43 @@ public class ClientStream implements IClient {
 		}
 	}
 	
-	@Override
-	public void sendMessage(String content)
+	private void sendMessage(Message message)
 	{
-		Message msg = new Message(MessageType.CHAT, this.controller.getCurrentTimestamp(), this.nickname, content);
-		this.controller.addToTextArea(msg);
 		try {
-			this.output.writeObject(msg);
+			this.output.writeObject(message);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 	
 	@Override
+	public void sendChatMessage(String content)
+	{
+		Message msg = new Message(MessageType.CHAT, this.controller.getCurrentTimestamp(), this.nickname, content);
+		
+		// send the message
+		this.sendMessage(msg);
+		
+		// add the message to the textArea
+		this.controller.addToTextArea(msg);
+	}
+	
+	@Override
 	public void sendReady(boolean ready)
 	{
 		Message msg = new Message(MessageType.READY, this.controller.getCurrentTimestamp(), this.nickname, "" + ready);
-		try {
-			this.output.writeObject(msg);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		
+		// send ready message
+		this.sendMessage(msg);
+	}
+	
+	@Override
+	public void sendClose()
+	{
+		Message msg = new Message(MessageType.DISCONNECT, controller.getCurrentTimestamp(), this.nickname, "");
+		
+		// send disconnect message
+		this.sendMessage(msg);
 	}
 	
 	private List<User> extractUserList(String s)
@@ -227,16 +243,5 @@ public class ClientStream implements IClient {
 		}
 		
 		return list;
-	}
-	
-	@Override
-	public void sendClose()
-	{
-		Message msg = new Message(MessageType.DISCONNECT, controller.getCurrentTimestamp(), this.nickname, "");
-		try {
-			this.output.writeObject(msg);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 	}
 }
