@@ -11,18 +11,19 @@ Chat support using JavaFX and socket TCP (stream) to be used for Cluedo app
 
 
 to add:
-- automatic textarea scrolling, to last message;
 - ~~update User list in server, when someone send the READY.~~
+- ~~add arrow to identify which user a particular client is~~
+- ~~refactor: use only one listView and put an HBox inside it(?)~~
+- ~~add on close function to disconnect and stop the threads before closing the app~~
+- ~~add "start game" button which enables when the room has the minimum users required~~
+- ~~add open/close checkbox to allow users to join~~
+- automatic textarea scrolling, to last message;
 - fix exception print stack (handle them in a more proper way).
 - add timer after sending READY message
-- add arrow to identify which user a particular client is
-- refactor: use only one listView and put an HBox inside it(?)
 - fix gui components to have proper dimension
-- add on close function to disconnect and stop the threads before closing the app
-- add "start game" button which enables when the room has the minimum users required
-- add open/close checkbox to allow users to join
 - add Datagram (UDP) variant
-- port forwarding(?)
+- create a class for my Spinner (MikyllSpinner ?)
+- add an headless server to handle the room list (when a server creates a room it's inserted into the list, and the client can access that list to see those rooms)
 
 references:
 - [JavaFX-Chat](https://github.com/DomHeal/JavaFX-Chat)
