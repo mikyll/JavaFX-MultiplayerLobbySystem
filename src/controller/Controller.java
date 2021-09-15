@@ -243,26 +243,6 @@ public class Controller {
 		this.listViewUsersS.getItems().get(0).setVisible(true);
 		
 		this.connectedUsers = 1;
-		
-		/*this.listViewUsersS.getItems().add(this.textFieldNickname.getText());
-		Label l;
-		Button b;
-		// popolate the listView with the controls but set them invisibile
-		for(int i = 0; i < 6; i++)
-		{
-			l = new Label();
-			l.setPrefSize(25, 25);
-			l.setStyle("-fx-background-color: red");
-			l.setVisible(false);
-			this.listViewReadyS.getItems().add(l);
-			
-			b = new Button("Kick");
-			b.setPrefSize(70, 20);
-			b.setStyle("-fx-font-size: 15.0");
-			b.setVisible(false);
-			b.setOnAction(this::kickUser);
-			this.listViewKickS.getItems().add(b);
-		}*/
 	}
 	
 	@FXML public void selectJER(ActionEvent event) 
@@ -274,18 +254,6 @@ public class Controller {
 		
 		// reset the user list
 		this.resetList();
-		
-		/*Label l;
-		// popolate the listView with the controls but set them invisibile
-		for(int i = 0; i < 6; i++)
-		{
-			l = new Label();
-			l.setPrefSize(25, 25);
-			l.setStyle("-fx-background-color: red");
-			l.setVisible(false);
-			
-			this.listViewReadyC.getItems().add(l);
-		}*/
 		
 		// show loading box
 		this.showConnectingBox(true);
