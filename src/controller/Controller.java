@@ -1,8 +1,11 @@
 package controller;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -17,8 +20,11 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Paint;
 import model.User;
 import model.chat.Message;
 import networking.ClientStream;
@@ -27,6 +33,7 @@ import networking.IServer;
 import networking.ServerStream;
 
 public class Controller {
+	private static final int ROOM_CAPACITY = 6;
 	
 	private static final Pattern PATTERN_NICKNAME = Pattern.compile("^[a-zA-Z0-9]{3,15}$");
 	private static final Pattern PATTERN_IP = Pattern.compile("^(([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.){3}([01]?\\d\\d?|2[0-4]\\d|25[0-5])$");
@@ -57,12 +64,24 @@ public class Controller {
 	@FXML private Button buttonChatS;
 	private IServer server;
 	
-	@FXML private ListView<String> listViewUsersC;
+	@FXML private ListView<HBox> listViewUsersC;
+	@FXML private ListView<HBox> listViewUsersS;
+	
+	private ArrayList<Label> listUsernameC;
+	private ArrayList<Label> listUsernameS;
+	private ArrayList<Label> listReadyC;
+	private ArrayList<Label> listReadyS;
+	private ArrayList<ImageView> listImage;
+	private ArrayList<Button> listKick;
+	
+	private int connectedUsers;
+	
+	/*@FXML private ListView<String> listViewUsersC;
 	@FXML private ListView<Label> listViewReadyC;
 	
 	@FXML private ListView<String> listViewUsersS;
 	@FXML private ListView<Label> listViewReadyS;
-	@FXML private ListView<Button> listViewKickS;
+	@FXML private ListView<Button> listViewKickS;*/
 	
 	private SimpleDateFormat tformatter;
 	
@@ -77,6 +96,79 @@ public class Controller {
 		this.buttonCNR.setDisable(true);
 		this.buttonJER.setDisable(true);
 		this.labelErrorIP.setVisible(false);
+		
+		this.listUsernameC = new ArrayList<Label>();
+		this.listUsernameS = new ArrayList<Label>();
+		this.listReadyC = new ArrayList<Label>();
+		this.listReadyS = new ArrayList<Label>();
+		this.listImage = new ArrayList<ImageView>();
+		this.listKick = new ArrayList<Button>();
+		
+		// popolate the ListView with HBox and set them not visible
+		for(int i = 0; i < ROOM_CAPACITY; i++)
+		{
+			// hbox client
+			HBox hbox = new HBox();
+			hbox.setPrefSize(280, 25);
+			hbox.setSpacing(20);
+			hbox.setVisible(false);
+			// username client
+			Label l = new Label("");
+			l.setPrefWidth(150);
+			l.setTextFill(Paint.valueOf("white"));
+			hbox.getChildren().add(l);
+			this.listUsernameC.add(l);
+			// ready client
+			l = new Label("");
+			l.setPrefSize(25, 25);
+			l.setStyle("-fx-background-color: red");
+			l.setVisible(i == 0 ? false : true);
+			hbox.getChildren().add(l);
+			this.listReadyC.add(l);
+			// identifier
+			ImageView iv = new ImageView();
+			try {
+				iv.setImage(new Image(new FileInputStream("src/view/icon-user.png")));
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			}
+			iv.resize(25, 25);
+			hbox.getChildren().add(iv);
+			this.listImage.add(iv);
+			
+			this.listViewUsersC.getItems().add(hbox);
+			
+			// hbox server
+			hbox = new HBox();
+			hbox.setPrefSize(300, 25);
+			hbox.setSpacing(20);
+			hbox.setVisible(false);
+			// username server
+			l = new Label("");
+			l.setPrefWidth(150);
+			l.setTextFill(Paint.valueOf("white"));
+			hbox.getChildren().add(l);
+			this.listUsernameS.add(l);
+			// ready server
+			l = new Label("");
+			l.setPrefSize(25, 25);
+			l.setStyle("-fx-background-color: red");
+			l.setVisible(i == 0 ? false : true);
+			hbox.getChildren().add(l);
+			this.listReadyS.add(l);
+			// kick
+			Button b = new Button("Kick");
+			b.setPrefSize(70, 20);
+			b.setStyle("-fx-font-size: 15.0");
+			b.setOnAction(this::kickUser);
+			b.setVisible(i == 0 ? false : true); // NB: visible only if i >= 1
+			hbox.getChildren().add(b);
+			this.listKick.add(b);
+			
+			this.listViewUsersS.getItems().add(hbox);
+		}
+		
+		connectedUsers = 0;
 	}
 	
 	@FXML public void validateNickname()
@@ -143,7 +235,16 @@ public class Controller {
 		// create new room -> start server
 		this.server = new ServerStream(this, this.textFieldNickname.getText());
 		
-		this.listViewUsersS.getItems().add(this.textFieldNickname.getText());
+		// reset the user list
+		this.resetList();
+		
+		// set the first list element (the server) to visibile
+		this.listUsernameS.get(0).setText(this.textFieldNickname.getText());
+		this.listViewUsersS.getItems().get(0).setVisible(true);
+		
+		this.connectedUsers = 1;
+		
+		/*this.listViewUsersS.getItems().add(this.textFieldNickname.getText());
 		Label l;
 		Button b;
 		// popolate the listView with the controls but set them invisibile
@@ -153,15 +254,15 @@ public class Controller {
 			l.setPrefSize(25, 25);
 			l.setStyle("-fx-background-color: red");
 			l.setVisible(false);
-			
 			this.listViewReadyS.getItems().add(l);
+			
 			b = new Button("Kick");
 			b.setPrefSize(70, 20);
 			b.setStyle("-fx-font-size: 15.0");
 			b.setVisible(false);
 			b.setOnAction(this::kickUser);
 			this.listViewKickS.getItems().add(b);
-		}
+		}*/
 	}
 	
 	@FXML public void selectJER(ActionEvent event) 
@@ -171,7 +272,10 @@ public class Controller {
 		// connect to existing room -> start client
 		this.client = new ClientStream(this, this.textFieldIP.getText(), 9001, this.textFieldNickname.getText());
 		
-		Label l;
+		// reset the user list
+		this.resetList();
+		
+		/*Label l;
 		// popolate the listView with the controls but set them invisibile
 		for(int i = 0; i < 6; i++)
 		{
@@ -181,8 +285,9 @@ public class Controller {
 			l.setVisible(false);
 			
 			this.listViewReadyC.getItems().add(l);
-		}
+		}*/
 		
+		// show loading box
 		this.showConnectingBox(true);
 	}
 	
@@ -196,7 +301,22 @@ public class Controller {
 	
 	@FXML public void toggleReady(ActionEvent event)
 	{
-		int i;
+		if(this.buttonReady.getText().equalsIgnoreCase("Ready"))
+		{
+			this.buttonReady.setText("Not ready");
+			this.buttonReady.setStyle("-fx-background-color: red");
+			this.client.sendReady(false);
+			this.updateReady(this.textFieldNickname.getText(), false);
+		}
+		else
+		{
+			this.buttonReady.setText("Ready");
+			this.buttonReady.setStyle("-fx-background-color: lime");
+			this.client.sendReady(true);
+			this.updateReady(this.textFieldNickname.getText(), true);
+		}
+		
+		/*int i;
 		for(i = 0; i < this.listViewUsersC.getItems().size(); i++)
 		{
 			if(this.listViewUsersC.getItems().get(i).equals(this.textFieldNickname.getText()))
@@ -215,7 +335,7 @@ public class Controller {
 			this.buttonReady.setStyle("-fx-background-color: lime");
 			this.client.sendReady(true);
 			this.listViewReadyC.getItems().get(i).setStyle("-fx-background-color: lime");
-		}
+		}*/
 		// set a 5 sec timer that disables the button, so that users can't spam the toggle
 	}
 	@FXML public void sendMessageC(ActionEvent event) 
@@ -228,18 +348,16 @@ public class Controller {
 		this.textFieldChatC.setText("");
 	}
 	@FXML public void kickUser(ActionEvent event)
-	{	
-		this.vboxBack.setVisible(false);
-		
+	{
 		// get the button index
-		for(int i = 1; i < this.listViewUsersS.getItems().size(); i++)
+		for(int i = 1; i < this.connectedUsers; i++)
 		{
-			if(this.listViewKickS.getItems().get(i).equals(event.getTarget()))
+			if(this.listKick.get(i).equals(event.getTarget()))
 			{
-				System.out.println("Server: kicked user " + this.listViewUsersS.getItems().get(i));
+				System.out.println("Server: kicked user " + this.listUsernameS.get(i).getText());
 				
 				// send Kick message
-				this.server.sendKickUser(this.listViewUsersS.getItems().get(i));
+				this.server.sendKickUser(this.listUsernameS.get(i).getText());
 				break;
 			}
 		}
@@ -300,14 +418,13 @@ public class Controller {
 	
 	public void updateReady(String nickname, boolean ready)
 	{
-		// update user list
 		if(this.client != null)
 		{
 			for(int i = 0; i < this.listViewUsersC.getItems().size(); i++)
 			{
-				if(nickname.equals(this.listViewUsersC.getItems().get(i)))
+				if(nickname.equals(this.listUsernameC.get(i).getText()))
 				{
-					this.listViewReadyC.getItems().get(i).setStyle(ready ? "-fx-background-color: lime" : "-fx-background-color: red");
+					this.listReadyC.get(i).setStyle(ready ? "-fx-background-color: lime" : "-fx-background-color: red");
 					break;
 				}
 			}
@@ -316,9 +433,9 @@ public class Controller {
 		{
 			for(int i = 0; i < this.listViewUsersS.getItems().size(); i++)
 			{
-				if(nickname.equals(this.listViewUsersS.getItems().get(i)))
+				if(nickname.equals(this.listUsernameS.get(i).getText()))
 				{
-					this.listViewReadyS.getItems().get(i).setStyle(ready ? "-fx-background-color: lime" : "-fx-background-color: red");
+					this.listReadyS.get(i).setStyle(ready ? "-fx-background-color: lime" : "-fx-background-color: red");
 					break;
 				}
 			}
@@ -349,20 +466,28 @@ public class Controller {
 		Platform.runLater(() -> {
 			if(this.client != null)
 			{
-				this.listViewUsersC.getItems().add(u.getNickname());
+				this.listUsernameC.get(this.connectedUsers).setText(u.getNickname());
+				this.listViewUsersC.getItems().get(this.connectedUsers).setVisible(true);
+				this.connectedUsers++;
+				
+				/*this.listViewUsersC.getItems().add(u.getNickname());
 				int i = this.listViewUsersC.getItems().size();
 				Label l = this.listViewReadyC.getItems().get(i - 1);
 				l.setStyle("-fx-background-color: red");
-				l.setVisible(true);
+				l.setVisible(true);*/
 			}
 			else if(this.server != null)
 			{
-				this.listViewUsersS.getItems().add(u.getNickname());
+				this.listUsernameS.get(this.connectedUsers).setText(u.getNickname());
+				this.listViewUsersS.getItems().get(this.connectedUsers).setVisible(true);
+				this.connectedUsers++;
+				
+				/*this.listViewUsersS.getItems().add(u.getNickname());
 				int i = this.listViewUsersS.getItems().size();
 				Label l = this.listViewReadyS.getItems().get(i - 1);
 				l.setStyle("-fx-background-color: red");
 				l.setVisible(true);
-				this.listViewKickS.getItems().get(i - 1).setVisible(true);
+				this.listViewKickS.getItems().get(i - 1).setVisible(true);*/
 			}
 		});
 		
@@ -370,38 +495,49 @@ public class Controller {
 	public void removeUser(String nickname)
 	{
 		Platform.runLater(() -> {
+			boolean found = false;
 			if(this.client != null)
 			{
-				for(int i = 0; i < this.listViewUsersC.getItems().size(); i++)
+				// NB: we have to move by one position back every user, to fill the empty space left by the removed one
+				for(int i = 1; i < this.connectedUsers; i++)
 				{
-					if(this.listViewUsersC.getItems().get(i).equals(nickname))
+					if(found)
 					{
-						this.listViewUsersC.getItems().remove(i);
-						break;
+						this.listUsernameC.get(i - 1).setText(this.listUsernameC.get(i).getText());
+						this.listReadyC.get(i - 1).setStyle(this.listReadyC.get(i).getStyle());
+						this.listImage.get(i - 1).setVisible(this.listImage.get(i).isVisible());
 					}
+					if(this.listUsernameC.get(i).getText().equals(nickname))
+						found = true;
 				}
-				Label l = this.listViewReadyC.getItems().get(this.listViewUsersC.getItems().size());
-				l.setStyle("-fx-background-color: red");
-				l.setVisible(false);
+				this.listViewUsersC.getItems().get(this.connectedUsers - 1).setVisible(false);
+				this.listUsernameC.get(this.connectedUsers - 1).setText("");
+				this.listReadyC.get(this.connectedUsers - 1).setStyle("-fx-background-color: red");
+				this.listImage.get(this.connectedUsers - 1).setVisible(false);
+				this.connectedUsers--;
 			}
 			else if(this.server != null)
 			{
-				for(int i = 0; i < this.listViewUsersS.getItems().size(); i++)
+				// NB: we have to move by one position back every user, to fill the empty space left by the removed one
+				for(int i = 1; i < this.connectedUsers; i++)
 				{
-					if(this.listViewUsersS.getItems().get(i).equals(nickname))
+					if(found)
 					{
-						this.listViewUsersS.getItems().remove(i);
-						break;
+						this.listUsernameS.get(i - 1).setText(this.listUsernameS.get(i).getText());
+						this.listReadyS.get(i - 1).setStyle(this.listReadyS.get(i).getStyle());
 					}
+					if(this.listUsernameS.get(i).getText().equals(nickname))
+						found = true;
 				}
-				Label l = this.listViewReadyS.getItems().get(this.listViewUsersS.getItems().size());
-				l.setStyle("-fx-background-color: red");
-				l.setVisible(false);
-				this.listViewKickS.getItems().get(this.listViewUsersS.getItems().size()).setVisible(false);
+				this.listViewUsersS.getItems().get(this.connectedUsers - 1).setVisible(false);
+				this.listUsernameS.get(this.connectedUsers - 1).setText("");
+				this.listReadyS.get(this.connectedUsers - 1).setStyle("-fx-background-color: red");
+				this.connectedUsers--;
 			}
 		});
 		
 	}
+	
 	public void updateUserList(List<User> users)
 	{
 		Platform.runLater(() -> {
@@ -409,11 +545,13 @@ public class Controller {
 			{
 				for(int i = 0; i < users.size(); i++)
 				{
-					this.listViewUsersC.getItems().add(users.get(i).getNickname());
-					Label l = this.listViewReadyC.getItems().get(i);
-					l.setStyle(users.get(i).isReady() ? "-fx-background-color: lime" : "-fx-background-color: red");
-					l.setVisible(i == 0 ? false : true);
+					User u = users.get(i);
+					this.listUsernameC.get(i).setText(u.getNickname());
+					this.listViewUsersC.getItems().get(i).setVisible(true);
+					this.listReadyC.get(i).setStyle(u.isReady() ? "-fx-background-color: lime" : "-fx-background-color: red");
+					this.listImage.get(i).setVisible(this.textFieldNickname.getText().equals(users.get(i).getNickname()) ? true : false);
 				}
+				this.connectedUsers = users.size();
 			}
 			else if(this.server != null)
 			{
@@ -445,4 +583,27 @@ public class Controller {
 			this.server = null;
 		}
     }
+	
+	private void resetList()
+	{
+		if(this.client != null)
+		{
+			for(int i = 0; i < ROOM_CAPACITY; i++)
+			{
+				this.listViewUsersC.getItems().get(i).setVisible(false);
+				this.listUsernameC.get(i).setText("");
+				this.listReadyC.get(i).setStyle("-fx-background-color: red");
+				this.listImage.get(i).setVisible(false);
+			}
+		}
+		else if(this.server != null)
+		{
+			for(int i = 0; i < ROOM_CAPACITY; i++)
+			{
+				this.listViewUsersS.getItems().get(i).setVisible(false);
+				this.listUsernameS.get(i).setText("");
+				this.listReadyS.get(i).setStyle("-fx-background-color: red");
+			}
+		}
+	}
 }

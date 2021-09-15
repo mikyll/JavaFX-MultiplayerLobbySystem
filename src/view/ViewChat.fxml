@@ -16,7 +16,7 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.Controller">
    <children>
-      <VBox fx:id="vboxLogin" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" spacing="5.0" style="-fx-background-color: black;">
+      <VBox fx:id="vboxLogin" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" spacing="5.0" style="-fx-background-color: black;" visible="false">
          <children>
             <HBox alignment="CENTER_LEFT" prefHeight="30.0" prefWidth="242.0">
                <children>
@@ -65,9 +65,7 @@
                      <children>
                         <HBox prefHeight="300.0" prefWidth="300.0">
                            <children>
-                              <ListView fx:id="listViewUsersS" prefHeight="300.0" prefWidth="150.0" style="-fx-background-color: black; -fx-text-fill: white;" />
-                              <ListView fx:id="listViewReadyS" prefHeight="300.0" prefWidth="50.0" style="-fx-background-color: black; -fx-text-fill: white;" />
-                              <ListView fx:id="listViewKickS" prefHeight="300.0" prefWidth="100.0" style="-fx-background-color: black; -fx-text-fill: white;" />
+                              <ListView fx:id="listViewUsersS" prefHeight="300.0" prefWidth="300.0" style="-fx-background-color: black; -fx-text-fill: white;" />
                            </children>
                         </HBox>
                      </children>
@@ -87,7 +85,7 @@
             </HBox>
          </children>
       </VBox>
-      <VBox fx:id="vboxChatClient" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" spacing="5.0" style="-fx-background-color: black;" visible="false">
+      <VBox fx:id="vboxChatClient" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" spacing="5.0" style="-fx-background-color: black;">
          <children>
             <HBox prefHeight="400.0" prefWidth="600.0">
                <children>
@@ -100,8 +98,7 @@
                         </Label>
                         <HBox prefHeight="300.0" prefWidth="300.0">
                            <children>
-                              <ListView fx:id="listViewUsersC" prefHeight="300.0" prefWidth="200.0" style="-fx-background-color: black; -fx-text-fill: white;" />
-                              <ListView fx:id="listViewReadyC" prefHeight="300.0" prefWidth="50.0" style="-fx-background-color: black; -fx-text-fill: white;" />
+                              <ListView fx:id="listViewUsersC" prefHeight="300.0" prefWidth="280.0" style="-fx-background-color: black; -fx-text-fill: white;" />
                            </children>
                         </HBox>
                         <Button fx:id="buttonReady" mnemonicParsing="false" onAction="#toggleReady" prefHeight="26.0" prefWidth="90.0" style="-fx-background-color: red;" text="Not ready" />
