@@ -255,6 +255,10 @@ public class Controller {
 		// reset the user list
 		this.resetList();
 		
+		// reset ready button
+		this.buttonReady.setText("Not ready");
+		this.buttonReady.setStyle("-fx-background-color: red");
+		
 		// show loading box
 		this.showConnectingBox(true);
 	}
