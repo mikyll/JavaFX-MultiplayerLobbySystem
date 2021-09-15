@@ -75,7 +75,7 @@
                         <TextArea fx:id="textAreaChatS" editable="false" minHeight="100.0" prefHeight="350.0" prefWidth="300.0" />
                         <HBox prefHeight="30.0" prefWidth="300.0">
                            <children>
-                              <TextField fx:id="textFieldChatS" prefHeight="30.0" prefWidth="250.0" />
+                              <TextField fx:id="textFieldChatS" onKeyPressed="#enterChatHandle" prefHeight="30.0" prefWidth="250.0" />
                               <Button fx:id="buttonChatS" mnemonicParsing="false" onAction="#sendMessageS" prefHeight="30.0" prefWidth="50.0" text="Send" />
                            </children>
                         </HBox>
@@ -112,7 +112,7 @@
                         <TextArea fx:id="textAreaChatC" editable="false" prefHeight="370.0" prefWidth="300.0" />
                         <HBox prefHeight="30.0" prefWidth="442.0" spacing="5.0">
                            <children>
-                              <TextField fx:id="textFieldChatC" minHeight="30.0" minWidth="100.0" prefHeight="30.0" prefWidth="250.0" />
+                              <TextField fx:id="textFieldChatC" minHeight="30.0" minWidth="100.0" onKeyPressed="#enterChatHandle" prefHeight="30.0" prefWidth="250.0" />
                               <Button fx:id="buttonChatC" mnemonicParsing="false" onAction="#sendMessageC" prefHeight="30.0" prefWidth="50.0" text="Send" />
                            </children>
                         </HBox>

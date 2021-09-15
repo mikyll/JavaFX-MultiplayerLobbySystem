@@ -22,6 +22,8 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Paint;
@@ -234,6 +236,7 @@ public class Controller {
 		
 		// create new room -> start server
 		this.server = new ServerStream(this, this.textFieldNickname.getText());
+		this.client = null;
 		
 		// reset the user list
 		this.resetList();
@@ -251,6 +254,7 @@ public class Controller {
 		
 		// connect to existing room -> start client
 		this.client = new ClientStream(this, this.textFieldIP.getText(), 9001, this.textFieldNickname.getText());
+		this.server = null;
 		
 		// reset the user list
 		this.resetList();
@@ -287,7 +291,7 @@ public class Controller {
 			this.client.sendReady(true);
 			this.updateReady(this.textFieldNickname.getText(), true);
 		}
-		// set a 5 sec timer that disables the button, so that users can't spam the toggle
+		// TO-DO: set a 5 sec timer that disables the button, so that users can't spam the toggle
 	}
 	@FXML public void sendMessageC(ActionEvent event) 
 	{
@@ -297,6 +301,39 @@ public class Controller {
 			this.client.sendChatMessage(msg);
 		}
 		this.textFieldChatC.setText("");
+	}
+	@FXML public void sendMessageS(ActionEvent event) 
+	{
+		String msg = this.textFieldChatS.getText();
+		if(!msg.isEmpty() && !msg.isBlank())
+		{
+			this.server.sendChatMessage(msg);
+		}
+		this.textFieldChatS.setText("");
+	}
+	@FXML public void enterChatHandle(KeyEvent e)
+	{
+		if(e.getCode().equals(KeyCode.ENTER))
+		{
+			if(this.client != null)
+			{
+				String msg = this.textFieldChatC.getText();
+				if(!msg.isEmpty() && !msg.isBlank())
+				{
+					this.client.sendChatMessage(msg);
+				}
+				this.textFieldChatC.setText("");
+			}
+			else if(this.server != null)
+			{
+				String msg = this.textFieldChatS.getText();
+				if(!msg.isEmpty() && !msg.isBlank())
+				{
+					this.server.sendChatMessage(msg);
+				}
+				this.textFieldChatS.setText("");
+			}
+		}
 	}
 	@FXML public void kickUser(ActionEvent event)
 	{
@@ -312,15 +349,6 @@ public class Controller {
 				break;
 			}
 		}
-	}
-	@FXML public void sendMessageS(ActionEvent event) 
-	{
-		String msg = this.textFieldChatS.getText();
-		if(!msg.isEmpty() && !msg.isBlank())
-		{
-			this.server.sendChatMessage(msg);
-		}
-		this.textFieldChatS.setText("");
 	}
 	
 	public void addToTextArea(String text)
@@ -390,14 +418,6 @@ public class Controller {
 					break;
 				}
 			}
-		}
-	}
-	private void setServerAddress()
-	{
-		try {
-			this.labelServerIP.setText("Server IP address: " + InetAddress.getLocalHost().toString().split("/")[1]);
-		} catch (UnknownHostException e) {
-			e.printStackTrace();
 		}
 	}
 	public String getCurrentTimestamp()
@@ -524,6 +544,15 @@ public class Controller {
 			this.server = null;
 		}
     }
+	
+	private void setServerAddress()
+	{
+		try {
+			this.labelServerIP.setText("Server IP address: " + InetAddress.getLocalHost().toString().split("/")[1]);
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		}
+	}
 	
 	private void resetList()
 	{
