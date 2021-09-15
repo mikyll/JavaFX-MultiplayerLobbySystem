@@ -24,6 +24,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Paint;
@@ -35,21 +36,31 @@ import networking.IServer;
 import networking.ServerStream;
 
 public class Controller {
+	private static final int MIN_USERS = 2; // users required to start
 	private static final int ROOM_CAPACITY = 6;
-	private static final int USERS_REQUIRED_TO_START = 2;
 	
 	private static final Pattern PATTERN_NICKNAME = Pattern.compile("^[a-zA-Z0-9]{3,15}$");
 	private static final Pattern PATTERN_IP = Pattern.compile("^(([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.){3}([01]?\\d\\d?|2[0-4]\\d|25[0-5])$");
 	
-	// login
+	// multiplayer
 	@FXML private VBox vboxBack;
-	@FXML private VBox vboxLogin;
+	@FXML private VBox vboxMP;
 	@FXML private TextField textFieldNickname;
+	@FXML private Label labelMinRoom;
+	@FXML private Label labelMaxRoom;
+	@FXML private ImageView buttonIncreaseMinRoom;
+	@FXML private ImageView buttonDecreaseMinRoom;
+	@FXML private ImageView buttonIncreaseMaxRoom;
+	@FXML private ImageView buttonDecreaseMaxRoom;
 	@FXML private Button buttonCNR;
 	@FXML private TextField textFieldIP;
 	@FXML private Button buttonJER;
 	@FXML private Label labelErrorIP;
 	@FXML private HBox hboxC; // hbox connection
+	private Image arrowUp;
+	private Image arrowUpDisabled;
+	private Image arrowDown;
+	private Image arrowDownDisabled;
 	
 	// client
 	@FXML private VBox vboxChatClient;
@@ -100,6 +111,25 @@ public class Controller {
 		this.listReadyS = new ArrayList<Label>();
 		this.listImage = new ArrayList<ImageView>();
 		this.listKick = new ArrayList<Button>();
+		
+		this.labelMinRoom.setText("" + MIN_USERS);
+		this.labelMaxRoom.setText("" + ROOM_CAPACITY);
+		
+		try {
+			this.arrowUp = new Image(new FileInputStream("src/view/icon-arrow-up.png"));
+			this.arrowUpDisabled = new Image(new FileInputStream("src/view/icon-arrow-up-disabled.png"));
+			this.arrowDown = new Image(new FileInputStream("src/view/icon-arrow-down.png"));
+			this.arrowDownDisabled = new Image(new FileInputStream("src/view/icon-arrow-down-disabled.png"));
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		
+		this.buttonDecreaseMinRoom.setDisable(true);
+		this.buttonIncreaseMaxRoom.setDisable(true);
+		this.buttonIncreaseMinRoom.setImage(this.arrowUp);
+		this.buttonDecreaseMinRoom.setImage(this.arrowDownDisabled);
+		this.buttonIncreaseMaxRoom.setImage(this.arrowUpDisabled);
+		this.buttonDecreaseMaxRoom.setImage(this.arrowDown);
 		
 		// popolate the ListView with HBox and set them not visible
 		for(int i = 0; i < ROOM_CAPACITY; i++)
@@ -187,11 +217,8 @@ public class Controller {
 	}
 	private boolean checkNickname(String text)
 	{
-		// if OK
-		if(PATTERN_NICKNAME.matcher(text).matches())
-			return true;
-		// if NOT
-		else return false;
+		// if OK return true
+		return PATTERN_NICKNAME.matcher(text).matches() ? true : false;
 	}
 	@FXML public void validateAddress()
 	{
@@ -215,20 +242,88 @@ public class Controller {
 	}
 	private boolean checkIP(String text)
 	{
-		// if OK
-		if(PATTERN_IP.matcher(text).matches())
-			return true;
-		// if NOT
-		else return false;
+		// if OK return true
+		return PATTERN_IP.matcher(text).matches() ? true : false;
 	}
-	
+	@FXML public void increaseMinRoom(MouseEvent event)
+	{
+		this.buttonDecreaseMinRoom.setDisable(false);
+		this.buttonDecreaseMinRoom.setImage(this.arrowDown);
+		
+		int min = Integer.parseInt(this.labelMinRoom.getText());
+		int max = Integer.parseInt(this.labelMaxRoom.getText());
+		
+		this.labelMinRoom.setText("" + ++min);
+		
+		if(min == max)
+		{
+			this.buttonIncreaseMinRoom.setDisable(true);
+			this.buttonIncreaseMinRoom.setImage(this.arrowUpDisabled);
+			this.buttonDecreaseMaxRoom.setDisable(true);
+			this.buttonDecreaseMaxRoom.setImage(this.arrowDownDisabled);
+		}
+	}
+	@FXML public void decreaseMinRoom(MouseEvent event)
+	{
+		this.buttonIncreaseMinRoom.setDisable(false);
+		this.buttonIncreaseMinRoom.setImage(this.arrowUp);
+		this.buttonDecreaseMaxRoom.setDisable(false);
+		this.buttonDecreaseMaxRoom.setImage(this.arrowDown);
+		
+		int value = Integer.parseInt(this.labelMinRoom.getText());
+		if(value != MIN_USERS)
+		{
+			this.labelMinRoom.setText("" + --value);
+			if(value == MIN_USERS)
+			{
+				this.buttonDecreaseMinRoom.setDisable(true);
+				this.buttonDecreaseMinRoom.setImage(this.arrowDownDisabled);
+			}
+		}
+	}
+	@FXML public void increaseMaxRoom(MouseEvent event)
+	{
+		this.buttonIncreaseMinRoom.setDisable(false);
+		this.buttonIncreaseMinRoom.setImage(this.arrowUp);
+		this.buttonDecreaseMaxRoom.setDisable(false);
+		this.buttonDecreaseMaxRoom.setImage(this.arrowDown);
+		
+		int value = Integer.parseInt(this.labelMaxRoom.getText());
+		if(value != ROOM_CAPACITY)
+		{
+			this.labelMaxRoom.setText("" + ++value);
+			if(value == ROOM_CAPACITY)
+			{
+				this.buttonIncreaseMaxRoom.setDisable(true);
+				this.buttonIncreaseMaxRoom.setImage(this.arrowUpDisabled);
+			}
+		}
+	}
+	@FXML public void decreaseMaxRoom(MouseEvent event)
+	{
+		this.buttonIncreaseMaxRoom.setDisable(false);
+		this.buttonIncreaseMaxRoom.setImage(this.arrowUp);
+		
+		int min = Integer.parseInt(this.labelMinRoom.getText());
+		int max = Integer.parseInt(this.labelMaxRoom.getText());
+		
+		this.labelMaxRoom.setText("" + --max);
+		
+		if(min == max)
+		{
+			this.buttonIncreaseMinRoom.setDisable(true);
+			this.buttonIncreaseMinRoom.setImage(this.arrowUpDisabled);
+			this.buttonDecreaseMaxRoom.setDisable(true);
+			this.buttonDecreaseMaxRoom.setImage(this.arrowDownDisabled);
+		}
+	}
 	@FXML public void selectCNR(ActionEvent event) 
 	{
 		this.textAreaChatS.setText(this.getCurrentTimestamp() + " " + this.textFieldNickname.getText() + " created the room");
 		this.setServerAddress();
 		
 		// create new room -> start server
-		this.server = new ServerStream(this, this.textFieldNickname.getText(), USERS_REQUIRED_TO_START);
+		this.server = new ServerStream(this, this.textFieldNickname.getText(), Integer.parseInt(this.labelMinRoom.getText()), Integer.parseInt(this.labelMaxRoom.getText()));
 		this.client = null;
 		
 		// reset the user list
@@ -397,17 +492,17 @@ public class Controller {
 		this.vboxBack.setVisible(false);
 		this.vboxChatClient.setVisible(false);
 		this.vboxChatServer.setVisible(false);
-		this.vboxLogin.setVisible(true);
+		this.vboxMP.setVisible(true);
 	}
 	public void switchToChatC()
 	{
-		this.vboxLogin.setVisible(false);
+		this.vboxMP.setVisible(false);
 		this.vboxChatClient.setVisible(true);
 		this.vboxBack.setVisible(true);
 	}
 	public void switchToChatS()
 	{
-		this.vboxLogin.setVisible(false);
+		this.vboxMP.setVisible(false);
 		this.vboxChatServer.setVisible(true);
 		this.vboxBack.setVisible(true);
 	}

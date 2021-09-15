@@ -23,7 +23,7 @@ public class ServerStream implements IServer{
 	
 	private static final int PORT = 9001;
 	private int maxNumUsers = 6;
-	private int minToStartGame;
+	private int minToStartGame = 2;
 	
 	private Controller controller;
 	private String nickname;
@@ -32,11 +32,14 @@ public class ServerStream implements IServer{
 	private ArrayList<User> users;
 	private ArrayList<ObjectOutputStream> writers;
 	
-	public ServerStream(Controller controller, String nickname, int users_required)
+	public ServerStream(Controller controller, String nickname, int usersRequired, int maxCapacity)
 	{
 		this.controller = controller;
 		this.nickname = nickname;
-		this.minToStartGame = users_required;
+		this.minToStartGame = usersRequired;
+		this.maxNumUsers = maxCapacity;
+		
+		System.out.println(usersRequired); // test
 		
 		this.users = new ArrayList<User>();
 		User u = new User(nickname);
