@@ -548,7 +548,6 @@ public class Controller {
 	
 	public void addUser(User u)
 	{
-		System.out.println("Controller: add user"); // test
 		Platform.runLater(() -> {
 			if(this.client != null)
 			{
