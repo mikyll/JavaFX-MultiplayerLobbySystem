@@ -56,17 +56,26 @@
             <Insets left="100.0" right="100.0" />
          </padding>
       </VBox>
-      <VBox fx:id="vboxChatServer" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: black;">
+      <VBox fx:id="vboxChatServer" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: black;" visible="false">
          <children>
             <Label fx:id="labelServerIP" prefHeight="20.0" prefWidth="590.0" text="Server IP address: X.X.X.X" textFill="WHITE" />
-            <HBox prefHeight="370.0" prefWidth="600.0">
+            <HBox prefHeight="380.0" prefWidth="600.0">
                <children>
-                  <VBox prefHeight="380.0" prefWidth="300.0">
+                  <VBox alignment="TOP_CENTER" prefHeight="380.0" prefWidth="300.0">
                      <children>
-                        <HBox prefHeight="300.0" prefWidth="300.0">
+                        <ListView fx:id="listViewUsersS" prefHeight="300.0" prefWidth="300.0" style="-fx-background-color: black; -fx-text-fill: white;" />
+                        <HBox alignment="TOP_CENTER" prefHeight="30.0" prefWidth="300.0" spacing="20.0">
                            <children>
-                              <ListView fx:id="listViewUsersS" prefHeight="300.0" prefWidth="300.0" style="-fx-background-color: black; -fx-text-fill: white;" />
+                              <Button fx:id="buttonStartGame" mnemonicParsing="false" onAction="#startGame" prefHeight="30.0" prefWidth="80.0" text="Start game" />
+                              <Button fx:id="buttonOpenClose" mnemonicParsing="false" onAction="#toggleOpenClose" prefHeight="30.0" prefWidth="74.0" text="Open">
+                                 <graphic>
+                                    <Label fx:id="labelOpenClose" prefHeight="17.0" prefWidth="17.0" style="-fx-background-color: lime;" />
+                                 </graphic>
+                              </Button>
                            </children>
+                           <padding>
+                              <Insets left="87.0" />
+                           </padding>
                         </HBox>
                      </children>
                   </VBox>
@@ -85,7 +94,7 @@
             </HBox>
          </children>
       </VBox>
-      <VBox fx:id="vboxChatClient" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" spacing="5.0" style="-fx-background-color: black;" visible="false">
+      <VBox fx:id="vboxChatClient" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" spacing="5.0" style="-fx-background-color: black;">
          <children>
             <HBox prefHeight="400.0" prefWidth="600.0">
                <children>
@@ -96,11 +105,7 @@
                               <Font size="20.0" />
                            </font>
                         </Label>
-                        <HBox prefHeight="300.0" prefWidth="300.0">
-                           <children>
-                              <ListView fx:id="listViewUsersC" prefHeight="300.0" prefWidth="280.0" style="-fx-background-color: black; -fx-text-fill: white;" />
-                           </children>
-                        </HBox>
+                        <ListView fx:id="listViewUsersC" prefHeight="300.0" prefWidth="280.0" style="-fx-background-color: black; -fx-text-fill: white;" />
                         <Button fx:id="buttonReady" mnemonicParsing="false" onAction="#toggleReady" prefHeight="26.0" prefWidth="90.0" style="-fx-background-color: red;" text="Not ready" />
                      </children>
                      <padding>
@@ -110,7 +115,7 @@
                   <VBox prefHeight="400.0" prefWidth="300.0">
                      <children>
                         <TextArea fx:id="textAreaChatC" editable="false" prefHeight="370.0" prefWidth="300.0" />
-                        <HBox prefHeight="30.0" prefWidth="442.0" spacing="5.0">
+                        <HBox prefHeight="30.0" prefWidth="300.0">
                            <children>
                               <TextField fx:id="textFieldChatC" minHeight="30.0" minWidth="100.0" onKeyPressed="#enterChatHandle" prefHeight="30.0" prefWidth="250.0" />
                               <Button fx:id="buttonChatC" mnemonicParsing="false" onAction="#sendMessageC" prefHeight="30.0" prefWidth="50.0" text="Send" />

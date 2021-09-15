@@ -23,6 +23,7 @@ public class ServerStream implements IServer{
 	
 	private static final int PORT = 9001;
 	private int maxNumUsers = 6;
+	private int minToStartGame;
 	
 	private Controller controller;
 	private String nickname;
@@ -31,13 +32,16 @@ public class ServerStream implements IServer{
 	private ArrayList<User> users;
 	private ArrayList<ObjectOutputStream> writers;
 	
-	public ServerStream(Controller controller, String nickname)
+	public ServerStream(Controller controller, String nickname, int users_required)
 	{
 		this.controller = controller;
 		this.nickname = nickname;
+		this.minToStartGame = users_required;
 		
 		this.users = new ArrayList<User>();
-		this.users.add(new User(nickname));
+		User u = new User(nickname);
+		u.setReady(true); // the server is always ready
+		this.users.add(u);
 		this.writers = new ArrayList<ObjectOutputStream>();
 		this.writers.add(null);
 		
@@ -137,24 +141,31 @@ public class ServerStream implements IServer{
 							{
 								System.out.println("Server: connect message received");
 								
-								Message mReply;
+								Message mReply = new Message();
+								mReply.setTimestamp(controller.getCurrentTimestamp());
 								
 								// check if the connection can happen
+								// the room is full
 								if(users.size() == maxNumUsers)
 								{
-									mReply = new Message(MessageType.CONNECT_FAILED, controller.getCurrentTimestamp(), "", "The room is full");
-									this.output.writeObject(mReply);
+									mReply.setMsgType(MessageType.CONNECT_FAILED);
+									mReply.setNickname("");
+									mReply.setContent("The room is full");
 								}
+								// a username with the same nickname is already inside the room
 								else if(checkDuplicateNickname(incomingMsg.getNickname()))
 								{
-									mReply = new Message(MessageType.CONNECT_FAILED, controller.getCurrentTimestamp(), "", "Nickname '" + incomingMsg.getNickname() + "' already present");
-									this.output.writeObject(mReply);
+									mReply.setMsgType(MessageType.CONNECT_FAILED);
+									mReply.setNickname("");
+									mReply.setContent("Nickname '" + incomingMsg.getNickname() + "' already present");
 								}
-								/*else if() // room is closed
+								// the room is closed
+								else if(!controller.isRoomOpen())
 								{
-									
+									mReply.setMsgType(MessageType.CONNECT_FAILED);
+									mReply.setNickname("");
+									mReply.setContent("The room is closed");
 								}
-								*/
 								// the connection can be accepted
 								else
 								{
@@ -164,18 +175,21 @@ public class ServerStream implements IServer{
 									writers.add(this.output);
 									controller.addUser(u);
 									
-									// send back OK message, containing the updated user list
-									mReply = new Message(MessageType.CONNECT_OK, controller.getCurrentTimestamp(), nickname, getUserList());
-									this.output.writeObject(mReply);
-									
-									// add the message to the chat textArea
-									controller.addToTextArea(mReply.getTimestamp() + " " + incomingMsg.getNickname() + " has joined the room");
-									
 									// forward to other users the new user joined
 									mReply.setMsgType(MessageType.USER_JOINED);
 									mReply.setNickname(incomingMsg.getNickname());
 									forwardMessage(mReply);
+									
+									// create OK message, containing the updated user list
+									mReply.setMsgType(MessageType.CONNECT_OK);
+									mReply.setNickname(nickname);
+									mReply.setContent(getUserList());
+									
+									// add the message to the chat textArea
+									controller.addToTextArea(mReply.getTimestamp() + " " + incomingMsg.getNickname() + " has joined the room");
 								}
+								// send back a reply for the CONNECT request
+								this.output.writeObject(mReply);
 								
 								break;
 							}
@@ -204,7 +218,8 @@ public class ServerStream implements IServer{
 									}
 								}
 								
-								// enable start button if everyone is ready
+								// enable start button if everyone is ready & there are enough users
+								controller.enableStartGame(checkCanStartGame());
 								
 								// forward the ready to other users
 								forwardMessage(incomingMsg);
@@ -232,6 +247,9 @@ public class ServerStream implements IServer{
 										break;
 									}
 								}
+								
+								// enable start button if everyone is ready
+								controller.enableStartGame(checkCanStartGame());
 								
 								// close the connection(?)
 								socket.close();
@@ -313,12 +331,6 @@ public class ServerStream implements IServer{
 				break;
 			}
 		}
-		
-		// remove user from the listView
-		this.controller.removeUser(kickNickname);
-		
-		// add kick message to the textArea
-		this.controller.addToTextArea(msg.getTimestamp() + " " + msg.getNickname() + " has been kicked out");
 	}
 	
 	@Override
@@ -340,6 +352,18 @@ public class ServerStream implements IServer{
 		
 		// close the socket
 		this.serverListener.closeSocket();
+	}
+	
+	@Override
+	public boolean checkCanStartGame()
+	{
+		for(User u : this.users)
+		{
+			System.out.println(u.isReady());
+			if(!u.isReady())
+				return false;
+		}
+		return this.users.size() >= this.minToStartGame ? true : false;
 	}
 	
 	private void forwardMessage(Message msg)

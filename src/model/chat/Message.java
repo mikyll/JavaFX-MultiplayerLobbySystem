@@ -10,6 +10,10 @@ public class Message implements Serializable{
 	private String nickname;
 	private String content;
 	
+	public Message()
+	{
+		
+	}
 	public Message(String type, String timestamp, String nickname, String content)
 	{
 		this.msgType = MessageType.valueOf(type);

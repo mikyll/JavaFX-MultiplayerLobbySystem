@@ -36,6 +36,7 @@ import networking.ServerStream;
 
 public class Controller {
 	private static final int ROOM_CAPACITY = 6;
+	private static final int USERS_REQUIRED_TO_START = 2;
 	
 	private static final Pattern PATTERN_NICKNAME = Pattern.compile("^[a-zA-Z0-9]{3,15}$");
 	private static final Pattern PATTERN_IP = Pattern.compile("^(([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.){3}([01]?\\d\\d?|2[0-4]\\d|25[0-5])$");
@@ -56,7 +57,11 @@ public class Controller {
 	@FXML private TextField textFieldChatC;
 	@FXML private Button buttonChatC;
 	@FXML private Button buttonReady;
+	@FXML private ListView<HBox> listViewUsersC;
 	private IClient client;
+	private ArrayList<Label> listUsernameC;
+	private ArrayList<Label> listReadyC;
+	private ArrayList<ImageView> listImage;
 	
 	// server
 	@FXML private VBox vboxChatServer;
@@ -64,26 +69,16 @@ public class Controller {
 	@FXML private TextArea textAreaChatS;
 	@FXML private TextField textFieldChatS;
 	@FXML private Button buttonChatS;
-	private IServer server;
-	
-	@FXML private ListView<HBox> listViewUsersC;
+	@FXML private Button buttonStartGame;
+	@FXML private Button buttonOpenClose;
+	@FXML private Label labelOpenClose;
 	@FXML private ListView<HBox> listViewUsersS;
-	
-	private ArrayList<Label> listUsernameC;
+	private IServer server;
 	private ArrayList<Label> listUsernameS;
-	private ArrayList<Label> listReadyC;
 	private ArrayList<Label> listReadyS;
-	private ArrayList<ImageView> listImage;
 	private ArrayList<Button> listKick;
 	
 	private int connectedUsers;
-	
-	/*@FXML private ListView<String> listViewUsersC;
-	@FXML private ListView<Label> listViewReadyC;
-	
-	@FXML private ListView<String> listViewUsersS;
-	@FXML private ListView<Label> listViewReadyS;
-	@FXML private ListView<Button> listViewKickS;*/
 	
 	private SimpleDateFormat tformatter;
 	
@@ -154,7 +149,7 @@ public class Controller {
 			// ready server
 			l = new Label("");
 			l.setPrefSize(25, 25);
-			l.setStyle("-fx-background-color: red");
+			l.setStyle(i == 0 ? "-fx-background-color: lime" : "-fx-background-color: red");
 			l.setVisible(i == 0 ? false : true);
 			hbox.getChildren().add(l);
 			this.listReadyS.add(l);
@@ -229,17 +224,20 @@ public class Controller {
 	
 	@FXML public void selectCNR(ActionEvent event) 
 	{
-		this.vboxBack.setVisible(true);
-		
 		this.textAreaChatS.setText(this.getCurrentTimestamp() + " " + this.textFieldNickname.getText() + " created the room");
 		this.setServerAddress();
 		
 		// create new room -> start server
-		this.server = new ServerStream(this, this.textFieldNickname.getText());
+		this.server = new ServerStream(this, this.textFieldNickname.getText(), USERS_REQUIRED_TO_START);
 		this.client = null;
 		
 		// reset the user list
 		this.resetList();
+		
+		// reset buttons
+		this.buttonStartGame.setDisable(true);
+		this.buttonOpenClose.setText("Open");
+		this.labelOpenClose.setStyle("-fx-background-color: lime");
 		
 		// set the first list element (the server) to visibile
 		this.listUsernameS.get(0).setText(this.textFieldNickname.getText());
@@ -250,8 +248,6 @@ public class Controller {
 	
 	@FXML public void selectJER(ActionEvent event) 
 	{
-		this.vboxBack.setVisible(true);
-		
 		// connect to existing room -> start client
 		this.client = new ClientStream(this, this.textFieldIP.getText(), 9001, this.textFieldNickname.getText());
 		this.server = null;
@@ -344,11 +340,37 @@ public class Controller {
 			{
 				System.out.println("Server: kicked user " + this.listUsernameS.get(i).getText());
 				
+				// remove user from the listView
+				this.removeUser(this.listUsernameS.get(i).getText());
+				
+				// add kick message to the textArea
+				this.addToTextArea(this.getCurrentTimestamp() + " " + this.listUsernameS.get(i).getText() + " has been kicked out");
+				
 				// send Kick message
 				this.server.sendKickUser(this.listUsernameS.get(i).getText());
+				
 				break;
 			}
 		}
+	}
+	@FXML public void toggleOpenClose(ActionEvent event)
+	{
+		// close the room
+		if(this.buttonOpenClose.getText().equalsIgnoreCase("Open"))
+		{
+			this.buttonOpenClose.setText("Closed");
+			this.labelOpenClose.setStyle("-fx-background-color: red");
+		}
+		// open the room
+		else
+		{
+			this.buttonOpenClose.setText("Open");
+			this.labelOpenClose.setStyle("-fx-background-color: lime");
+		}
+	}
+	@FXML public void startGame(ActionEvent event)
+	{
+		System.out.println("Start game");
 	}
 	
 	public void addToTextArea(String text)
@@ -381,11 +403,13 @@ public class Controller {
 	{
 		this.vboxLogin.setVisible(false);
 		this.vboxChatClient.setVisible(true);
+		this.vboxBack.setVisible(true);
 	}
 	public void switchToChatS()
 	{
 		this.vboxLogin.setVisible(false);
 		this.vboxChatServer.setVisible(true);
+		this.vboxBack.setVisible(true);
 	}
 	
 	public void updateReady(String nickname, boolean ready)
@@ -413,6 +437,7 @@ public class Controller {
 			}
 		}
 	}
+	
 	public String getCurrentTimestamp()
 	{
 		Date date = new Date(System.currentTimeMillis());
@@ -420,6 +445,7 @@ public class Controller {
 		
 		return timestamp;
 	}
+	
 	public void showConnectingBox(boolean value)
 	{
 		this.hboxC.setVisible(value);
@@ -440,6 +466,8 @@ public class Controller {
 				this.listUsernameS.get(this.connectedUsers).setText(u.getNickname());
 				this.listViewUsersS.getItems().get(this.connectedUsers).setVisible(true);
 				this.connectedUsers++;
+				
+				this.buttonStartGame.setDisable(true); // when a new user connects it's always not ready
 			}
 		});
 		
@@ -486,9 +514,10 @@ public class Controller {
 				this.listUsernameS.get(this.connectedUsers - 1).setText("");
 				this.listReadyS.get(this.connectedUsers - 1).setStyle("-fx-background-color: red");
 				this.connectedUsers--;
+				
+				this.buttonStartGame.setDisable(!this.server.checkCanStartGame());
 			}
 		});
-		
 	}
 	
 	public void updateUserList(List<User> users)
@@ -513,6 +542,17 @@ public class Controller {
 			}
 		});
 	}
+	
+	public boolean isRoomOpen()
+	{
+		return this.buttonOpenClose.getText().equalsIgnoreCase("Open") ? true : false;
+	}
+	
+	public void enableStartGame(boolean value)
+	{
+		this.buttonStartGame.setDisable(!value);
+	}
+	
 	public void showAlert(AlertType aType, String header, String content)
 	{
 		Platform.runLater(() -> {
