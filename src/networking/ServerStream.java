@@ -39,8 +39,6 @@ public class ServerStream implements IServer{
 		this.minToStartGame = usersRequired;
 		this.maxNumUsers = maxCapacity;
 		
-		System.out.println(usersRequired); // test
-		
 		this.users = new ArrayList<User>();
 		User u = new User(nickname);
 		u.setReady(true); // the server is always ready
