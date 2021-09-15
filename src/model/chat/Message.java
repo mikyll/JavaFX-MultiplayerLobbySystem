@@ -34,13 +34,8 @@ public class Message implements Serializable{
 	public String getContent() {return content;}
 	public void setContent(String content) {this.content = content;}
 	
-	public static void printMessage(Message msg)
-	{
-		System.out.println(msg.getTimestamp() + " " + msg.getNickname() + "(" + msg.getMsgType().toString() + "): " + msg.getContent());
-	}
-	
 	public String toString()
 	{
-		return this.timestamp + " " + this.nickname + ": " + this.content;
+		return this.timestamp + " " + this.nickname + "(" + this.msgType.toString() + "): " + this.content;
 	}
 }

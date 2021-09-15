@@ -56,7 +56,7 @@
             <Insets left="100.0" right="100.0" />
          </padding>
       </VBox>
-      <VBox fx:id="vboxChatServer" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: black;" visible="false">
+      <VBox fx:id="vboxChatServer" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: black;">
          <children>
             <Label fx:id="labelServerIP" prefHeight="20.0" prefWidth="590.0" text="Server IP address: X.X.X.X" textFill="WHITE" />
             <HBox prefHeight="370.0" prefWidth="600.0">
@@ -72,7 +72,7 @@
                   </VBox>
                   <VBox prefHeight="380.0" prefWidth="300.0">
                      <children>
-                        <TextArea fx:id="textAreaChatS" editable="false" prefHeight="350.0" prefWidth="300.0" />
+                        <TextArea fx:id="textAreaChatS" editable="false" minHeight="100.0" prefHeight="350.0" prefWidth="300.0" />
                         <HBox prefHeight="30.0" prefWidth="300.0">
                            <children>
                               <TextField fx:id="textFieldChatS" prefHeight="30.0" prefWidth="250.0" />
@@ -85,7 +85,7 @@
             </HBox>
          </children>
       </VBox>
-      <VBox fx:id="vboxChatClient" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" spacing="5.0" style="-fx-background-color: black;">
+      <VBox fx:id="vboxChatClient" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" spacing="5.0" style="-fx-background-color: black;" visible="false">
          <children>
             <HBox prefHeight="400.0" prefWidth="600.0">
                <children>
@@ -112,7 +112,7 @@
                         <TextArea fx:id="textAreaChatC" editable="false" prefHeight="370.0" prefWidth="300.0" />
                         <HBox prefHeight="30.0" prefWidth="442.0" spacing="5.0">
                            <children>
-                              <TextField fx:id="textFieldChatC" prefHeight="30.0" prefWidth="250.0" />
+                              <TextField fx:id="textFieldChatC" minHeight="30.0" minWidth="100.0" prefHeight="30.0" prefWidth="250.0" />
                               <Button fx:id="buttonChatC" mnemonicParsing="false" onAction="#sendMessageC" prefHeight="30.0" prefWidth="50.0" text="Send" />
                            </children>
                         </HBox>

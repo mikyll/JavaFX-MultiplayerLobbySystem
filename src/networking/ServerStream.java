@@ -66,7 +66,7 @@ public class ServerStream implements IServer{
 		public ServerListener(int port) throws IOException
 		{
 			this.listener = new ServerSocket(port);
-			System.out.println("Server: listening for connections on port " + PORT);
+			System.out.println("Server (" + this.getId() + "): listening for connections on port " + PORT);
 		}
 		
 		@Override
@@ -130,7 +130,7 @@ public class ServerStream implements IServer{
 					Message incomingMsg = (Message) this.input.readObject();
 					if(incomingMsg != null)
 					{
-						Message.printMessage(incomingMsg); // test
+						System.out.println("Server (" + this.getId() + "): received " + incomingMsg.toString()); // test
 						switch(incomingMsg.getMsgType())
 						{
 							case CONNECT:
@@ -167,7 +167,6 @@ public class ServerStream implements IServer{
 									// send back OK message, containing the updated user list
 									mReply = new Message(MessageType.CONNECT_OK, controller.getCurrentTimestamp(), nickname, getUserList());
 									this.output.writeObject(mReply);
-									Message.printMessage(mReply); // test
 									
 									// add the message to the chat textArea
 									controller.addToTextArea(mReply.getTimestamp() + " " + incomingMsg.getNickname() + " has joined the room");

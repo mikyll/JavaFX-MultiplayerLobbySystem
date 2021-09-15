@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
+import java.net.ConnectException;
 import java.net.Socket;
 import java.net.SocketException;
 import java.util.ArrayList;
@@ -67,10 +68,9 @@ public class ClientStream implements IClient {
 				while(this.socket.isConnected())
 				{
 					Message incomingMsg = (Message) input.readObject();
-					System.out.println("Client: message received");
 					if(incomingMsg != null)
 					{
-						Message.printMessage(incomingMsg); // test
+						System.out.println("Client (" + this.getId() + "): received " + incomingMsg.toString()); // test
 						switch(incomingMsg.getMsgType())
 						{
 							case CONNECT_FAILED:
@@ -180,7 +180,12 @@ public class ClientStream implements IClient {
 				}
 			} catch(SocketException e) {
 				System.out.println("Socket exception");
-				e.printStackTrace();
+				if(e instanceof ConnectException)
+				{
+					controller.showAlert(AlertType.ERROR, "Connection failed", e.getMessage());
+					controller.showConnectingBox(false);
+				}
+				else e.printStackTrace();
 			} catch (IOException e) {
 				System.out.println("Errore stream");
 				e.printStackTrace();
