@@ -204,6 +204,8 @@ public class ServerStream implements IServer{
 									}
 								}
 								
+								// enable start button if everyone is ready
+								
 								// forward the ready to other users
 								forwardMessage(incomingMsg);
 								
@@ -296,7 +298,7 @@ public class ServerStream implements IServer{
 	@Override
 	public void sendKickUser(String kickNickname)
 	{
-		Message msg = new Message(MessageType.KICK, controller.getCurrentTimestamp(), kickNickname, "You have been kicked out from the server");
+		Message msg = new Message(MessageType.KICK, controller.getCurrentTimestamp(), kickNickname, "You have been kicked out from the room");
 		
 		// send kick to everyone (the nickname indicates which user is getting kicked)
 		this.sendMessage(msg);

@@ -356,7 +356,9 @@ public class Controller {
 		// client
 		if(this.client != null)
 		{
-			this.textAreaChatC.setText(this.textAreaChatC.getText() + "\n" + text);
+			if(this.textAreaChatC.getText().isEmpty())
+				this.textAreaChatC.setText(text);
+			else this.textAreaChatC.setText(this.textAreaChatC.getText() + "\n" + text);
 		}
 		// server
 		else if(this.server != null)
@@ -366,16 +368,7 @@ public class Controller {
 	}
 	public void addToTextArea(Message message)
 	{
-		// client
-		if(this.client != null)
-		{
-			this.textAreaChatC.setText(this.textAreaChatC.getText() + "\n" + message.getTimestamp() + " " + message.getNickname() + ": " + message.getContent());
-		}
-		// server
-		else if(this.server != null)
-		{
-			this.textAreaChatS.setText(this.textAreaChatS.getText() + "\n" + message.getTimestamp() + " " + message.getNickname() + ": " + message.getContent());
-		}
+		this.addToTextArea(message.getTimestamp() + " " + message.getNickname() + ": " + message.getContent());
 	}
 	public void switchToMP()
 	{
