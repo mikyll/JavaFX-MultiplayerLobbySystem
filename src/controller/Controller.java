@@ -568,7 +568,6 @@ public class Controller {
 	}
 	public void removeUser(String nickname)
 	{
-		System.out.println("Controller: remove user"); // test
 		Platform.runLater(() -> {
 			boolean found = false;
 			if(this.client != null)
@@ -616,7 +615,6 @@ public class Controller {
 	
 	public void updateUserList(List<User> users)
 	{
-		System.out.println("Controller: update user list"); // test
 		Platform.runLater(() -> {
 			if(this.client != null)
 			{
@@ -683,7 +681,6 @@ public class Controller {
 	
 	private void resetList()
 	{
-		System.out.println("Controller: reset user list"); // test
 		if(this.client != null)
 		{
 			for(int i = 0; i < ROOM_CAPACITY; i++)
