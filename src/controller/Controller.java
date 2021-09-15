@@ -174,8 +174,8 @@ public class Controller {
 		if(checkNickname(this.textFieldNickname.getText()))
 		{
 			this.buttonCNR.setDisable(false);
-			// & address OK
-			if(this.checkIP(this.textFieldIP.getText()))
+			// & address OK (or empty)
+			if(this.checkIP(this.textFieldIP.getText()) || this.textFieldIP.getText().isEmpty())
 				this.buttonJER.setDisable(false);
 		}
 		// nickname NOT
@@ -195,19 +195,19 @@ public class Controller {
 	}
 	@FXML public void validateAddress()
 	{
-		// address OK, nickname OK
-		if(checkIP(this.textFieldIP.getText()) && checkNickname(this.textFieldNickname.getText()))
+		// address OK (or empty) & nickname OK
+		if((checkIP(this.textFieldIP.getText()) || this.textFieldIP.getText().isEmpty()) && checkNickname(this.textFieldNickname.getText()))
 		{
 			this.buttonJER.setDisable(false);
 			this.labelErrorIP.setVisible(false);
 		}
-		// address NOT, nickname OK
-		else if(!checkIP(this.textFieldIP.getText()))
+		// address NOT (nor empty) & nickname OK
+		else if(!(checkIP(this.textFieldIP.getText()) || this.textFieldIP.getText().isEmpty()))
 		{
 			this.buttonJER.setDisable(true);
 			this.labelErrorIP.setVisible(true);
 		}
-		// address OK, nickname NOT
+		// address OK (or empty) & nickname NOT
 		else
 		{
 			this.labelErrorIP.setVisible(false);
