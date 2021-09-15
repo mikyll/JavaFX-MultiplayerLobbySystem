@@ -16,31 +16,89 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.Controller">
    <children>
-      <VBox fx:id="vboxLogin" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" spacing="5.0" style="-fx-background-color: black;" visible="false">
+      <VBox fx:id="vboxMP" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" spacing="5.0" style="-fx-background-color: black;">
          <children>
-            <HBox alignment="CENTER_LEFT" prefHeight="30.0" prefWidth="242.0">
+            <HBox alignment="CENTER_LEFT" prefHeight="30.0" prefWidth="240.0">
                <children>
-                  <Label prefHeight="27.0" prefWidth="130.0" text="Nickname:" textFill="WHITE">
+                  <Label prefHeight="30.0" prefWidth="130.0" text="Nickname:" textFill="WHITE">
                      <font>
                         <Font size="18.0" />
                      </font>
                   </Label>
-                  <TextField fx:id="textFieldNickname" onKeyTyped="#validateNickname" prefHeight="30.0" prefWidth="140.0" />
+                  <TextField fx:id="textFieldNickname" onKeyTyped="#validateNickname" prefHeight="30.0" prefWidth="180.0" />
                </children>
             </HBox>
-            <Separator prefHeight="20.0" prefWidth="200.0" visible="false" />
-            <Button fx:id="buttonCNR" mnemonicParsing="false" onAction="#selectCNR" prefHeight="30.0" prefWidth="140.0" text="Create new room" />
-            <Separator prefHeight="15.0" prefWidth="442.0" visible="false" />
-            <VBox alignment="CENTER" prefHeight="105.0" prefWidth="242.0" spacing="5.0">
+            <HBox alignment="CENTER_LEFT" prefHeight="30.0" prefWidth="240.0">
                <children>
-                  <TextField fx:id="textFieldIP" onKeyTyped="#validateAddress" prefHeight="30.0" prefWidth="140.0" promptText="Remote IP address" />
-                  <Button fx:id="buttonJER" mnemonicParsing="false" onAction="#selectJER" prefHeight="30.0" prefWidth="140.0" text="Join existing room" />
-                  <Label fx:id="labelErrorIP" prefHeight="30.0" prefWidth="95.0" text="Invalid IP address." textFill="RED" visible="false" />
+                  <Label prefHeight="30.0" prefWidth="130.0" text="Room size:" textFill="WHITE">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+                  <Label prefHeight="30.0" prefWidth="37.0" text="Min:" textFill="WHITE">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </Label>
+                  <Label id="spinner" fx:id="labelMinRoom" alignment="CENTER" prefHeight="30.0" prefWidth="20.0" style="-fx-background-color: white; -fx-background-radius: 3;" text="2">
+                     <font>
+                        <Font name="System Bold" size="16.0" />
+                     </font>
+                  </Label>
+                  <VBox alignment="CENTER_LEFT" prefHeight="30.0" prefWidth="30.0">
+                     <children>
+                        <ImageView fx:id="buttonIncreaseMinRoom" fitHeight="15.0" fitWidth="30.0" onMouseClicked="#increaseMinRoom" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@icon-arrow-up.png" />
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="buttonDecreaseMinRoom" fitHeight="15.0" fitWidth="30.0" onMouseClicked="#decreaseMinRoom" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@icon-arrow-down.png" />
+                           </image>
+                        </ImageView>
+                     </children>
+                  </VBox>
+                  <Separator orientation="VERTICAL" prefHeight="30.0" prefWidth="6.0" visible="false" />
+                  <Label prefHeight="30.0" prefWidth="37.0" text="Max:" textFill="WHITE">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </Label>
+                  <Label id="spinner" fx:id="labelMaxRoom" alignment="CENTER" prefHeight="30.0" prefWidth="20.0" style="-fx-background-color: white; -fx-background-radius: 3;" text="6">
+                     <font>
+                        <Font name="System Bold" size="16.0" />
+                     </font>
+                  </Label>
+                  <VBox alignment="CENTER_LEFT" prefHeight="30.0" prefWidth="30.0">
+                     <children>
+                        <ImageView fx:id="buttonIncreaseMaxRoom" fitHeight="15.0" fitWidth="30.0" onMouseClicked="#increaseMaxRoom" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@icon-arrow-up.png" />
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="buttonDecreaseMaxRoom" fitHeight="15.0" fitWidth="30.0" onMouseClicked="#decreaseMaxRoom" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@icon-arrow-down.png" />
+                           </image>
+                        </ImageView>
+                     </children>
+                  </VBox>
                </children>
-               <padding>
-                  <Insets left="130.0" right="130.0" />
-               </padding>
-            </VBox>
+            </HBox>
+            <Button fx:id="buttonCNR" mnemonicParsing="false" onAction="#selectCNR" prefHeight="30.0" prefWidth="180.0" text="Create new room" />
+            <Separator prefHeight="30.0" prefWidth="440.0" visible="false" />
+            <HBox alignment="CENTER_LEFT" prefHeight="30.0" prefWidth="240.0">
+               <children>
+                  <Label prefHeight="30.0" prefWidth="130.0" text="IP address:" textFill="WHITE">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="textFieldIP" onKeyTyped="#validateAddress" prefHeight="30.0" prefWidth="180.0" promptText="localhost" />
+               </children>
+            </HBox>
+            <Button fx:id="buttonJER" mnemonicParsing="false" onAction="#selectJER" prefHeight="30.0" prefWidth="180.0" text="Join existing room" />
             <HBox fx:id="hboxC" alignment="CENTER" prefHeight="30.0" prefWidth="242.0" spacing="10.0" visible="false">
                <children>
                   <Label prefHeight="18.0" prefWidth="130.0" text="Connecting to server..." textFill="WHITE" />
@@ -51,9 +109,10 @@
                   </ImageView>
                </children>
             </HBox>
+            <Label fx:id="labelErrorIP" prefHeight="30.0" prefWidth="95.0" text="Invalid IP address." textFill="RED" visible="false" />
          </children>
          <padding>
-            <Insets left="100.0" right="100.0" />
+            <Insets left="80.0" right="80.0" />
          </padding>
       </VBox>
       <VBox fx:id="vboxChatServer" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: black;" visible="false">
@@ -94,7 +153,7 @@
             </HBox>
          </children>
       </VBox>
-      <VBox fx:id="vboxChatClient" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" spacing="5.0" style="-fx-background-color: black;">
+      <VBox fx:id="vboxChatClient" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" spacing="5.0" style="-fx-background-color: black;" visible="false">
          <children>
             <HBox prefHeight="400.0" prefWidth="600.0">
                <children>
