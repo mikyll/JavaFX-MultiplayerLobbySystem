@@ -416,25 +416,12 @@ public class Controller {
 				this.listUsernameC.get(this.connectedUsers).setText(u.getNickname());
 				this.listViewUsersC.getItems().get(this.connectedUsers).setVisible(true);
 				this.connectedUsers++;
-				
-				/*this.listViewUsersC.getItems().add(u.getNickname());
-				int i = this.listViewUsersC.getItems().size();
-				Label l = this.listViewReadyC.getItems().get(i - 1);
-				l.setStyle("-fx-background-color: red");
-				l.setVisible(true);*/
 			}
 			else if(this.server != null)
 			{
 				this.listUsernameS.get(this.connectedUsers).setText(u.getNickname());
 				this.listViewUsersS.getItems().get(this.connectedUsers).setVisible(true);
 				this.connectedUsers++;
-				
-				/*this.listViewUsersS.getItems().add(u.getNickname());
-				int i = this.listViewUsersS.getItems().size();
-				Label l = this.listViewReadyS.getItems().get(i - 1);
-				l.setStyle("-fx-background-color: red");
-				l.setVisible(true);
-				this.listViewKickS.getItems().get(i - 1).setVisible(true);*/
 			}
 		});
 		
