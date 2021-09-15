@@ -125,7 +125,7 @@ public class Controller {
 			l.setVisible(i == 0 ? false : true);
 			hbox.getChildren().add(l);
 			this.listReadyC.add(l);
-			// identifier
+			// identifier image
 			ImageView iv = new ImageView();
 			try {
 				iv.setImage(new Image(new FileInputStream("src/view/icon-user.png")));
@@ -156,7 +156,7 @@ public class Controller {
 			l.setVisible(i == 0 ? false : true);
 			hbox.getChildren().add(l);
 			this.listReadyS.add(l);
-			// kick
+			// kick button
 			Button b = new Button("Kick");
 			b.setPrefSize(70, 20);
 			b.setStyle("-fx-font-size: 15.0");
@@ -410,6 +410,7 @@ public class Controller {
 	
 	public void addUser(User u)
 	{
+		System.out.println("Controller: add user"); // test
 		Platform.runLater(() -> {
 			if(this.client != null)
 			{
@@ -428,6 +429,7 @@ public class Controller {
 	}
 	public void removeUser(String nickname)
 	{
+		System.out.println("Controller: remove user"); // test
 		Platform.runLater(() -> {
 			boolean found = false;
 			if(this.client != null)
@@ -474,6 +476,7 @@ public class Controller {
 	
 	public void updateUserList(List<User> users)
 	{
+		System.out.println("Controller: update user list"); // test
 		Platform.runLater(() -> {
 			if(this.client != null)
 			{
@@ -520,6 +523,7 @@ public class Controller {
 	
 	private void resetList()
 	{
+		System.out.println("Controller: reset user list"); // test
 		if(this.client != null)
 		{
 			for(int i = 0; i < ROOM_CAPACITY; i++)
