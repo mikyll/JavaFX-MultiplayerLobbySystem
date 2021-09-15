@@ -26,6 +26,7 @@ to add:
 - create a class for my Spinner (MikyllSpinner ?)
 - add an headless server to handle the room list (when a server creates a room it's inserted into the list, and the client can access that list to see those rooms)
 - add a ban list (nickname/IP)
+- check if the users get disconnected properly when closing the app by the Launcher
 
 references:
 - [JavaFX-Chat](https://github.com/DomHeal/JavaFX-Chat)
