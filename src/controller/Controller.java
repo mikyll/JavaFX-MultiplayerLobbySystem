@@ -113,6 +113,7 @@ public class Controller {
 	public void initialize()
 	{
 		this.state = NavState.MULTIPLAYER;
+		
 		this.vboxBack.setVisible(true);
 		this.vboxMP.setVisible(true);
 		this.vboxCreateRoom.setVisible(false);
@@ -233,37 +234,39 @@ public class Controller {
 			}
 			case MP_CREATE:
 			{
-				this.state = NavState.MULTIPLAYER;
 				this.vboxCreateRoom.setVisible(false);
 				this.vboxMP.setVisible(true);
+				
+				this.state = NavState.MULTIPLAYER;
 				
 				break;
 			}
 			case MP_JOIN:
 			{
-				this.state = NavState.MULTIPLAYER;
 				this.vboxJoinRoom.setVisible(false);
 				this.vboxMP.setVisible(true);
+				
+				this.state = NavState.MULTIPLAYER;
 				
 				break;
 			}
 			case MP_SERVER:
 			{
-				this.state = NavState.MULTIPLAYER;
+				this.closeConnection();
 				this.vboxServerRoom.setVisible(false);
 				this.vboxMP.setVisible(true);
 				
-				this.closeConnection();
+				this.state = NavState.MULTIPLAYER;
 				
 				break;
 			}
 			case MP_CLIENT:
 			{
-				this.state = NavState.MULTIPLAYER;
+				this.closeConnection();
 				this.vboxClientRoom.setVisible(false);
 				this.vboxMP.setVisible(true);
 				
-				this.closeConnection();
+				this.state = NavState.MULTIPLAYER;
 				
 				break;
 			}
@@ -278,18 +281,18 @@ public class Controller {
 		this.vboxMP.setVisible(false);
 		this.vboxCreateRoom.setVisible(true);
 		
-		this.state = NavState.MP_CREATE;
-		
 		// reset CNR fields?
+		
+		this.state = NavState.MP_CREATE;
 	}
 	@FXML public void selectJER(ActionEvent event)
 	{
 		this.vboxMP.setVisible(false);
 		this.vboxJoinRoom.setVisible(true);
 		
-		this.state = NavState.MP_JOIN;
-		
 		// reset JER fields?
+		
+		this.state = NavState.MP_JOIN;
 	}
 	
 	// MultiPlayer: Create New Room callbacks
@@ -581,17 +584,17 @@ public class Controller {
 	}
 	public void switchToServerRoom()
 	{
-		this.state = NavState.MP_SERVER;
-		
 		this.vboxCreateRoom.setVisible(false);
 		this.vboxServerRoom.setVisible(true);
+		
+		this.state = NavState.MP_SERVER;
 	}
 	public void switchToClientRoom()
 	{
-		this.state = NavState.MP_CLIENT;
-		
 		this.vboxJoinRoom.setVisible(false);
 		this.vboxClientRoom.setVisible(true);
+		
+		this.state = NavState.MP_CLIENT;
 	}
 	public void showAlert(AlertType aType, String header, String content)
 	{
