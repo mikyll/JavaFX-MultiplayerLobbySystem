@@ -673,9 +673,28 @@ public class Controller {
 			}
 		}
 	}
-	
-	
-	
+	private void resetList()
+	{
+		if(this.state == NavState.MP_CLIENT)
+		{
+			for(int i = 0; i < ROOM_CAPACITY; i++)
+			{
+				this.listViewUsersC.getItems().get(i).setVisible(false);
+				this.listUsernameC.get(i).setText("");
+				this.listReadyC.get(i).setStyle("-fx-background-color: red");
+				this.listImage.get(i).setVisible(false);
+			}
+		}
+		else if(this.state == NavState.MP_SERVER)
+		{
+			for(int i = 0; i < ROOM_CAPACITY; i++)
+			{
+				this.listViewUsersS.getItems().get(i).setVisible(false);
+				this.listUsernameS.get(i).setText("");
+				this.listReadyS.get(i).setStyle("-fx-background-color: red");
+			}
+		}
+	}
 	public void addUser(User u)
 	{
 		Platform.runLater(() -> {
@@ -763,12 +782,10 @@ public class Controller {
 			}
 		});
 	}
-	
 	public void enableStartGame(boolean value)
 	{
 		this.buttonStartGame.setDisable(!value);
 	}
-	
 	public void closeConnection()
 	{
 		if(this.state == NavState.MP_CLIENT)
@@ -782,26 +799,4 @@ public class Controller {
 			this.server = null;
 		}
     }
-	private void resetList()
-	{
-		if(this.state == NavState.MP_CLIENT)
-		{
-			for(int i = 0; i < ROOM_CAPACITY; i++)
-			{
-				this.listViewUsersC.getItems().get(i).setVisible(false);
-				this.listUsernameC.get(i).setText("");
-				this.listReadyC.get(i).setStyle("-fx-background-color: red");
-				this.listImage.get(i).setVisible(false);
-			}
-		}
-		else if(this.state == NavState.MP_SERVER)
-		{
-			for(int i = 0; i < ROOM_CAPACITY; i++)
-			{
-				this.listViewUsersS.getItems().get(i).setVisible(false);
-				this.listUsernameS.get(i).setText("");
-				this.listReadyS.get(i).setStyle("-fx-background-color: red");
-			}
-		}
-	}
 }
