@@ -17,7 +17,7 @@ to add:
 - ~~add on close function to disconnect and stop the threads before closing the app~~
 - ~~add "start game" button which enables when the room has the minimum users required~~
 - ~~add open/close checkbox to allow users to join~~
-- change the "this.client != null" check with NavState.MP_CLIENT (same for the server)
+- ~~change the "this.client != null" check with NavState.MP_CLIENT (same for the server)~~
 - fix Join Existing Room validation
 - move Controller methods (in a proper order)
 - catch Connection Reset & SocketException: Interrupted function call: accept failed, thrown when we back from the server room, when no one has been accepted yet
