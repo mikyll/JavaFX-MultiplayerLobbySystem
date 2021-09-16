@@ -28,6 +28,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Paint;
+import model.NavState;
 import model.User;
 import model.chat.Message;
 import networking.ClientStream;
@@ -42,7 +43,7 @@ public class Controller {
 	private static final Pattern PATTERN_NICKNAME = Pattern.compile("^[a-zA-Z0-9]{3,15}$");
 	private static final Pattern PATTERN_IP = Pattern.compile("^(([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.){3}([01]?\\d\\d?|2[0-4]\\d|25[0-5])$");
 	
-	// private StateApp (Multiplayer, MC, MJ, MCNR, MJER, ...)
+	private NavState state;
 	
 	@FXML private VBox vboxBack;
 	
@@ -109,6 +110,9 @@ public class Controller {
 	
 	public void initialize()
 	{
+		this.state = NavState.MULTIPLAYER;
+		this.vboxBack.setVisible(true);
+		
 		this.tformatter = new SimpleDateFormat("[HH:mm:ss]");
 		this.switchToMP();
 		this.showConnectingBox(false);
@@ -210,56 +214,80 @@ public class Controller {
 		connectedUsers = 0;
 	}
 	
-	@FXML public void validateNickname()
+	// Multiplayer callbacks
+	@FXML public void goBack(ActionEvent event)
+	{
+		switch(this.state)
+		{
+			case MULTIPLAYER:
+			{
+				// nothing
+				
+				break;
+			}
+			case MP_CREATE:
+			{
+				this.vboxCreateRoom.setVisible(false);
+				this.vboxMP.setVisible(true);
+				
+				break;
+			}
+			case MP_JOIN:
+			{
+				this.vboxJoinRoom.setVisible(false);
+				this.vboxMP.setVisible(true);
+				
+				break;
+			}
+			case MP_SERVER:
+			{
+				break;
+			}
+			case MP_CLIENT:
+			{
+				break;
+			}
+			default:
+			{
+				break;
+			}
+		}
+		this.vboxBack.setVisible(false);
+		this.switchToMP();
+		
+		this.closeConnection();
+	}
+	@FXML public void selectCNR(ActionEvent event)
+	{
+		this.vboxMP.setVisible(false);
+		this.vboxCreateRoom.setVisible(true);
+		
+		this.state = NavState.MP_CREATE;
+		
+		// reset CNR fields?
+	}
+	@FXML public void selectJER(ActionEvent event)
+	{
+		this.vboxMP.setVisible(false);
+		this.vboxJoinRoom.setVisible(true);
+		
+		this.state = NavState.MP_JOIN;
+		
+		// reset JER fields?
+	}
+	
+	// MultiPlayer: Create New Room callbacks
+	@FXML public void validateNicknameCNR()
 	{
 		// nickname OK
-		if(checkNickname(this.textFieldNickname.getText()))
+		if(checkNickname(this.textFieldNicknameS.getText()))
 		{
 			this.buttonCNR.setDisable(false);
-			// & address OK (or empty)
-			if(this.checkIP(this.textFieldIP.getText()) || this.textFieldIP.getText().isEmpty())
-				this.buttonJER.setDisable(false);
 		}
 		// nickname NOT
-		else
 		{
 			this.buttonCNR.setDisable(true);
-			this.buttonJER.setDisable(true);
 		}
-	}
-	@FXML public void validateNicknameC()
-	{
-		
-	}
-	private boolean checkNickname(String text)
-	{
-		// if OK return true
-		return PATTERN_NICKNAME.matcher(text).matches() ? true : false;
-	}
-	@FXML public void validateAddress()
-	{
-		// address OK (or empty) & nickname OK
-		if((checkIP(this.textFieldIP.getText()) || this.textFieldIP.getText().isEmpty()) && checkNickname(this.textFieldNickname.getText()))
-		{
-			this.buttonJER.setDisable(false);
-			this.labelErrorIP.setVisible(false);
-		}
-		// address NOT (nor empty) & nickname OK
-		else if(!(checkIP(this.textFieldIP.getText()) || this.textFieldIP.getText().isEmpty()))
-		{
-			this.buttonJER.setDisable(true);
-			this.labelErrorIP.setVisible(true);
-		}
-		// address OK (or empty) & nickname NOT
-		else
-		{
-			this.labelErrorIP.setVisible(false);
-		}
-	}
-	private boolean checkIP(String text)
-	{
-		// if OK return true
-		return PATTERN_IP.matcher(text).matches() ? true : false;
 	}
 	@FXML public void increaseMinRoom(MouseEvent event)
 	{
@@ -333,13 +361,13 @@ public class Controller {
 			this.buttonDecreaseMaxRoom.setImage(this.arrowDownDisabled);
 		}
 	}
-	@FXML public void selectCNR(ActionEvent event) 
+	@FXML public void createNewRoom(ActionEvent event) 
 	{
-		this.textAreaChatS.setText(this.getCurrentTimestamp() + " " + this.textFieldNickname.getText() + " created the room");
+		this.textAreaChatS.setText(this.getCurrentTimestamp() + " " + this.textFieldNicknameS.getText() + " created the room");
 		this.setServerAddress();
 		
 		// create new room -> start server
-		this.server = new ServerStream(this, this.textFieldNickname.getText(), Integer.parseInt(this.labelMinRoom.getText()), Integer.parseInt(this.labelMaxRoom.getText()));
+		this.server = new ServerStream(this, this.textFieldNicknameS.getText(), Integer.parseInt(this.labelMinRoom.getText()), Integer.parseInt(this.labelMaxRoom.getText()));
 		this.client = null;
 		
 		// reset the user list
@@ -351,13 +379,66 @@ public class Controller {
 		this.labelOpenClose.setStyle("-fx-background-color: lime");
 		
 		// set the first list element (the server) to visibile
-		this.listUsernameS.get(0).setText(this.textFieldNickname.getText());
+		this.listUsernameS.get(0).setText(this.textFieldNicknameS.getText());
 		this.listViewUsersS.getItems().get(0).setVisible(true);
 		
 		this.connectedUsers = 1;
 	}
 	
-	@FXML public void selectJER(ActionEvent event) 
+	
+	@FXML public void validateNickname()
+	{
+		// nickname OK
+		if(checkNickname(this.textFieldNickname.getText()))
+		{
+			this.buttonCNR.setDisable(false);
+			// & address OK (or empty)
+			if(this.checkIP(this.textFieldIP.getText()) || this.textFieldIP.getText().isEmpty())
+				this.buttonJER.setDisable(false);
+		}
+		// nickname NOT
+		else
+		{
+			this.buttonCNR.setDisable(true);
+			this.buttonJER.setDisable(true);
+		}
+	}
+	@FXML public void validateNicknameC()
+	{
+		
+	}
+	private boolean checkNickname(String text)
+	{
+		// if OK return true
+		return PATTERN_NICKNAME.matcher(text).matches() ? true : false;
+	}
+	@FXML public void validateAddress()
+	{
+		// address OK (or empty) & nickname OK
+		if((checkIP(this.textFieldIP.getText()) || this.textFieldIP.getText().isEmpty()) && checkNickname(this.textFieldNickname.getText()))
+		{
+			this.buttonJER.setDisable(false);
+			this.labelErrorIP.setVisible(false);
+		}
+		// address NOT (nor empty) & nickname OK
+		else if(!(checkIP(this.textFieldIP.getText()) || this.textFieldIP.getText().isEmpty()))
+		{
+			this.buttonJER.setDisable(true);
+			this.labelErrorIP.setVisible(true);
+		}
+		// address OK (or empty) & nickname NOT
+		else
+		{
+			this.labelErrorIP.setVisible(false);
+		}
+	}
+	private boolean checkIP(String text)
+	{
+		// if OK return true
+		return PATTERN_IP.matcher(text).matches() ? true : false;
+	}
+	
+	@FXML public void joinExistingRoom(ActionEvent event) 
 	{
 		// connect to existing room -> start client
 		this.client = new ClientStream(this, this.textFieldIP.getText(), 9001, this.textFieldNickname.getText());
@@ -372,14 +453,6 @@ public class Controller {
 		
 		// show loading box
 		this.showConnectingBox(true);
-	}
-	
-	@FXML public void goBack(ActionEvent event)
-	{
-		this.vboxBack.setVisible(false);
-		this.switchToMP();
-		
-		this.closeConnection();
 	}
 	
 	@FXML public void toggleReady(ActionEvent event)
@@ -510,18 +583,23 @@ public class Controller {
 		this.vboxServerRoom.setVisible(false);
 		this.vboxMP.setVisible(true);
 	}
-	public void switchToChatC()
+	public void switchToServerRoom()
 	{
-		this.vboxMP.setVisible(false);
-		this.vboxClientRoom.setVisible(true);
-		this.vboxBack.setVisible(true);
-	}
-	public void switchToChatS()
-	{
+		this.state = NavState.MP_SERVER;
+		
 		this.vboxMP.setVisible(false);
 		this.vboxServerRoom.setVisible(true);
 		this.vboxBack.setVisible(true);
 	}
+	public void switchToClientRoom()
+	{
+		this.state = NavState.MP_CLIENT;
+		
+		this.vboxMP.setVisible(false);
+		this.vboxClientRoom.setVisible(true);
+		this.vboxBack.setVisible(true);
+	}
+	
 	
 	public void updateReady(String nickname, boolean ready)
 	{

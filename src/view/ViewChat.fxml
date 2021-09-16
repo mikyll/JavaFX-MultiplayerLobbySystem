@@ -16,7 +16,7 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.Controller">
    <children>
-      <VBox fx:id="vboxMP" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" spacing="20.0" style="-fx-background-color: black;" visible="false">
+      <VBox fx:id="vboxMP" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" spacing="20.0" style="-fx-background-color: black;">
          <padding>
             <Insets left="80.0" right="80.0" />
          </padding>
@@ -27,19 +27,19 @@
                </font>
             </Label>
             <Separator prefHeight="65.0" prefWidth="440.0" visible="false" />
-            <Button fx:id="buttonC" mnemonicParsing="false" prefHeight="35.0" prefWidth="200.0" text="Create new room">
+            <Button fx:id="buttonC" mnemonicParsing="false" onAction="#selectCNR" prefHeight="35.0" prefWidth="200.0" text="Create new room">
                <font>
                   <Font name="System Bold" size="16.0" />
                </font>
             </Button>
-            <Button fx:id="buttonJ" mnemonicParsing="false" prefHeight="35.0" prefWidth="200.0" text="Join existing room">
+            <Button fx:id="buttonJ" mnemonicParsing="false" onAction="#selectJER" prefHeight="35.0" prefWidth="200.0" text="Join existing room">
                <font>
                   <Font name="System Bold" size="16.0" />
                </font>
             </Button>
          </children>
       </VBox>
-      <VBox fx:id="vboxCreateRoom" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" spacing="20.0" style="-fx-background-color: black;">
+      <VBox fx:id="vboxCreateRoom" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" spacing="20.0" style="-fx-background-color: black;" visible="false">
          <padding>
             <Insets left="80.0" right="80.0" />
          </padding>
@@ -119,7 +119,7 @@
                </children>
             </HBox>
             <Separator prefHeight="50.0" prefWidth="440.0" visible="false" />
-            <Button fx:id="buttonCNR1" mnemonicParsing="false" onAction="#selectCNR" prefHeight="38.0" prefWidth="220.0" text="Create new room">
+            <Button fx:id="buttonCNR" mnemonicParsing="false" onAction="#selectCNR" prefHeight="38.0" prefWidth="220.0" text="Create new room">
                <font>
                   <Font name="System Bold" size="16.0" />
                </font>

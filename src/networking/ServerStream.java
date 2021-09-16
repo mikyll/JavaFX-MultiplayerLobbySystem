@@ -49,7 +49,7 @@ public class ServerStream implements IServer{
 		try {
 			this.serverListener = new ServerListener(PORT);
 			this.serverListener.start();
-			this.controller.switchToChatS();
+			this.controller.switchToServerRoom(); // if everything is ok, we can switch to Server Room View
 		} catch (IOException e) {
 			System.out.println("Server: ServerSocket creation failed");
 			if(e instanceof BindException)

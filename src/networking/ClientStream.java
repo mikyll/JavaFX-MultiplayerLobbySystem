@@ -91,9 +91,9 @@ public class ClientStream implements IClient {
 								// get user list from OK message
 								controller.updateUserList(extractUserList(incomingMsg.getContent()));
 								
-								// stop loading icon & switch view
+								// stop loading icon & switch to Client Room View
 								controller.showConnectingBox(false);
-								controller.switchToChatC();
+								controller.switchToClientRoom();
 								
 								break;
 							}
