@@ -85,15 +85,15 @@ public class ClientStream implements IClient {
 							}
 							case CONNECT_OK:
 							{
-								// add the message to the chat textArea
-								controller.addToTextArea(incomingMsg.getTimestamp() + " " + nickname + " has joined the room");
+								// stop loading icon & switch to Client Room View
+								controller.showConnectingBox(false);
+								controller.switchToClientRoom();
 								
 								// get user list from OK message
 								controller.updateUserList(extractUserList(incomingMsg.getContent()));
 								
-								// stop loading icon & switch view
-								controller.showConnectingBox(false);
-								controller.switchToChatC();
+								// add the message to the chat textArea
+								controller.addToTextArea(incomingMsg.getTimestamp() + " " + nickname + " has joined the room");
 								
 								break;
 							}
@@ -125,11 +125,11 @@ public class ClientStream implements IClient {
 								// this user got kicked out
 								if(incomingMsg.getNickname().equals(nickname))
 								{
-									// close connection (?)
-									//this.socket.close();
-									
 									// switch view
 									controller.switchToMP();
+									
+									// close connection (?)
+									//this.socket.close();
 									
 									// show alert
 									controller.showAlert(AlertType.INFORMATION, "Disconnected from server", incomingMsg.getContent());
@@ -150,10 +150,10 @@ public class ClientStream implements IClient {
 								// the room has been closed (connection lost from the server)
 								if(incomingMsg.getNickname().equals(nickname))
 								{
-									// close connection(?)
-									
 									// switch view
 									controller.switchToMP();
+									
+									// close connection(?)
 									
 									// show alert
 									controller.showAlert(AlertType.INFORMATION, "Disconnected from server", incomingMsg.getContent());

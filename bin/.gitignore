@@ -1,5 +1,4 @@
-/controller/
 /view/
-/networking/
+/controller/
 /model/
-/application/
+/networking/

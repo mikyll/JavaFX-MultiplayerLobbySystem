@@ -49,7 +49,7 @@ public class ServerStream implements IServer{
 		try {
 			this.serverListener = new ServerListener(PORT);
 			this.serverListener.start();
-			this.controller.switchToChatS();
+			this.controller.switchToServerRoom(); // if everything is ok, we can switch to Server Room View
 		} catch (IOException e) {
 			System.out.println("Server: ServerSocket creation failed");
 			if(e instanceof BindException)
@@ -146,8 +146,15 @@ public class ServerStream implements IServer{
 								mReply.setTimestamp(controller.getCurrentTimestamp());
 								
 								// check if the connection can happen
+								// the room is closed
+								if(!controller.isRoomOpen())
+								{
+									mReply.setMsgType(MessageType.CONNECT_FAILED);
+									mReply.setNickname("");
+									mReply.setContent("The room is closed");
+								}
 								// the room is full
-								if(users.size() == maxNumUsers)
+								else if(users.size() == maxNumUsers)
 								{
 									mReply.setMsgType(MessageType.CONNECT_FAILED);
 									mReply.setNickname("");
@@ -159,13 +166,6 @@ public class ServerStream implements IServer{
 									mReply.setMsgType(MessageType.CONNECT_FAILED);
 									mReply.setNickname("");
 									mReply.setContent("Nickname '" + incomingMsg.getNickname() + "' already present");
-								}
-								// the room is closed
-								else if(!controller.isRoomOpen())
-								{
-									mReply.setMsgType(MessageType.CONNECT_FAILED);
-									mReply.setNickname("");
-									mReply.setContent("The room is closed");
 								}
 								// the connection can be accepted
 								else
@@ -360,7 +360,6 @@ public class ServerStream implements IServer{
 	{
 		for(User u : this.users)
 		{
-			System.out.println(u.isReady());
 			if(!u.isReady())
 				return false;
 		}

@@ -28,6 +28,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Paint;
+import model.NavState;
 import model.User;
 import model.chat.Message;
 import networking.ClientStream;
@@ -42,40 +43,40 @@ public class Controller {
 	private static final Pattern PATTERN_NICKNAME = Pattern.compile("^[a-zA-Z0-9]{3,15}$");
 	private static final Pattern PATTERN_IP = Pattern.compile("^(([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.){3}([01]?\\d\\d?|2[0-4]\\d|25[0-5])$");
 	
-	// multiplayer
+	private NavState state;
+	
 	@FXML private VBox vboxBack;
+	
+	// MultiPlayer
 	@FXML private VBox vboxMP;
-	@FXML private TextField textFieldNickname;
+	@FXML private Button buttonC; // button Create
+	@FXML private Button buttonJ; // button Join
+	
+	// MultiPlayer: Create New Room
+	@FXML private VBox vboxCreateRoom;
+	@FXML private TextField textFieldNicknameS;
 	@FXML private Label labelMinRoom;
 	@FXML private Label labelMaxRoom;
 	@FXML private ImageView buttonIncreaseMinRoom;
 	@FXML private ImageView buttonDecreaseMinRoom;
 	@FXML private ImageView buttonIncreaseMaxRoom;
 	@FXML private ImageView buttonDecreaseMaxRoom;
-	@FXML private Button buttonCNR;
-	@FXML private TextField textFieldIP;
-	@FXML private Button buttonJER;
-	@FXML private Label labelErrorIP;
-	@FXML private HBox hboxC; // hbox connection
 	private Image arrowUp;
 	private Image arrowUpDisabled;
 	private Image arrowDown;
 	private Image arrowDownDisabled;
+	@FXML private Button buttonCNR; // button Create New Room
 	
-	// client
-	@FXML private VBox vboxChatClient;
-	@FXML private TextArea textAreaChatC;
-	@FXML private TextField textFieldChatC;
-	@FXML private Button buttonChatC;
-	@FXML private Button buttonReady;
-	@FXML private ListView<HBox> listViewUsersC;
-	private IClient client;
-	private ArrayList<Label> listUsernameC;
-	private ArrayList<Label> listReadyC;
-	private ArrayList<ImageView> listImage;
+	// MultiPlayer: Join Existing Room
+	@FXML private VBox vboxJoinRoom;
+	@FXML private TextField textFieldNicknameC;
+	@FXML private TextField textFieldIP;
+	@FXML private Label labelErrorIP;
+	@FXML private HBox hboxConnection; // hbox connection
+	@FXML private Button buttonJER;
 	
-	// server
-	@FXML private VBox vboxChatServer;
+	// MultiPlayer: Server
+	@FXML private VBox vboxServerRoom;
 	@FXML private Label labelServerIP;
 	@FXML private TextArea textAreaChatS;
 	@FXML private TextField textFieldChatS;
@@ -89,6 +90,20 @@ public class Controller {
 	private ArrayList<Label> listReadyS;
 	private ArrayList<Button> listKick;
 	
+	// MultiPlayer: Client
+	@FXML private VBox vboxClientRoom;
+	@FXML private TextArea textAreaChatC;
+	@FXML private TextField textFieldChatC;
+	@FXML private Button buttonChatC;
+	@FXML private Button buttonReady;
+	@FXML private ListView<HBox> listViewUsersC;
+	private IClient client;
+	private ArrayList<Label> listUsernameC;
+	private ArrayList<Label> listReadyC;
+	private ArrayList<ImageView> listImage;
+	
+	
+	
 	private int connectedUsers;
 	
 	private SimpleDateFormat tformatter;
@@ -97,8 +112,16 @@ public class Controller {
 	
 	public void initialize()
 	{
+		this.state = NavState.MULTIPLAYER;
+		
+		this.vboxBack.setVisible(true);
+		this.vboxMP.setVisible(true);
+		this.vboxCreateRoom.setVisible(false);
+		this.vboxJoinRoom.setVisible(false);
+		this.vboxServerRoom.setVisible(false);
+		this.vboxClientRoom.setVisible(false);
+		
 		this.tformatter = new SimpleDateFormat("[HH:mm:ss]");
-		this.switchToMP();
 		this.showConnectingBox(false);
 		
 		this.buttonCNR.setDisable(true);
@@ -198,52 +221,93 @@ public class Controller {
 		connectedUsers = 0;
 	}
 	
-	@FXML public void validateNickname()
+	// Multiplayer callbacks
+	@FXML public void goBack(ActionEvent event)
+	{
+		switch(this.state)
+		{
+			case MULTIPLAYER:
+			{
+				// nothing
+				
+				break;
+			}
+			case MP_CREATE:
+			{
+				this.vboxCreateRoom.setVisible(false);
+				this.vboxMP.setVisible(true);
+				
+				this.state = NavState.MULTIPLAYER;
+				
+				break;
+			}
+			case MP_JOIN:
+			{
+				this.vboxJoinRoom.setVisible(false);
+				this.vboxMP.setVisible(true);
+				
+				this.state = NavState.MULTIPLAYER;
+				
+				break;
+			}
+			case MP_SERVER:
+			{
+				this.closeConnection();
+				this.vboxServerRoom.setVisible(false);
+				this.vboxMP.setVisible(true);
+				
+				this.state = NavState.MULTIPLAYER;
+				
+				break;
+			}
+			case MP_CLIENT:
+			{
+				this.closeConnection();
+				this.vboxClientRoom.setVisible(false);
+				this.vboxMP.setVisible(true);
+				
+				this.state = NavState.MULTIPLAYER;
+				
+				break;
+			}
+			default:
+			{
+				break;
+			}
+		}
+	}
+	@FXML public void selectCNR(ActionEvent event)
+	{
+		this.vboxMP.setVisible(false);
+		this.vboxCreateRoom.setVisible(true);
+		
+		// reset CNR fields?
+		
+		this.state = NavState.MP_CREATE;
+	}
+	@FXML public void selectJER(ActionEvent event)
+	{
+		this.vboxMP.setVisible(false);
+		this.vboxJoinRoom.setVisible(true);
+		
+		// reset JER fields?
+		
+		this.state = NavState.MP_JOIN;
+	}
+	
+	// MultiPlayer: Create New Room callbacks
+	@FXML public void validateNicknameS()
 	{
 		// nickname OK
-		if(checkNickname(this.textFieldNickname.getText()))
+		if(this.checkNickname(this.textFieldNicknameS.getText()))
 		{
 			this.buttonCNR.setDisable(false);
-			// & address OK (or empty)
-			if(this.checkIP(this.textFieldIP.getText()) || this.textFieldIP.getText().isEmpty())
-				this.buttonJER.setDisable(false);
 		}
 		// nickname NOT
 		else
 		{
 			this.buttonCNR.setDisable(true);
-			this.buttonJER.setDisable(true);
 		}
-	}
-	private boolean checkNickname(String text)
-	{
-		// if OK return true
-		return PATTERN_NICKNAME.matcher(text).matches() ? true : false;
-	}
-	@FXML public void validateAddress()
-	{
-		// address OK (or empty) & nickname OK
-		if((checkIP(this.textFieldIP.getText()) || this.textFieldIP.getText().isEmpty()) && checkNickname(this.textFieldNickname.getText()))
-		{
-			this.buttonJER.setDisable(false);
-			this.labelErrorIP.setVisible(false);
-		}
-		// address NOT (nor empty) & nickname OK
-		else if(!(checkIP(this.textFieldIP.getText()) || this.textFieldIP.getText().isEmpty()))
-		{
-			this.buttonJER.setDisable(true);
-			this.labelErrorIP.setVisible(true);
-		}
-		// address OK (or empty) & nickname NOT
-		else
-		{
-			this.labelErrorIP.setVisible(false);
-		}
-	}
-	private boolean checkIP(String text)
-	{
-		// if OK return true
-		return PATTERN_IP.matcher(text).matches() ? true : false;
 	}
 	@FXML public void increaseMinRoom(MouseEvent event)
 	{
@@ -317,13 +381,13 @@ public class Controller {
 			this.buttonDecreaseMaxRoom.setImage(this.arrowDownDisabled);
 		}
 	}
-	@FXML public void selectCNR(ActionEvent event) 
+	@FXML public void createNewRoom(ActionEvent event) 
 	{
-		this.textAreaChatS.setText(this.getCurrentTimestamp() + " " + this.textFieldNickname.getText() + " created the room");
+		this.textAreaChatS.setText(this.getCurrentTimestamp() + " " + this.textFieldNicknameS.getText() + " created the room");
 		this.setServerAddress();
 		
-		// create new room -> start server
-		this.server = new ServerStream(this, this.textFieldNickname.getText(), Integer.parseInt(this.labelMinRoom.getText()), Integer.parseInt(this.labelMaxRoom.getText()));
+		// create new room -> start server (if OK switch to Server Room View)
+		this.server = new ServerStream(this, this.textFieldNicknameS.getText(), Integer.parseInt(this.labelMinRoom.getText()), Integer.parseInt(this.labelMaxRoom.getText()));
 		this.client = null;
 		
 		// reset the user list
@@ -335,16 +399,44 @@ public class Controller {
 		this.labelOpenClose.setStyle("-fx-background-color: lime");
 		
 		// set the first list element (the server) to visibile
-		this.listUsernameS.get(0).setText(this.textFieldNickname.getText());
+		this.listUsernameS.get(0).setText(this.textFieldNicknameS.getText());
 		this.listViewUsersS.getItems().get(0).setVisible(true);
 		
 		this.connectedUsers = 1;
 	}
 	
-	@FXML public void selectJER(ActionEvent event) 
+	// MultiPlayer: Join Existing Room callbacks
+	@FXML public void validateNicknameAddressC()
 	{
-		// connect to existing room -> start client
-		this.client = new ClientStream(this, this.textFieldIP.getText(), 9001, this.textFieldNickname.getText());
+		// nickname OK & address OK (or empty)
+		if(this.checkNickname(this.textFieldNicknameC.getText()) && (this.checkIP(this.textFieldIP.getText()) || this.textFieldIP.getText().isEmpty()))
+		{
+			this.buttonJER.setDisable(false);
+			this.labelErrorIP.setVisible(false);
+		}
+		// nickname OK & address NOT (nor empty)
+		else if(this.checkNickname(this.textFieldNicknameC.getText()) && !(checkIP(this.textFieldIP.getText()) || this.textFieldIP.getText().isEmpty()))
+		{
+			this.buttonJER.setDisable(true);
+			this.labelErrorIP.setVisible(true);
+		}
+		// nickname NOT & address OK (or empty)
+		else if(!this.checkNickname(this.textFieldNicknameC.getText()) && (checkIP(this.textFieldIP.getText()) || this.textFieldIP.getText().isEmpty()))
+		{
+			this.buttonJER.setDisable(true);
+			this.labelErrorIP.setVisible(false);
+		}
+		// nickname NOT & address NOT (nor empty)
+		else
+		{
+			this.buttonJER.setDisable(true);
+			this.labelErrorIP.setVisible(true);
+		}
+	}
+	@FXML public void joinExistingRoom(ActionEvent event) 
+	{
+		// connect to existing room -> start client (if OK switch to Client Room View)
+		this.client = new ClientStream(this, this.textFieldIP.getText(), 9001, this.textFieldNicknameC.getText());
 		this.server = null;
 		
 		// reset the user list
@@ -358,74 +450,7 @@ public class Controller {
 		this.showConnectingBox(true);
 	}
 	
-	@FXML public void goBack(ActionEvent event)
-	{
-		this.vboxBack.setVisible(false);
-		this.switchToMP();
-		
-		this.closeConnection();
-	}
-	
-	@FXML public void toggleReady(ActionEvent event)
-	{
-		if(this.buttonReady.getText().equalsIgnoreCase("Ready"))
-		{
-			this.buttonReady.setText("Not ready");
-			this.buttonReady.setStyle("-fx-background-color: red");
-			this.client.sendReady(false);
-			this.updateReady(this.textFieldNickname.getText(), false);
-		}
-		else
-		{
-			this.buttonReady.setText("Ready");
-			this.buttonReady.setStyle("-fx-background-color: lime");
-			this.client.sendReady(true);
-			this.updateReady(this.textFieldNickname.getText(), true);
-		}
-		// TO-DO: set a 5 sec timer that disables the button, so that users can't spam the toggle
-	}
-	@FXML public void sendMessageC(ActionEvent event) 
-	{
-		String msg = this.textFieldChatC.getText();
-		if(!msg.isEmpty() && !msg.isBlank())
-		{
-			this.client.sendChatMessage(msg);
-		}
-		this.textFieldChatC.setText("");
-	}
-	@FXML public void sendMessageS(ActionEvent event) 
-	{
-		String msg = this.textFieldChatS.getText();
-		if(!msg.isEmpty() && !msg.isBlank())
-		{
-			this.server.sendChatMessage(msg);
-		}
-		this.textFieldChatS.setText("");
-	}
-	@FXML public void enterChatHandle(KeyEvent e)
-	{
-		if(e.getCode().equals(KeyCode.ENTER))
-		{
-			if(this.client != null)
-			{
-				String msg = this.textFieldChatC.getText();
-				if(!msg.isEmpty() && !msg.isBlank())
-				{
-					this.client.sendChatMessage(msg);
-				}
-				this.textFieldChatC.setText("");
-			}
-			else if(this.server != null)
-			{
-				String msg = this.textFieldChatS.getText();
-				if(!msg.isEmpty() && !msg.isBlank())
-				{
-					this.server.sendChatMessage(msg);
-				}
-				this.textFieldChatS.setText("");
-			}
-		}
-	}
+	// MultiPlayer: Server callbacks
 	@FXML public void kickUser(ActionEvent event)
 	{
 		// get the button index
@@ -463,22 +488,151 @@ public class Controller {
 			this.labelOpenClose.setStyle("-fx-background-color: lime");
 		}
 	}
+	@FXML public void sendMessageS(ActionEvent event) 
+	{
+		String msg = this.textFieldChatS.getText();
+		if(!msg.isEmpty() && !msg.isBlank())
+			this.server.sendChatMessage(msg);
+		this.textFieldChatS.setText("");
+	}
+	@FXML public void enterChatHandleS(KeyEvent e)
+	{
+		if(e.getCode().equals(KeyCode.ENTER))
+		{
+			String msg = this.textFieldChatS.getText();
+			if(!msg.isEmpty() && !msg.isBlank())
+				this.server.sendChatMessage(msg);
+			this.textFieldChatS.setText("");
+		}
+	}
 	@FXML public void startGame(ActionEvent event)
 	{
 		System.out.println("Start game");
 	}
 	
+	// MultiPlayer: Client callbacks
+	@FXML public void toggleReady(ActionEvent event)
+	{
+		if(this.buttonReady.getText().equalsIgnoreCase("Ready"))
+		{
+			this.buttonReady.setText("Not ready");
+			this.buttonReady.setStyle("-fx-background-color: red");
+			this.client.sendReady(false);
+			this.updateReady(this.textFieldNicknameC.getText(), false);
+		}
+		else
+		{
+			this.buttonReady.setText("Ready");
+			this.buttonReady.setStyle("-fx-background-color: lime");
+			this.client.sendReady(true);
+			this.updateReady(this.textFieldNicknameC.getText(), true);
+		}
+		// TO-DO: set a 5 sec timer that disables the button, so that users can't spam the toggle
+	}
+	@FXML public void sendMessageC(ActionEvent event) 
+	{
+		String msg = this.textFieldChatC.getText();
+		if(!msg.isEmpty() && !msg.isBlank())
+			this.client.sendChatMessage(msg);
+		this.textFieldChatC.setText("");
+	}
+	@FXML public void enterChatHandleC(KeyEvent e)
+	{
+		if(e.getCode().equals(KeyCode.ENTER))
+		{
+			String msg = this.textFieldChatC.getText();
+			if(!msg.isEmpty() && !msg.isBlank())
+				this.client.sendChatMessage(msg);
+			this.textFieldChatC.setText("");
+		}
+	}
+	
+	// utilities
+	private boolean checkNickname(String text)
+	{
+		// if OK return true
+		return PATTERN_NICKNAME.matcher(text).matches() ? true : false;
+	}
+	private boolean checkIP(String text)
+	{
+		// if OK return true
+		return PATTERN_IP.matcher(text).matches() ? true : false;
+	}
+	public void switchToMP()
+	{
+		if(this.state == NavState.MP_CLIENT)
+		{
+			this.vboxClientRoom.setVisible(false);
+			this.vboxMP.setVisible(true);
+			
+			this.state = NavState.MULTIPLAYER;
+		}
+		else if (this.state == NavState.MP_SERVER)
+		{
+			this.vboxServerRoom.setVisible(false);
+			this.vboxMP.setVisible(true);
+			
+			this.state = NavState.MULTIPLAYER;
+		}
+	}
+	public void switchToServerRoom()
+	{
+		this.vboxCreateRoom.setVisible(false);
+		this.vboxServerRoom.setVisible(true);
+		
+		this.state = NavState.MP_SERVER;
+	}
+	public void switchToClientRoom()
+	{
+		this.vboxJoinRoom.setVisible(false);
+		this.vboxClientRoom.setVisible(true);
+		
+		this.state = NavState.MP_CLIENT;
+	}
+	public void showAlert(AlertType aType, String header, String content)
+	{
+		Platform.runLater(() -> {
+			Alert a = new Alert(aType);
+			a.setTitle("Information Dialog");
+			a.setHeaderText(header);
+			a.setContentText(content);
+			a.show();
+		});
+	}
+	private void setServerAddress()
+	{
+		try {
+			this.labelServerIP.setText("Server IP address: " + InetAddress.getLocalHost().toString().split("/")[1]);
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		}
+	}
+	public void showConnectingBox(boolean value)
+	{
+		this.hboxConnection.setVisible(value);
+	}
+	public boolean isRoomOpen()
+	{
+		return this.buttonOpenClose.getText().equalsIgnoreCase("Open") ? true : false;
+	}
+	public String getCurrentTimestamp()
+	{
+		Date date = new Date(System.currentTimeMillis());
+		String timestamp = this.tformatter.format(date);
+		
+		return timestamp;
+	}
 	public void addToTextArea(String text)
 	{
 		// client
-		if(this.client != null)
+		if(this.state == NavState.MP_CLIENT)
 		{
 			if(this.textAreaChatC.getText().isEmpty())
 				this.textAreaChatC.setText(text);
 			else this.textAreaChatC.setText(this.textAreaChatC.getText() + "\n" + text);
 		}
 		// server
-		else if(this.server != null)
+		else if(this.state == NavState.MP_SERVER)
 		{
 			this.textAreaChatS.setText(this.textAreaChatS.getText() + "\n" + text);
 		}
@@ -487,29 +641,9 @@ public class Controller {
 	{
 		this.addToTextArea(message.getTimestamp() + " " + message.getNickname() + ": " + message.getContent());
 	}
-	public void switchToMP()
-	{
-		this.vboxBack.setVisible(false);
-		this.vboxChatClient.setVisible(false);
-		this.vboxChatServer.setVisible(false);
-		this.vboxMP.setVisible(true);
-	}
-	public void switchToChatC()
-	{
-		this.vboxMP.setVisible(false);
-		this.vboxChatClient.setVisible(true);
-		this.vboxBack.setVisible(true);
-	}
-	public void switchToChatS()
-	{
-		this.vboxMP.setVisible(false);
-		this.vboxChatServer.setVisible(true);
-		this.vboxBack.setVisible(true);
-	}
-	
 	public void updateReady(String nickname, boolean ready)
 	{
-		if(this.client != null)
+		if(this.state == NavState.MP_CLIENT)
 		{
 			for(int i = 0; i < this.listViewUsersC.getItems().size(); i++)
 			{
@@ -520,7 +654,7 @@ public class Controller {
 				}
 			}
 		}
-		else if(this.server != null)
+		else if(this.state == NavState.MP_SERVER)
 		{
 			for(int i = 0; i < this.listViewUsersS.getItems().size(); i++)
 			{
@@ -532,30 +666,38 @@ public class Controller {
 			}
 		}
 	}
-	
-	public String getCurrentTimestamp()
+	private void resetList()
 	{
-		Date date = new Date(System.currentTimeMillis());
-		String timestamp = this.tformatter.format(date);
-		
-		return timestamp;
+		if(this.state == NavState.MP_CLIENT)
+		{
+			for(int i = 0; i < ROOM_CAPACITY; i++)
+			{
+				this.listViewUsersC.getItems().get(i).setVisible(false);
+				this.listUsernameC.get(i).setText("");
+				this.listReadyC.get(i).setStyle("-fx-background-color: red");
+				this.listImage.get(i).setVisible(false);
+			}
+		}
+		else if(this.state == NavState.MP_SERVER)
+		{
+			for(int i = 0; i < ROOM_CAPACITY; i++)
+			{
+				this.listViewUsersS.getItems().get(i).setVisible(false);
+				this.listUsernameS.get(i).setText("");
+				this.listReadyS.get(i).setStyle("-fx-background-color: red");
+			}
+		}
 	}
-	
-	public void showConnectingBox(boolean value)
-	{
-		this.hboxC.setVisible(value);
-	}
-	
 	public void addUser(User u)
 	{
 		Platform.runLater(() -> {
-			if(this.client != null)
+			if(this.state == NavState.MP_CLIENT)
 			{
 				this.listUsernameC.get(this.connectedUsers).setText(u.getNickname());
 				this.listViewUsersC.getItems().get(this.connectedUsers).setVisible(true);
 				this.connectedUsers++;
 			}
-			else if(this.server != null)
+			else if(this.state == NavState.MP_SERVER)
 			{
 				this.listUsernameS.get(this.connectedUsers).setText(u.getNickname());
 				this.listViewUsersS.getItems().get(this.connectedUsers).setVisible(true);
@@ -570,7 +712,7 @@ public class Controller {
 	{
 		Platform.runLater(() -> {
 			boolean found = false;
-			if(this.client != null)
+			if(this.state == NavState.MP_CLIENT)
 			{
 				// NB: we have to move by one position back every user, to fill the empty space left by the removed one
 				for(int i = 1; i < this.connectedUsers; i++)
@@ -590,7 +732,7 @@ public class Controller {
 				this.listImage.get(this.connectedUsers - 1).setVisible(false);
 				this.connectedUsers--;
 			}
-			else if(this.server != null)
+			else if(this.state == NavState.MP_SERVER)
 			{
 				// NB: we have to move by one position back every user, to fill the empty space left by the removed one
 				for(int i = 1; i < this.connectedUsers; i++)
@@ -612,11 +754,10 @@ public class Controller {
 			}
 		});
 	}
-	
 	public void updateUserList(List<User> users)
 	{
 		Platform.runLater(() -> {
-			if(this.client != null)
+			if(this.state == NavState.MP_CLIENT)
 			{
 				for(int i = 0; i < users.size(); i++)
 				{
@@ -624,81 +765,31 @@ public class Controller {
 					this.listUsernameC.get(i).setText(u.getNickname());
 					this.listViewUsersC.getItems().get(i).setVisible(true);
 					this.listReadyC.get(i).setStyle(u.isReady() ? "-fx-background-color: lime" : "-fx-background-color: red");
-					this.listImage.get(i).setVisible(this.textFieldNickname.getText().equals(users.get(i).getNickname()) ? true : false);
+					this.listImage.get(i).setVisible(this.textFieldNicknameC.getText().equals(users.get(i).getNickname()) ? true : false);
 				}
 				this.connectedUsers = users.size();
 			}
-			else if(this.server != null)
+			else if(this.state == NavState.MP_SERVER)
 			{
 				// for the moment it's never used from the server
 			}
 		});
 	}
-	
-	public boolean isRoomOpen()
-	{
-		return this.buttonOpenClose.getText().equalsIgnoreCase("Open") ? true : false;
-	}
-	
 	public void enableStartGame(boolean value)
 	{
 		this.buttonStartGame.setDisable(!value);
 	}
-	
-	public void showAlert(AlertType aType, String header, String content)
-	{
-		Platform.runLater(() -> {
-			Alert a = new Alert(aType);
-			a.setTitle("Information Dialog");
-			a.setHeaderText(header);
-			a.setContentText(content);
-			a.show();
-		});
-	}
-	
 	public void closeConnection()
 	{
-		if(this.client != null)
+		if(this.state == NavState.MP_CLIENT)
 		{
 			this.client.sendClose();
 			this.client = null;
 		}
-		else if(this.server != null)
+		else if(this.state == NavState.MP_SERVER)
 		{
 			this.server.sendClose();
 			this.server = null;
 		}
     }
-	
-	private void setServerAddress()
-	{
-		try {
-			this.labelServerIP.setText("Server IP address: " + InetAddress.getLocalHost().toString().split("/")[1]);
-		} catch (UnknownHostException e) {
-			e.printStackTrace();
-		}
-	}
-	
-	private void resetList()
-	{
-		if(this.client != null)
-		{
-			for(int i = 0; i < ROOM_CAPACITY; i++)
-			{
-				this.listViewUsersC.getItems().get(i).setVisible(false);
-				this.listUsernameC.get(i).setText("");
-				this.listReadyC.get(i).setStyle("-fx-background-color: red");
-				this.listImage.get(i).setVisible(false);
-			}
-		}
-		else if(this.server != null)
-		{
-			for(int i = 0; i < ROOM_CAPACITY; i++)
-			{
-				this.listViewUsersS.getItems().get(i).setVisible(false);
-				this.listUsernameS.get(i).setText("");
-				this.listReadyS.get(i).setStyle("-fx-background-color: red");
-			}
-		}
-	}
 }

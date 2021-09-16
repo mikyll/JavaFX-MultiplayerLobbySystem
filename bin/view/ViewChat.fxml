@@ -16,8 +16,40 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.Controller">
    <children>
-      <VBox fx:id="vboxMP" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" spacing="5.0" style="-fx-background-color: black;">
+      <VBox fx:id="vboxMP" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" spacing="20.0" style="-fx-background-color: black;" visible="false">
+         <padding>
+            <Insets left="80.0" right="80.0" />
+         </padding>
          <children>
+            <Label prefHeight="50.0" prefWidth="183.0" text="Multiplayer" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="30.0" />
+               </font>
+            </Label>
+            <Separator prefHeight="65.0" prefWidth="440.0" visible="false" />
+            <Button fx:id="buttonC" mnemonicParsing="false" onAction="#selectCNR" prefHeight="35.0" prefWidth="200.0" text="Create new room">
+               <font>
+                  <Font name="System Bold" size="16.0" />
+               </font>
+            </Button>
+            <Button fx:id="buttonJ" mnemonicParsing="false" onAction="#selectJER" prefHeight="35.0" prefWidth="200.0" text="Join existing room">
+               <font>
+                  <Font name="System Bold" size="16.0" />
+               </font>
+            </Button>
+         </children>
+      </VBox>
+      <VBox fx:id="vboxCreateRoom" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" spacing="20.0" style="-fx-background-color: black;" visible="false">
+         <padding>
+            <Insets left="80.0" right="80.0" />
+         </padding>
+         <children>
+            <Label prefHeight="50.0" prefWidth="183.0" text="Create Room" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="30.0" />
+               </font>
+            </Label>
+            <Separator prefHeight="50.0" prefWidth="440.0" visible="false" />
             <HBox alignment="CENTER_LEFT" prefHeight="30.0" prefWidth="240.0">
                <children>
                   <Label prefHeight="30.0" prefWidth="130.0" text="Nickname:" textFill="WHITE">
@@ -25,7 +57,7 @@
                         <Font size="18.0" />
                      </font>
                   </Label>
-                  <TextField fx:id="textFieldNickname" onKeyTyped="#validateNickname" prefHeight="30.0" prefWidth="180.0" />
+                  <TextField fx:id="textFieldNicknameS" onKeyTyped="#validateNicknameS" prefHeight="30.0" prefWidth="180.0" />
                </children>
             </HBox>
             <HBox alignment="CENTER_LEFT" prefHeight="30.0" prefWidth="240.0">
@@ -86,8 +118,35 @@
                   </VBox>
                </children>
             </HBox>
-            <Button fx:id="buttonCNR" mnemonicParsing="false" onAction="#selectCNR" prefHeight="30.0" prefWidth="180.0" text="Create new room" />
-            <Separator prefHeight="30.0" prefWidth="440.0" visible="false" />
+            <Separator prefHeight="50.0" prefWidth="440.0" visible="false" />
+            <Button fx:id="buttonCNR" mnemonicParsing="false" onAction="#createNewRoom" prefHeight="38.0" prefWidth="220.0" text="Create new room">
+               <font>
+                  <Font name="System Bold" size="16.0" />
+               </font>
+            </Button>
+         </children>
+      </VBox>
+      <VBox fx:id="vboxJoinRoom" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" spacing="5.0" style="-fx-background-color: black;">
+         <padding>
+            <Insets left="80.0" right="80.0" />
+         </padding>
+         <children>
+            <Label prefHeight="50.0" prefWidth="150.0" text="Join Room" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="30.0" />
+               </font>
+            </Label>
+            <Separator prefHeight="50.0" prefWidth="440.0" visible="false" />
+            <HBox alignment="CENTER_LEFT" prefHeight="30.0" prefWidth="240.0">
+               <children>
+                  <Label prefHeight="30.0" prefWidth="130.0" text="Nickname:" textFill="WHITE">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="textFieldNicknameC" onKeyTyped="#validateNicknameAddressC" prefHeight="30.0" prefWidth="180.0" />
+               </children>
+            </HBox>
             <HBox alignment="CENTER_LEFT" prefHeight="30.0" prefWidth="240.0">
                <children>
                   <Label prefHeight="30.0" prefWidth="130.0" text="IP address:" textFill="WHITE">
@@ -95,11 +154,11 @@
                         <Font size="18.0" />
                      </font>
                   </Label>
-                  <TextField fx:id="textFieldIP" onKeyTyped="#validateAddress" prefHeight="30.0" prefWidth="180.0" promptText="localhost" />
+                  <TextField fx:id="textFieldIP" onKeyTyped="#validateNicknameAddressC" prefHeight="30.0" prefWidth="180.0" promptText="localhost" />
                </children>
             </HBox>
-            <Button fx:id="buttonJER" mnemonicParsing="false" onAction="#selectJER" prefHeight="30.0" prefWidth="180.0" text="Join existing room" />
-            <HBox fx:id="hboxC" alignment="CENTER" prefHeight="30.0" prefWidth="242.0" spacing="10.0" visible="false">
+            <Label fx:id="labelErrorIP" prefHeight="30.0" prefWidth="95.0" text="Invalid IP address." textFill="RED" visible="false" />
+            <HBox fx:id="hboxConnection" alignment="CENTER" prefHeight="30.0" prefWidth="242.0" spacing="10.0" visible="false">
                <children>
                   <Label prefHeight="18.0" prefWidth="130.0" text="Connecting to server..." textFill="WHITE" />
                   <ImageView fitHeight="20.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
@@ -109,13 +168,15 @@
                   </ImageView>
                </children>
             </HBox>
-            <Label fx:id="labelErrorIP" prefHeight="30.0" prefWidth="95.0" text="Invalid IP address." textFill="RED" visible="false" />
+            <Separator prefHeight="50.0" prefWidth="440.0" visible="false" />
+            <Button fx:id="buttonJER" mnemonicParsing="false" onAction="#joinExistingRoom" prefHeight="38.0" prefWidth="220.0" text="Join existing room">
+               <font>
+                  <Font name="System Bold" size="16.0" />
+               </font>
+            </Button>
          </children>
-         <padding>
-            <Insets left="80.0" right="80.0" />
-         </padding>
       </VBox>
-      <VBox fx:id="vboxChatServer" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: black;" visible="false">
+      <VBox fx:id="vboxServerRoom" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: black;" visible="false">
          <children>
             <Label fx:id="labelServerIP" prefHeight="20.0" prefWidth="590.0" text="Server IP address: X.X.X.X" textFill="WHITE" />
             <HBox prefHeight="380.0" prefWidth="600.0">
@@ -143,7 +204,7 @@
                         <TextArea fx:id="textAreaChatS" editable="false" minHeight="100.0" prefHeight="350.0" prefWidth="300.0" />
                         <HBox prefHeight="30.0" prefWidth="300.0">
                            <children>
-                              <TextField fx:id="textFieldChatS" onKeyPressed="#enterChatHandle" prefHeight="30.0" prefWidth="250.0" />
+                              <TextField fx:id="textFieldChatS" onKeyPressed="#enterChatHandleS" prefHeight="30.0" prefWidth="250.0" />
                               <Button fx:id="buttonChatS" mnemonicParsing="false" onAction="#sendMessageS" prefHeight="30.0" prefWidth="50.0" text="Send" />
                            </children>
                         </HBox>
@@ -153,7 +214,7 @@
             </HBox>
          </children>
       </VBox>
-      <VBox fx:id="vboxChatClient" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" spacing="5.0" style="-fx-background-color: black;" visible="false">
+      <VBox fx:id="vboxClientRoom" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" spacing="5.0" style="-fx-background-color: black;" visible="false">
          <children>
             <HBox prefHeight="400.0" prefWidth="600.0">
                <children>
@@ -176,7 +237,7 @@
                         <TextArea fx:id="textAreaChatC" editable="false" prefHeight="370.0" prefWidth="300.0" />
                         <HBox prefHeight="30.0" prefWidth="300.0">
                            <children>
-                              <TextField fx:id="textFieldChatC" minHeight="30.0" minWidth="100.0" onKeyPressed="#enterChatHandle" prefHeight="30.0" prefWidth="250.0" />
+                              <TextField fx:id="textFieldChatC" minHeight="30.0" minWidth="100.0" onKeyPressed="#enterChatHandleC" prefHeight="30.0" prefWidth="250.0" />
                               <Button fx:id="buttonChatC" mnemonicParsing="false" onAction="#sendMessageC" prefHeight="30.0" prefWidth="50.0" text="Send" />
                            </children>
                         </HBox>
