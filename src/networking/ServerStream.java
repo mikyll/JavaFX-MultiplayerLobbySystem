@@ -146,8 +146,15 @@ public class ServerStream implements IServer{
 								mReply.setTimestamp(controller.getCurrentTimestamp());
 								
 								// check if the connection can happen
+								// the room is closed
+								if(!controller.isRoomOpen())
+								{
+									mReply.setMsgType(MessageType.CONNECT_FAILED);
+									mReply.setNickname("");
+									mReply.setContent("The room is closed");
+								}
 								// the room is full
-								if(users.size() == maxNumUsers)
+								else if(users.size() == maxNumUsers)
 								{
 									mReply.setMsgType(MessageType.CONNECT_FAILED);
 									mReply.setNickname("");
@@ -159,13 +166,6 @@ public class ServerStream implements IServer{
 									mReply.setMsgType(MessageType.CONNECT_FAILED);
 									mReply.setNickname("");
 									mReply.setContent("Nickname '" + incomingMsg.getNickname() + "' already present");
-								}
-								// the room is closed
-								else if(!controller.isRoomOpen())
-								{
-									mReply.setMsgType(MessageType.CONNECT_FAILED);
-									mReply.setNickname("");
-									mReply.setContent("The room is closed");
 								}
 								// the connection can be accepted
 								else

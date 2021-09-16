@@ -301,6 +301,7 @@ public class Controller {
 			this.buttonCNR.setDisable(false);
 		}
 		// nickname NOT
+		else
 		{
 			this.buttonCNR.setDisable(true);
 		}
@@ -416,7 +417,7 @@ public class Controller {
 			this.buttonJER.setDisable(true);
 			this.labelErrorIP.setVisible(true);
 		}
-		// nickname NOT & address NOT (nor empty)
+		// nickname NOT & address NOT (nor empty) || nickname NOT & address OK (or empty)
 		else
 		{
 			this.buttonJER.setDisable(true);
@@ -567,31 +568,86 @@ public class Controller {
 		}
 	}
 	
-	
-	
-	
-	
+	// utilities
+	private boolean checkNickname(String text)
+	{
+		// if OK return true
+		return PATTERN_NICKNAME.matcher(text).matches() ? true : false;
+	}
+	private boolean checkIP(String text)
+	{
+		// if OK return true
+		return PATTERN_IP.matcher(text).matches() ? true : false;
+	}
 	public void switchToServerRoom()
 	{
 		this.state = NavState.MP_SERVER;
 		
-		this.vboxMP.setVisible(false);
+		this.vboxCreateRoom.setVisible(false);
 		this.vboxServerRoom.setVisible(true);
-		this.vboxBack.setVisible(true);
 	}
 	public void switchToClientRoom()
 	{
 		this.state = NavState.MP_CLIENT;
 		
-		this.vboxMP.setVisible(false);
+		this.vboxJoinRoom.setVisible(false);
 		this.vboxClientRoom.setVisible(true);
-		this.vboxBack.setVisible(true);
 	}
-	
-	
+	public void showAlert(AlertType aType, String header, String content)
+	{
+		Platform.runLater(() -> {
+			Alert a = new Alert(aType);
+			a.setTitle("Information Dialog");
+			a.setHeaderText(header);
+			a.setContentText(content);
+			a.show();
+		});
+	}
+	private void setServerAddress()
+	{
+		try {
+			this.labelServerIP.setText("Server IP address: " + InetAddress.getLocalHost().toString().split("/")[1]);
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		}
+	}
+	public void showConnectingBox(boolean value)
+	{
+		this.hboxConnection.setVisible(value);
+	}
+	public boolean isRoomOpen()
+	{
+		return this.buttonOpenClose.getText().equalsIgnoreCase("Open") ? true : false;
+	}
+	public String getCurrentTimestamp()
+	{
+		Date date = new Date(System.currentTimeMillis());
+		String timestamp = this.tformatter.format(date);
+		
+		return timestamp;
+	}
+	public void addToTextArea(String text)
+	{
+		// client
+		if(this.state == NavState.MP_CLIENT)
+		{
+			if(this.textAreaChatC.getText().isEmpty())
+				this.textAreaChatC.setText(text);
+			else this.textAreaChatC.setText(this.textAreaChatC.getText() + "\n" + text);
+		}
+		// server
+		else if(this.state == NavState.MP_SERVER)
+		{
+			this.textAreaChatS.setText(this.textAreaChatS.getText() + "\n" + text);
+		}
+	}
+	public void addToTextArea(Message message)
+	{
+		this.addToTextArea(message.getTimestamp() + " " + message.getNickname() + ": " + message.getContent());
+	}
 	public void updateReady(String nickname, boolean ready)
 	{
-		if(this.client != null)
+		if(this.state == NavState.MP_CLIENT)
 		{
 			for(int i = 0; i < this.listViewUsersC.getItems().size(); i++)
 			{
@@ -602,7 +658,7 @@ public class Controller {
 				}
 			}
 		}
-		else if(this.server != null)
+		else if(this.state == NavState.MP_SERVER)
 		{
 			for(int i = 0; i < this.listViewUsersS.getItems().size(); i++)
 			{
@@ -615,29 +671,18 @@ public class Controller {
 		}
 	}
 	
-	public String getCurrentTimestamp()
-	{
-		Date date = new Date(System.currentTimeMillis());
-		String timestamp = this.tformatter.format(date);
-		
-		return timestamp;
-	}
 	
-	public void showConnectingBox(boolean value)
-	{
-		this.hboxConnection.setVisible(value);
-	}
 	
 	public void addUser(User u)
 	{
 		Platform.runLater(() -> {
-			if(this.client != null)
+			if(this.state == NavState.MP_CLIENT)
 			{
 				this.listUsernameC.get(this.connectedUsers).setText(u.getNickname());
 				this.listViewUsersC.getItems().get(this.connectedUsers).setVisible(true);
 				this.connectedUsers++;
 			}
-			else if(this.server != null)
+			else if(this.state == NavState.MP_SERVER)
 			{
 				this.listUsernameS.get(this.connectedUsers).setText(u.getNickname());
 				this.listViewUsersS.getItems().get(this.connectedUsers).setVisible(true);
@@ -652,7 +697,7 @@ public class Controller {
 	{
 		Platform.runLater(() -> {
 			boolean found = false;
-			if(this.client != null)
+			if(this.state == NavState.MP_CLIENT)
 			{
 				// NB: we have to move by one position back every user, to fill the empty space left by the removed one
 				for(int i = 1; i < this.connectedUsers; i++)
@@ -672,7 +717,7 @@ public class Controller {
 				this.listImage.get(this.connectedUsers - 1).setVisible(false);
 				this.connectedUsers--;
 			}
-			else if(this.server != null)
+			else if(this.state == NavState.MP_SERVER)
 			{
 				// NB: we have to move by one position back every user, to fill the empty space left by the removed one
 				for(int i = 1; i < this.connectedUsers; i++)
@@ -694,11 +739,10 @@ public class Controller {
 			}
 		});
 	}
-	
 	public void updateUserList(List<User> users)
 	{
 		Platform.runLater(() -> {
-			if(this.client != null)
+			if(this.state == NavState.MP_CLIENT)
 			{
 				for(int i = 0; i < users.size(); i++)
 				{
@@ -710,16 +754,11 @@ public class Controller {
 				}
 				this.connectedUsers = users.size();
 			}
-			else if(this.server != null)
+			else if(this.state == NavState.MP_SERVER)
 			{
 				// for the moment it's never used from the server
 			}
 		});
-	}
-	
-	public boolean isRoomOpen()
-	{
-		return this.buttonOpenClose.getText().equalsIgnoreCase("Open") ? true : false;
 	}
 	
 	public void enableStartGame(boolean value)
@@ -727,43 +766,22 @@ public class Controller {
 		this.buttonStartGame.setDisable(!value);
 	}
 	
-	public void showAlert(AlertType aType, String header, String content)
-	{
-		Platform.runLater(() -> {
-			Alert a = new Alert(aType);
-			a.setTitle("Information Dialog");
-			a.setHeaderText(header);
-			a.setContentText(content);
-			a.show();
-		});
-	}
-	
 	public void closeConnection()
 	{
-		if(this.client != null)
+		if(this.state == NavState.MP_CLIENT)
 		{
 			this.client.sendClose();
 			this.client = null;
 		}
-		else if(this.server != null)
+		else if(this.state == NavState.MP_SERVER)
 		{
 			this.server.sendClose();
 			this.server = null;
 		}
     }
-	
-	private void setServerAddress()
-	{
-		try {
-			this.labelServerIP.setText("Server IP address: " + InetAddress.getLocalHost().toString().split("/")[1]);
-		} catch (UnknownHostException e) {
-			e.printStackTrace();
-		}
-	}
-	
 	private void resetList()
 	{
-		if(this.client != null)
+		if(this.state == NavState.MP_CLIENT)
 		{
 			for(int i = 0; i < ROOM_CAPACITY; i++)
 			{
@@ -773,7 +791,7 @@ public class Controller {
 				this.listImage.get(i).setVisible(false);
 			}
 		}
-		else if(this.server != null)
+		else if(this.state == NavState.MP_SERVER)
 		{
 			for(int i = 0; i < ROOM_CAPACITY; i++)
 			{
@@ -782,36 +800,5 @@ public class Controller {
 				this.listReadyS.get(i).setStyle("-fx-background-color: red");
 			}
 		}
-	}
-	
-	// utilities
-	private boolean checkNickname(String text)
-	{
-		// if OK return true
-		return PATTERN_NICKNAME.matcher(text).matches() ? true : false;
-	}
-	private boolean checkIP(String text)
-	{
-		// if OK return true
-		return PATTERN_IP.matcher(text).matches() ? true : false;
-	}
-	public void addToTextArea(String text)
-	{
-		// client
-		if(this.state == NavState.MP_CLIENT)
-		{
-			if(this.textAreaChatC.getText().isEmpty())
-				this.textAreaChatC.setText(text);
-			else this.textAreaChatC.setText(this.textAreaChatC.getText() + "\n" + text);
-		}
-		// server
-		else if(this.state == NavState.MP_SERVER)
-		{
-			this.textAreaChatS.setText(this.textAreaChatS.getText() + "\n" + text);
-		}
-	}
-	public void addToTextArea(Message message)
-	{
-		this.addToTextArea(message.getTimestamp() + " " + message.getNickname() + ": " + message.getContent());
 	}
 }
