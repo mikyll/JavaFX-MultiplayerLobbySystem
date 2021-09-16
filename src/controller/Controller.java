@@ -42,28 +42,40 @@ public class Controller {
 	private static final Pattern PATTERN_NICKNAME = Pattern.compile("^[a-zA-Z0-9]{3,15}$");
 	private static final Pattern PATTERN_IP = Pattern.compile("^(([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.){3}([01]?\\d\\d?|2[0-4]\\d|25[0-5])$");
 	
-	// multiplayer
+	// private StateApp (Multiplayer, MC, MJ, MCNR, MJER, ...)
+	
 	@FXML private VBox vboxBack;
+	
+	// MultiPlayer
 	@FXML private VBox vboxMP;
-	@FXML private TextField textFieldNickname;
+	@FXML private Button buttonC; // button Create
+	@FXML private Button buttonJ; // button Join
+	
+	// MultiPlayer: Create New Room
+	@FXML private VBox vboxCreateRoom;
+	@FXML private TextField textFieldNicknameS;
 	@FXML private Label labelMinRoom;
 	@FXML private Label labelMaxRoom;
 	@FXML private ImageView buttonIncreaseMinRoom;
 	@FXML private ImageView buttonDecreaseMinRoom;
 	@FXML private ImageView buttonIncreaseMaxRoom;
 	@FXML private ImageView buttonDecreaseMaxRoom;
-	@FXML private Button buttonCNR;
-	@FXML private TextField textFieldIP;
-	@FXML private Button buttonJER;
-	@FXML private Label labelErrorIP;
-	@FXML private HBox hboxC; // hbox connection
 	private Image arrowUp;
 	private Image arrowUpDisabled;
 	private Image arrowDown;
 	private Image arrowDownDisabled;
+	@FXML private Button buttonCNR; // button Create New Room
 	
-	// client
-	@FXML private VBox vboxChatClient;
+	// MultiPlayer: Join Existing Room
+	@FXML private VBox vboxJoinRoom;
+	@FXML private TextField textFieldNicknameC;
+	@FXML private TextField textFieldIP;
+	@FXML private Label labelErrorIP;
+	@FXML private HBox hboxConnection; // hbox connection
+	@FXML private Button buttonJER;
+	
+	// MultiPlayer: Client
+	@FXML private VBox vboxClientRoom;
 	@FXML private TextArea textAreaChatC;
 	@FXML private TextField textFieldChatC;
 	@FXML private Button buttonChatC;
@@ -74,8 +86,8 @@ public class Controller {
 	private ArrayList<Label> listReadyC;
 	private ArrayList<ImageView> listImage;
 	
-	// server
-	@FXML private VBox vboxChatServer;
+	// MultiPlayer: Server
+	@FXML private VBox vboxServerRoom;
 	@FXML private Label labelServerIP;
 	@FXML private TextArea textAreaChatS;
 	@FXML private TextField textFieldChatS;
@@ -214,6 +226,10 @@ public class Controller {
 			this.buttonCNR.setDisable(true);
 			this.buttonJER.setDisable(true);
 		}
+	}
+	@FXML public void validateNicknameC()
+	{
+		
 	}
 	private boolean checkNickname(String text)
 	{
@@ -490,20 +506,20 @@ public class Controller {
 	public void switchToMP()
 	{
 		this.vboxBack.setVisible(false);
-		this.vboxChatClient.setVisible(false);
-		this.vboxChatServer.setVisible(false);
+		this.vboxClientRoom.setVisible(false);
+		this.vboxServerRoom.setVisible(false);
 		this.vboxMP.setVisible(true);
 	}
 	public void switchToChatC()
 	{
 		this.vboxMP.setVisible(false);
-		this.vboxChatClient.setVisible(true);
+		this.vboxClientRoom.setVisible(true);
 		this.vboxBack.setVisible(true);
 	}
 	public void switchToChatS()
 	{
 		this.vboxMP.setVisible(false);
-		this.vboxChatServer.setVisible(true);
+		this.vboxServerRoom.setVisible(true);
 		this.vboxBack.setVisible(true);
 	}
 	
@@ -543,7 +559,7 @@ public class Controller {
 	
 	public void showConnectingBox(boolean value)
 	{
-		this.hboxC.setVisible(value);
+		this.hboxConnection.setVisible(value);
 	}
 	
 	public void addUser(User u)
