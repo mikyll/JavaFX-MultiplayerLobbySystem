@@ -15,6 +15,7 @@ import model.User;
 import model.chat.*;
 
 import controller.Controller;
+import javafx.event.ActionEvent;
 import javafx.scene.control.Alert.AlertType;
 
 public class ClientStream implements IClient {
@@ -129,7 +130,7 @@ public class ClientStream implements IClient {
 									//this.socket.close();
 									
 									// switch view
-									controller.switchToMP();
+									controller.goBack(new ActionEvent());
 									
 									// show alert
 									controller.showAlert(AlertType.INFORMATION, "Disconnected from server", incomingMsg.getContent());
@@ -153,7 +154,7 @@ public class ClientStream implements IClient {
 									// close connection(?)
 									
 									// switch view
-									controller.switchToMP();
+									controller.goBack(new ActionEvent());
 									
 									// show alert
 									controller.showAlert(AlertType.INFORMATION, "Disconnected from server", incomingMsg.getContent());

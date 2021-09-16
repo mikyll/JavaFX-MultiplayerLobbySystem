@@ -75,18 +75,6 @@ public class Controller {
 	@FXML private HBox hboxConnection; // hbox connection
 	@FXML private Button buttonJER;
 	
-	// MultiPlayer: Client
-	@FXML private VBox vboxClientRoom;
-	@FXML private TextArea textAreaChatC;
-	@FXML private TextField textFieldChatC;
-	@FXML private Button buttonChatC;
-	@FXML private Button buttonReady;
-	@FXML private ListView<HBox> listViewUsersC;
-	private IClient client;
-	private ArrayList<Label> listUsernameC;
-	private ArrayList<Label> listReadyC;
-	private ArrayList<ImageView> listImage;
-	
 	// MultiPlayer: Server
 	@FXML private VBox vboxServerRoom;
 	@FXML private Label labelServerIP;
@@ -102,6 +90,20 @@ public class Controller {
 	private ArrayList<Label> listReadyS;
 	private ArrayList<Button> listKick;
 	
+	// MultiPlayer: Client
+	@FXML private VBox vboxClientRoom;
+	@FXML private TextArea textAreaChatC;
+	@FXML private TextField textFieldChatC;
+	@FXML private Button buttonChatC;
+	@FXML private Button buttonReady;
+	@FXML private ListView<HBox> listViewUsersC;
+	private IClient client;
+	private ArrayList<Label> listUsernameC;
+	private ArrayList<Label> listReadyC;
+	private ArrayList<ImageView> listImage;
+	
+	
+	
 	private int connectedUsers;
 	
 	private SimpleDateFormat tformatter;
@@ -112,9 +114,13 @@ public class Controller {
 	{
 		this.state = NavState.MULTIPLAYER;
 		this.vboxBack.setVisible(true);
+		this.vboxMP.setVisible(true);
+		this.vboxCreateRoom.setVisible(false);
+		this.vboxJoinRoom.setVisible(false);
+		this.vboxServerRoom.setVisible(false);
+		this.vboxClientRoom.setVisible(false);
 		
 		this.tformatter = new SimpleDateFormat("[HH:mm:ss]");
-		this.switchToMP();
 		this.showConnectingBox(false);
 		
 		this.buttonCNR.setDisable(true);
@@ -227,6 +233,7 @@ public class Controller {
 			}
 			case MP_CREATE:
 			{
+				this.state = NavState.MULTIPLAYER;
 				this.vboxCreateRoom.setVisible(false);
 				this.vboxMP.setVisible(true);
 				
@@ -234,6 +241,7 @@ public class Controller {
 			}
 			case MP_JOIN:
 			{
+				this.state = NavState.MULTIPLAYER;
 				this.vboxJoinRoom.setVisible(false);
 				this.vboxMP.setVisible(true);
 				
@@ -241,10 +249,22 @@ public class Controller {
 			}
 			case MP_SERVER:
 			{
+				this.state = NavState.MULTIPLAYER;
+				this.vboxServerRoom.setVisible(false);
+				this.vboxMP.setVisible(true);
+				
+				this.closeConnection();
+				
 				break;
 			}
 			case MP_CLIENT:
 			{
+				this.state = NavState.MULTIPLAYER;
+				this.vboxClientRoom.setVisible(false);
+				this.vboxMP.setVisible(true);
+				
+				this.closeConnection();
+				
 				break;
 			}
 			default:
@@ -252,10 +272,6 @@ public class Controller {
 				break;
 			}
 		}
-		this.vboxBack.setVisible(false);
-		this.switchToMP();
-		
-		this.closeConnection();
 	}
 	@FXML public void selectCNR(ActionEvent event)
 	{
@@ -277,10 +293,10 @@ public class Controller {
 	}
 	
 	// MultiPlayer: Create New Room callbacks
-	@FXML public void validateNicknameCNR()
+	@FXML public void validateNicknameS()
 	{
 		// nickname OK
-		if(checkNickname(this.textFieldNicknameS.getText()))
+		if(this.checkNickname(this.textFieldNicknameS.getText()))
 		{
 			this.buttonCNR.setDisable(false);
 		}
@@ -366,7 +382,7 @@ public class Controller {
 		this.textAreaChatS.setText(this.getCurrentTimestamp() + " " + this.textFieldNicknameS.getText() + " created the room");
 		this.setServerAddress();
 		
-		// create new room -> start server
+		// create new room -> start server (if OK switch to Server Room View)
 		this.server = new ServerStream(this, this.textFieldNicknameS.getText(), Integer.parseInt(this.labelMinRoom.getText()), Integer.parseInt(this.labelMaxRoom.getText()));
 		this.client = null;
 		
@@ -385,37 +401,42 @@ public class Controller {
 		this.connectedUsers = 1;
 	}
 	
-	
-	@FXML public void validateNickname()
+	// MultiPlayer: Join Existing Room callbacks
+	@FXML public void validateNicknameAndAddressC()
 	{
-		// nickname OK
-		if(checkNickname(this.textFieldNickname.getText()))
+		// nickname OK & address OK (or empty)
+		if(this.checkNickname(this.textFieldNicknameC.getText()) && (this.checkIP(this.textFieldIP.getText()) || this.textFieldIP.getText().isEmpty()))
 		{
-			this.buttonCNR.setDisable(false);
-			// & address OK (or empty)
-			if(this.checkIP(this.textFieldIP.getText()) || this.textFieldIP.getText().isEmpty())
-				this.buttonJER.setDisable(false);
+			this.buttonJER.setDisable(false);
+			this.labelErrorIP.setVisible(false);
 		}
-		// nickname NOT
+		// nickname OK & address NOT (nor empty)
+		else if(this.checkNickname(this.textFieldNicknameC.getText()) && !(checkIP(this.textFieldIP.getText()) || this.textFieldIP.getText().isEmpty()))
+		{
+			this.buttonJER.setDisable(true);
+			this.labelErrorIP.setVisible(true);
+		}
+		// nickname NOT & address NOT (nor empty)
 		else
 		{
-			this.buttonCNR.setDisable(true);
 			this.buttonJER.setDisable(true);
+			this.labelErrorIP.setVisible(false);
 		}
 	}
 	@FXML public void validateNicknameC()
 	{
-		
-	}
-	private boolean checkNickname(String text)
-	{
-		// if OK return true
-		return PATTERN_NICKNAME.matcher(text).matches() ? true : false;
+		// nickname OK
+		if(checkNickname(this.textFieldNicknameC.getText()))
+			// & address OK (or empty)
+			if(this.checkIP(this.textFieldIP.getText()) || this.textFieldIP.getText().isEmpty())
+				this.buttonJER.setDisable(false);
+		// nickname NOT
+		else this.buttonJER.setDisable(true);
 	}
 	@FXML public void validateAddress()
 	{
 		// address OK (or empty) & nickname OK
-		if((checkIP(this.textFieldIP.getText()) || this.textFieldIP.getText().isEmpty()) && checkNickname(this.textFieldNickname.getText()))
+		if((checkIP(this.textFieldIP.getText()) || this.textFieldIP.getText().isEmpty()) && checkNickname(this.textFieldNicknameC.getText()))
 		{
 			this.buttonJER.setDisable(false);
 			this.labelErrorIP.setVisible(false);
@@ -432,16 +453,10 @@ public class Controller {
 			this.labelErrorIP.setVisible(false);
 		}
 	}
-	private boolean checkIP(String text)
-	{
-		// if OK return true
-		return PATTERN_IP.matcher(text).matches() ? true : false;
-	}
-	
 	@FXML public void joinExistingRoom(ActionEvent event) 
 	{
-		// connect to existing room -> start client
-		this.client = new ClientStream(this, this.textFieldIP.getText(), 9001, this.textFieldNickname.getText());
+		// connect to existing room -> start client (if OK switch to Client Room View)
+		this.client = new ClientStream(this, this.textFieldIP.getText(), 9001, this.textFieldNicknameC.getText());
 		this.server = null;
 		
 		// reset the user list
@@ -455,66 +470,7 @@ public class Controller {
 		this.showConnectingBox(true);
 	}
 	
-	@FXML public void toggleReady(ActionEvent event)
-	{
-		if(this.buttonReady.getText().equalsIgnoreCase("Ready"))
-		{
-			this.buttonReady.setText("Not ready");
-			this.buttonReady.setStyle("-fx-background-color: red");
-			this.client.sendReady(false);
-			this.updateReady(this.textFieldNickname.getText(), false);
-		}
-		else
-		{
-			this.buttonReady.setText("Ready");
-			this.buttonReady.setStyle("-fx-background-color: lime");
-			this.client.sendReady(true);
-			this.updateReady(this.textFieldNickname.getText(), true);
-		}
-		// TO-DO: set a 5 sec timer that disables the button, so that users can't spam the toggle
-	}
-	@FXML public void sendMessageC(ActionEvent event) 
-	{
-		String msg = this.textFieldChatC.getText();
-		if(!msg.isEmpty() && !msg.isBlank())
-		{
-			this.client.sendChatMessage(msg);
-		}
-		this.textFieldChatC.setText("");
-	}
-	@FXML public void sendMessageS(ActionEvent event) 
-	{
-		String msg = this.textFieldChatS.getText();
-		if(!msg.isEmpty() && !msg.isBlank())
-		{
-			this.server.sendChatMessage(msg);
-		}
-		this.textFieldChatS.setText("");
-	}
-	@FXML public void enterChatHandle(KeyEvent e)
-	{
-		if(e.getCode().equals(KeyCode.ENTER))
-		{
-			if(this.client != null)
-			{
-				String msg = this.textFieldChatC.getText();
-				if(!msg.isEmpty() && !msg.isBlank())
-				{
-					this.client.sendChatMessage(msg);
-				}
-				this.textFieldChatC.setText("");
-			}
-			else if(this.server != null)
-			{
-				String msg = this.textFieldChatS.getText();
-				if(!msg.isEmpty() && !msg.isBlank())
-				{
-					this.server.sendChatMessage(msg);
-				}
-				this.textFieldChatS.setText("");
-			}
-		}
-	}
+	// MultiPlayer: Server callbacks
 	@FXML public void kickUser(ActionEvent event)
 	{
 		// get the button index
@@ -552,37 +508,69 @@ public class Controller {
 			this.labelOpenClose.setStyle("-fx-background-color: lime");
 		}
 	}
+	@FXML public void sendMessageS(ActionEvent event) 
+	{
+		String msg = this.textFieldChatS.getText();
+		if(!msg.isEmpty() && !msg.isBlank())
+			this.server.sendChatMessage(msg);
+		this.textFieldChatS.setText("");
+	}
+	@FXML public void enterChatHandleS(KeyEvent e)
+	{
+		if(e.getCode().equals(KeyCode.ENTER))
+		{
+			String msg = this.textFieldChatS.getText();
+			if(!msg.isEmpty() && !msg.isBlank())
+				this.server.sendChatMessage(msg);
+			this.textFieldChatS.setText("");
+		}
+	}
 	@FXML public void startGame(ActionEvent event)
 	{
 		System.out.println("Start game");
 	}
 	
-	public void addToTextArea(String text)
+	// MultiPlayer: Client callbacks
+	@FXML public void toggleReady(ActionEvent event)
 	{
-		// client
-		if(this.client != null)
+		if(this.buttonReady.getText().equalsIgnoreCase("Ready"))
 		{
-			if(this.textAreaChatC.getText().isEmpty())
-				this.textAreaChatC.setText(text);
-			else this.textAreaChatC.setText(this.textAreaChatC.getText() + "\n" + text);
+			this.buttonReady.setText("Not ready");
+			this.buttonReady.setStyle("-fx-background-color: red");
+			this.client.sendReady(false);
+			this.updateReady(this.textFieldNicknameC.getText(), false);
 		}
-		// server
-		else if(this.server != null)
+		else
 		{
-			this.textAreaChatS.setText(this.textAreaChatS.getText() + "\n" + text);
+			this.buttonReady.setText("Ready");
+			this.buttonReady.setStyle("-fx-background-color: lime");
+			this.client.sendReady(true);
+			this.updateReady(this.textFieldNicknameC.getText(), true);
+		}
+		// TO-DO: set a 5 sec timer that disables the button, so that users can't spam the toggle
+	}
+	@FXML public void sendMessageC(ActionEvent event) 
+	{
+		String msg = this.textFieldChatC.getText();
+		if(!msg.isEmpty() && !msg.isBlank())
+			this.client.sendChatMessage(msg);
+		this.textFieldChatC.setText("");
+	}
+	@FXML public void enterChatHandleC(KeyEvent e)
+	{
+		if(e.getCode().equals(KeyCode.ENTER))
+		{
+			String msg = this.textFieldChatC.getText();
+			if(!msg.isEmpty() && !msg.isBlank())
+				this.client.sendChatMessage(msg);
+			this.textFieldChatC.setText("");
 		}
 	}
-	public void addToTextArea(Message message)
-	{
-		this.addToTextArea(message.getTimestamp() + " " + message.getNickname() + ": " + message.getContent());
-	}
-	public void switchToMP()
-	{
-		this.vboxBack.setVisible(false);
-		this.vboxClientRoom.setVisible(false);
-		this.vboxServerRoom.setVisible(false);
-		this.vboxMP.setVisible(true);
-	}
+	
+	
+	
+	
+	
 	public void switchToServerRoom()
 	{
 		this.state = NavState.MP_SERVER;
@@ -718,7 +706,7 @@ public class Controller {
 					this.listUsernameC.get(i).setText(u.getNickname());
 					this.listViewUsersC.getItems().get(i).setVisible(true);
 					this.listReadyC.get(i).setStyle(u.isReady() ? "-fx-background-color: lime" : "-fx-background-color: red");
-					this.listImage.get(i).setVisible(this.textFieldNickname.getText().equals(users.get(i).getNickname()) ? true : false);
+					this.listImage.get(i).setVisible(this.textFieldNicknameC.getText().equals(users.get(i).getNickname()) ? true : false);
 				}
 				this.connectedUsers = users.size();
 			}
@@ -794,5 +782,36 @@ public class Controller {
 				this.listReadyS.get(i).setStyle("-fx-background-color: red");
 			}
 		}
+	}
+	
+	// utilities
+	private boolean checkNickname(String text)
+	{
+		// if OK return true
+		return PATTERN_NICKNAME.matcher(text).matches() ? true : false;
+	}
+	private boolean checkIP(String text)
+	{
+		// if OK return true
+		return PATTERN_IP.matcher(text).matches() ? true : false;
+	}
+	public void addToTextArea(String text)
+	{
+		// client
+		if(this.state == NavState.MP_CLIENT)
+		{
+			if(this.textAreaChatC.getText().isEmpty())
+				this.textAreaChatC.setText(text);
+			else this.textAreaChatC.setText(this.textAreaChatC.getText() + "\n" + text);
+		}
+		// server
+		else if(this.state == NavState.MP_SERVER)
+		{
+			this.textAreaChatS.setText(this.textAreaChatS.getText() + "\n" + text);
+		}
+	}
+	public void addToTextArea(Message message)
+	{
+		this.addToTextArea(message.getTimestamp() + " " + message.getNickname() + ": " + message.getContent());
 	}
 }

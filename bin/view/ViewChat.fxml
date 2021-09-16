@@ -16,7 +16,7 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.Controller">
    <children>
-      <VBox fx:id="vboxMP" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" spacing="20.0" style="-fx-background-color: black;">
+      <VBox fx:id="vboxMP" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" spacing="20.0" style="-fx-background-color: black;" visible="false">
          <padding>
             <Insets left="80.0" right="80.0" />
          </padding>
@@ -169,7 +169,7 @@
                </children>
             </HBox>
             <Separator prefHeight="50.0" prefWidth="440.0" visible="false" />
-            <Button fx:id="buttonJER" mnemonicParsing="false" onAction="#selectJER" prefHeight="38.0" prefWidth="220.0" text="Join existing room">
+            <Button fx:id="buttonJER" mnemonicParsing="false" onAction="#joinExistingRoom" prefHeight="38.0" prefWidth="220.0" text="Join existing room">
                <font>
                   <Font name="System Bold" size="16.0" />
                </font>
@@ -204,7 +204,7 @@
                         <TextArea fx:id="textAreaChatS" editable="false" minHeight="100.0" prefHeight="350.0" prefWidth="300.0" />
                         <HBox prefHeight="30.0" prefWidth="300.0">
                            <children>
-                              <TextField fx:id="textFieldChatS" onKeyPressed="#enterChatHandle" prefHeight="30.0" prefWidth="250.0" />
+                              <TextField fx:id="textFieldChatS" onKeyPressed="#enterChatHandleS" prefHeight="30.0" prefWidth="250.0" />
                               <Button fx:id="buttonChatS" mnemonicParsing="false" onAction="#sendMessageS" prefHeight="30.0" prefWidth="50.0" text="Send" />
                            </children>
                         </HBox>
@@ -214,7 +214,7 @@
             </HBox>
          </children>
       </VBox>
-      <VBox fx:id="vboxClientRoom" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" spacing="5.0" style="-fx-background-color: black;" visible="false">
+      <VBox fx:id="vboxClientRoom" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" spacing="5.0" style="-fx-background-color: black;">
          <children>
             <HBox prefHeight="400.0" prefWidth="600.0">
                <children>
@@ -237,7 +237,7 @@
                         <TextArea fx:id="textAreaChatC" editable="false" prefHeight="370.0" prefWidth="300.0" />
                         <HBox prefHeight="30.0" prefWidth="300.0">
                            <children>
-                              <TextField fx:id="textFieldChatC" minHeight="30.0" minWidth="100.0" onKeyPressed="#enterChatHandle" prefHeight="30.0" prefWidth="250.0" />
+                              <TextField fx:id="textFieldChatC" minHeight="30.0" minWidth="100.0" onKeyPressed="#enterChatHandleC" prefHeight="30.0" prefWidth="250.0" />
                               <Button fx:id="buttonChatC" mnemonicParsing="false" onAction="#sendMessageC" prefHeight="30.0" prefWidth="50.0" text="Send" />
                            </children>
                         </HBox>
