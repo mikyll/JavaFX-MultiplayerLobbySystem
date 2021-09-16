@@ -39,7 +39,7 @@
             </Button>
          </children>
       </VBox>
-      <VBox fx:id="vboxCreateRoom" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" spacing="20.0" style="-fx-background-color: black;">
+      <VBox fx:id="vboxCreateRoom" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" spacing="20.0" style="-fx-background-color: black;" visible="false">
          <padding>
             <Insets left="80.0" right="80.0" />
          </padding>
@@ -126,7 +126,7 @@
             </Button>
          </children>
       </VBox>
-      <VBox fx:id="vboxJoinRoom" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" spacing="5.0" style="-fx-background-color: black;" visible="false">
+      <VBox fx:id="vboxJoinRoom" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" spacing="5.0" style="-fx-background-color: black;">
          <padding>
             <Insets left="80.0" right="80.0" />
          </padding>
@@ -144,7 +144,7 @@
                         <Font size="18.0" />
                      </font>
                   </Label>
-                  <TextField fx:id="textFieldNicknameC" onKeyTyped="#validateNicknameC" prefHeight="30.0" prefWidth="180.0" />
+                  <TextField fx:id="textFieldNicknameC" onKeyTyped="#validateNicknameAddressC" prefHeight="30.0" prefWidth="180.0" />
                </children>
             </HBox>
             <HBox alignment="CENTER_LEFT" prefHeight="30.0" prefWidth="240.0">
@@ -154,7 +154,7 @@
                         <Font size="18.0" />
                      </font>
                   </Label>
-                  <TextField fx:id="textFieldIP" onKeyTyped="#validateAddress" prefHeight="30.0" prefWidth="180.0" promptText="localhost" />
+                  <TextField fx:id="textFieldIP" onKeyTyped="#validateNicknameAddressC" prefHeight="30.0" prefWidth="180.0" promptText="localhost" />
                </children>
             </HBox>
             <Label fx:id="labelErrorIP" prefHeight="30.0" prefWidth="95.0" text="Invalid IP address." textFill="RED" visible="false" />

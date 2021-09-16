@@ -406,7 +406,7 @@ public class Controller {
 	}
 	
 	// MultiPlayer: Join Existing Room callbacks
-	@FXML public void validateNicknameAndAddressC()
+	@FXML public void validateNicknameAddressC()
 	{
 		// nickname OK & address OK (or empty)
 		if(this.checkNickname(this.textFieldNicknameC.getText()) && (this.checkIP(this.textFieldIP.getText()) || this.textFieldIP.getText().isEmpty()))
@@ -420,41 +420,17 @@ public class Controller {
 			this.buttonJER.setDisable(true);
 			this.labelErrorIP.setVisible(true);
 		}
-		// nickname NOT & address NOT (nor empty) || nickname NOT & address OK (or empty)
-		else
+		// nickname NOT & address OK (or empty)
+		else if(!this.checkNickname(this.textFieldNicknameC.getText()) && (checkIP(this.textFieldIP.getText()) || this.textFieldIP.getText().isEmpty()))
 		{
 			this.buttonJER.setDisable(true);
 			this.labelErrorIP.setVisible(false);
 		}
-	}
-	@FXML public void validateNicknameC()
-	{
-		// nickname OK
-		if(checkNickname(this.textFieldNicknameC.getText()))
-			// & address OK (or empty)
-			if(this.checkIP(this.textFieldIP.getText()) || this.textFieldIP.getText().isEmpty())
-				this.buttonJER.setDisable(false);
-		// nickname NOT
-		else this.buttonJER.setDisable(true);
-	}
-	@FXML public void validateAddress()
-	{
-		// address OK (or empty) & nickname OK
-		if((checkIP(this.textFieldIP.getText()) || this.textFieldIP.getText().isEmpty()) && checkNickname(this.textFieldNicknameC.getText()))
-		{
-			this.buttonJER.setDisable(false);
-			this.labelErrorIP.setVisible(false);
-		}
-		// address NOT (nor empty) & nickname OK
-		else if(!(checkIP(this.textFieldIP.getText()) || this.textFieldIP.getText().isEmpty()))
+		// nickname NOT & address NOT (nor empty)
+		else
 		{
 			this.buttonJER.setDisable(true);
 			this.labelErrorIP.setVisible(true);
-		}
-		// address OK (or empty) & nickname NOT
-		else
-		{
-			this.labelErrorIP.setVisible(false);
 		}
 	}
 	@FXML public void joinExistingRoom(ActionEvent event) 
