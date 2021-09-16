@@ -18,8 +18,9 @@ to add:
 - ~~add "start game" button which enables when the room has the minimum users required~~
 - ~~add open/close checkbox to allow users to join~~
 - ~~change the "this.client != null" check with NavState.MP_CLIENT (same for the server)~~
-- fix Join Existing Room validation
-- move Controller methods (in a proper order)
+- ~~fix Join Existing Room validation~~
+- ~~move Controller methods (in a proper order)~~
+- fix KickUser (removes the server too)
 - catch Connection Reset & SocketException: Interrupted function call: accept failed, thrown when we back from the server room, when no one has been accepted yet
 - automatic textarea scrolling, to last message;
 - fix exception print stack (handle them in a more proper way).

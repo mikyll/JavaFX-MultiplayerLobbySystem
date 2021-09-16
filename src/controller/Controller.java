@@ -558,6 +558,23 @@ public class Controller {
 		// if OK return true
 		return PATTERN_IP.matcher(text).matches() ? true : false;
 	}
+	public void switchToMP()
+	{
+		if(this.state == NavState.MP_CLIENT)
+		{
+			this.vboxClientRoom.setVisible(false);
+			this.vboxMP.setVisible(true);
+			
+			this.state = NavState.MULTIPLAYER;
+		}
+		else if (this.state == NavState.MP_SERVER)
+		{
+			this.vboxServerRoom.setVisible(false);
+			this.vboxMP.setVisible(true);
+			
+			this.state = NavState.MULTIPLAYER;
+		}
+	}
 	public void switchToServerRoom()
 	{
 		this.vboxCreateRoom.setVisible(false);

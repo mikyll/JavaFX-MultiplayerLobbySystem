@@ -360,7 +360,6 @@ public class ServerStream implements IServer{
 	{
 		for(User u : this.users)
 		{
-			System.out.println(u.isReady());
 			if(!u.isReady())
 				return false;
 		}
