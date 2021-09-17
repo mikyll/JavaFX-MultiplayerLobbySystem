@@ -89,6 +89,9 @@ public class ClientStream implements IClient {
 								controller.showConnectingBox(false);
 								controller.switchToClientRoom();
 								
+								// reset the user list
+								controller.resetList();
+								
 								// get user list from OK message
 								controller.updateUserList(extractUserList(incomingMsg.getContent()));
 								

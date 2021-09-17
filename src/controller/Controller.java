@@ -29,6 +29,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Paint;
+import javafx.scene.text.TextFlow;
 import model.NavState;
 import model.User;
 import model.chat.Message;
@@ -56,6 +57,7 @@ public class Controller {
 	// MultiPlayer: Create New Room
 	@FXML private VBox vboxCreateRoom;
 	@FXML private TextField textFieldNicknameS;
+	@FXML private TextFlow labelErrorNicknameS;
 	@FXML private Label labelMinRoom;
 	@FXML private Label labelMaxRoom;
 	@FXML private ImageView buttonIncreaseMinRoom;
@@ -72,6 +74,7 @@ public class Controller {
 	// MultiPlayer: Join Existing Room
 	@FXML private VBox vboxJoinRoom;
 	@FXML private TextField textFieldNicknameC;
+	@FXML private TextFlow labelErrorNicknameC;
 	@FXML private TextField textFieldIP;
 	@FXML private Label labelErrorIP;
 	@FXML private HBox hboxConnection; // hbox connection
@@ -304,11 +307,13 @@ public class Controller {
 		if(this.checkNickname(this.textFieldNicknameS.getText()))
 		{
 			this.buttonCNR.setDisable(false);
+			this.labelErrorNicknameS.setVisible(false);
 		}
 		// nickname NOT
 		else
 		{
 			this.buttonCNR.setDisable(true);
+			this.labelErrorNicknameS.setVisible(true);
 		}
 	}
 	@FXML public void increaseMinRoom(MouseEvent event)
@@ -385,8 +390,15 @@ public class Controller {
 	}
 	@FXML public void createNewRoom(ActionEvent event) 
 	{
-		this.textAreaChatS.setText(this.getCurrentTimestamp() + " " + this.textFieldNicknameS.getText() + " created the room");
+		if(!this.checkNickname(this.textFieldNicknameS.getText()))
+		{
+			this.showAlert(AlertType.ERROR, "Invalid nickname", "The nickname bust be from 3 to 15 alphanumeric char long.");
+			this.labelErrorNicknameS.setVisible(true);
+			return;
+		}
+		
 		this.setServerAddress();
+		this.textAreaChatS.setText(this.getCurrentTimestamp() + " " + this.textFieldNicknameS.getText() + " created the room");
 		
 		// create new room -> start server (if OK switch to Server Room View)
 		this.server = new ServerStream(this, this.textFieldNicknameS.getText(), Integer.parseInt(this.labelMinRoom.getText()), Integer.parseInt(this.labelMaxRoom.getText()), this.checkBoxRejoin.isSelected());
@@ -414,42 +426,59 @@ public class Controller {
 		if(this.checkNickname(this.textFieldNicknameC.getText()) && (this.checkIP(this.textFieldIP.getText()) || this.textFieldIP.getText().isEmpty()))
 		{
 			this.buttonJER.setDisable(false);
+			this.labelErrorNicknameC.setVisible(false);
 			this.labelErrorIP.setVisible(false);
 		}
 		// nickname OK & address NOT (nor empty)
 		else if(this.checkNickname(this.textFieldNicknameC.getText()) && !(checkIP(this.textFieldIP.getText()) || this.textFieldIP.getText().isEmpty()))
 		{
 			this.buttonJER.setDisable(true);
+			this.labelErrorNicknameC.setVisible(false);
 			this.labelErrorIP.setVisible(true);
 		}
 		// nickname NOT & address OK (or empty)
 		else if(!this.checkNickname(this.textFieldNicknameC.getText()) && (checkIP(this.textFieldIP.getText()) || this.textFieldIP.getText().isEmpty()))
 		{
 			this.buttonJER.setDisable(true);
+			this.labelErrorNicknameC.setVisible(true);
 			this.labelErrorIP.setVisible(false);
 		}
 		// nickname NOT & address NOT (nor empty)
 		else
 		{
 			this.buttonJER.setDisable(true);
+			this.labelErrorNicknameC.setVisible(true);
 			this.labelErrorIP.setVisible(true);
 		}
 	}
 	@FXML public void joinExistingRoom(ActionEvent event) 
 	{
-		// connect to existing room -> start client (if OK switch to Client Room View)
-		this.client = new ClientStream(this, this.textFieldIP.getText(), 9001, this.textFieldNicknameC.getText());
-		this.server = null;
+		if(!this.checkNickname(this.textFieldNicknameC.getText()))
+		{
+			this.showAlert(AlertType.ERROR, "Invalid nickname", "The nickname bust be from 3 to 15 alphanumeric char long.");
+			this.labelErrorNicknameC.setVisible(true);
+			return;
+		}
+		if(!this.checkIP(this.textFieldIP.getText()))
+		{
+			this.showAlert(AlertType.ERROR, "Invalid IP Address", "The address must be X.X.X.X or empty (localhost).");
+			this.labelErrorIP.setVisible(true);
+			return;
+		}
 		
-		// reset the user list
-		this.resetList();
+		// show loading box
+		this.showConnectingBox(true);
 		
 		// reset ready button
 		this.buttonReady.setText("Not ready");
 		this.buttonReady.setStyle("-fx-background-color: red");
 		
-		// show loading box
-		this.showConnectingBox(true);
+		// reset textArea
+		this.textAreaChatC.setText("");
+		
+		// connect to existing room -> start client (if OK switch to Client Room View)
+		this.client = new ClientStream(this, this.textFieldIP.getText(), 9001, this.textFieldNicknameC.getText());
+		this.server = null;
 	}
 	
 	// MultiPlayer: Server callbacks
@@ -668,7 +697,7 @@ public class Controller {
 			}
 		}
 	}
-	private void resetList()
+	public void resetList()
 	{
 		if(this.state == NavState.MP_CLIENT)
 		{
