@@ -141,10 +141,10 @@ public class Controller {
 		this.labelMaxRoom.setText("" + ROOM_CAPACITY);
 		
 		try {
-			this.arrowUp = new Image(new FileInputStream("src/view/icon-arrow-up.png"));
-			this.arrowUpDisabled = new Image(new FileInputStream("src/view/icon-arrow-up-disabled.png"));
-			this.arrowDown = new Image(new FileInputStream("src/view/icon-arrow-down.png"));
-			this.arrowDownDisabled = new Image(new FileInputStream("src/view/icon-arrow-down-disabled.png"));
+			this.arrowUp = new Image(new FileInputStream("src/resources/icon-arrow-up.png"));
+			this.arrowUpDisabled = new Image(new FileInputStream("src/resources/icon-arrow-up-disabled.png"));
+			this.arrowDown = new Image(new FileInputStream("src/resources/icon-arrow-down.png"));
+			this.arrowDownDisabled = new Image(new FileInputStream("src/resources/icon-arrow-down-disabled.png"));
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
@@ -180,7 +180,7 @@ public class Controller {
 			// identifier image
 			ImageView iv = new ImageView();
 			try {
-				iv.setImage(new Image(new FileInputStream("src/view/icon-user.png")));
+				iv.setImage(new Image(new FileInputStream("src/resources/icon-user.png")));
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
 			}

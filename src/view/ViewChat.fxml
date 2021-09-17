@@ -84,12 +84,12 @@
                            <children>
                               <ImageView fx:id="buttonIncreaseMinRoom" fitHeight="15.0" fitWidth="30.0" onMouseClicked="#increaseMinRoom" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@icon-arrow-up.png" />
+                                    <Image url="@../resources/icon-arrow-up.png" />
                                  </image>
                               </ImageView>
                               <ImageView fx:id="buttonDecreaseMinRoom" fitHeight="15.0" fitWidth="30.0" onMouseClicked="#decreaseMinRoom" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@icon-arrow-down.png" />
+                                    <Image url="@../resources/icon-arrow-down.png" />
                                  </image>
                               </ImageView>
                            </children>
@@ -109,12 +109,12 @@
                            <children>
                               <ImageView fx:id="buttonIncreaseMaxRoom" fitHeight="15.0" fitWidth="30.0" onMouseClicked="#increaseMaxRoom" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@icon-arrow-up.png" />
+                                    <Image url="@../resources/icon-arrow-up.png" />
                                  </image>
                               </ImageView>
                               <ImageView fx:id="buttonDecreaseMaxRoom" fitHeight="15.0" fitWidth="30.0" onMouseClicked="#decreaseMaxRoom" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@icon-arrow-down.png" />
+                                    <Image url="@../resources/icon-arrow-down.png" />
                                  </image>
                               </ImageView>
                            </children>
@@ -178,7 +178,7 @@
                   <Label prefHeight="18.0" prefWidth="130.0" text="Connecting to server..." textFill="WHITE" />
                   <ImageView fitHeight="20.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@icon-loading2.gif" />
+                        <Image url="@../resources/icon-loading.gif" />
                      </image>
                   </ImageView>
                </children>
@@ -268,7 +268,7 @@
                <graphic>
                   <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@icon-back.png" />
+                        <Image url="@../resources/icon-back.png" />
                      </image>
                   </ImageView>
                </graphic>
