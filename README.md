@@ -10,6 +10,13 @@
 <h1 align="center">JavaFX-MultiplayerLobbySystem</h1>
 JavaFX lobby system for multiplayer games with chat, ready toggle and kick buttons, using socket TCP by default.
 
+Features:
+- chat;
+- ready button;
+- kick user button (only the server, which created the room, can do this).
+
+Chat support using JavaFX and socket TCP (stream) to be used for Cluedo app
+
 ### Demo
 
 <table style="border: none">
@@ -25,71 +32,18 @@ JavaFX lobby system for multiplayer games with chat, ready toggle and kick butto
 
 <a href="#contribuire">contribuire</a> 
 
+
 ### Execution
 
+
+### Features
+table "feature-description-gif"
+schemes taken from the docs
 
 ### Documentation
 
 
 ### Roadmap
-Features da aggiungere e sviluppi futuri:
-* deploy su MacOS
-* aggiungere file di configurazione (xml o JSON) per rendere le modifiche alle impostazioni persistenti
-* aggiungere test domande duplicate
-* creare tool per inserire domande nuove (che sfrutta il test per le domande duplicate)
-* fare il porting su mobile (magari Android)
-
-### Built With
-Per l'implementazione ho utilizzato Java 11 e JavaFX 11, come IDE Eclipse (versione 2020-03 (4.15.0)), e SceneBuilder per la creazione della grafica (file FXML). Vedere i passi seguiti per il [setup del progetto](https://github.com/mikyll/ROQuiz/blob/main/Project%20Setup.md).
-
-versione Java: JavaSE-11 (jdk-11.0.11)<br/>
-versione JavaFX: JavaFX 11 (javafx-sdk-11.0.2)
-
-### References
-* Guida a classe Timeline usata per realizzare il countdown: [Timers in JavaFX and ReactFX](https://tomasmikula.github.io/blog/2014/06/04/timers-in-javafx-and-reactfx.html)
-* Lavorare coi moduli Java: [Java 9 Modules in Eclipse](https://blogs.oracle.com/java/post/how-to-develop-modules-with-eclipse-ide)
-* Creare jre custom con JavaFX (jlink): [Custom jre with JavaFX 11](https://stackoverflow.com/questions/52966195/custom-jre-with-javafx-11) e [How to use jlink to create a Java image with javafx modules](https://github.com/javafxports/openjdk-jfx/issues/238)
-* JavaFX ottenere HostService senza riferimento alla classe Application (Main extends Application): [Open a link in a browser without reference to Application](https://stackoverflow.com/questions/33094981/javafx-8-open-a-link-in-a-browser-without-reference-to-application)
-
-
-[downloads-shield]: https://img.shields.io/github/downloads/mikyll/ROQuiz/total
-[downloads-url]: https://github.com/mikyll/ROQuiz/releases/latest
-[contributors-shield]: https://img.shields.io/github/contributors/mikyll/ROQuiz
-[contributors-url]: https://github.com/mikyll/ROQuiz/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/mikyll/ROQuiz
-[forks-url]: https://github.com/mikyll/ROQuiz/network/members
-[stars-shield]: https://img.shields.io/github/stars/mikyll/ROQuiz
-[stars-url]: https://github.com/mikyll/ROQuiz/stargazers
-[issues-shield]: https://img.shields.io/github/issues/mikyll/ROQuiz
-[issues-url]: https://github.com/mikyll/ROQuiz/issues
-[license-shield]: https://img.shields.io/github/license/mikyll/ROQuiz
-[license-url]: https://github.com/mikyll/ROQuiz/blob/master/LICENSE
-[linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?logo=linkedin&colorB=0077B5
-[linkedin-url]: https://www.linkedin.com/in/michele-righi/?locale=it_IT
-[github-shield]: https://img.shields.io/github/followers/mikyll.svg?style=social&label=Follow
-[github-url]: https://github.com/mikyll
-
-
-# JavaFX-MultiplayerLobbySystem
-
-JavaFX lobby system for multiplayer games with chat, using socket TCP (can be extended to UDP).
-
-Features:
-- chat;
-- ready button;
-- kick user button (only the server, which created the room, can do this).
-
-Chat support using JavaFX and socket TCP (stream) to be used for Cluedo app
-
-
-### Demo
-showcase video with a server and multiple clients;
-
-table with feature, description and gif
-
-roadmap
-
-
 to add:
 - ~~update User list in server, when someone send the READY.~~
 - ~~add arrow to identify which user a particular client is~~
@@ -114,5 +68,30 @@ to add:
 - add a ban list (nickname/IP)
 - check if the users get disconnected properly when closing the app by the Launcher
 
-references:
-- [JavaFX-Chat](https://github.com/DomHeal/JavaFX-Chat)
+### Built With
+Per l'implementazione ho utilizzato Java 11 e JavaFX 11, come IDE Eclipse (versione 2020-03 (4.15.0)), e SceneBuilder per la creazione della grafica (file FXML). Vedere i passi seguiti per il [setup del progetto](https://github.com/mikyll/ROQuiz/blob/main/Project%20Setup.md).
+
+versione Java: JavaSE-11 (jdk-11.0.11)<br/>
+versione JavaFX: JavaFX 11 (javafx-sdk-11.0.2)
+
+### References
+* [JavaFX-Chat](https://github.com/DomHeal/JavaFX-Chat)
+
+
+
+[downloads-shield]: https://img.shields.io/github/downloads/mikyll/JavaFX-MultiplayerLobbySystem/total
+[downloads-url]: https://github.com/mikyll/JavaFX-MultiplayerLobbySystem/releases/latest
+[contributors-shield]: https://img.shields.io/github/contributors/mikyll/JavaFX-MultiplayerLobbySystem
+[contributors-url]: https://github.com/mikyll/JavaFX-MultiplayerLobbySystem/graphs/contributors
+[forks-shield]: https://img.shields.io/github/forks/mikyll/JavaFX-MultiplayerLobbySystem
+[forks-url]: https://github.com/mikyll/JavaFX-MultiplayerLobbySystem/network/members
+[stars-shield]: https://img.shields.io/github/stars/mikyll/JavaFX-MultiplayerLobbySystem
+[stars-url]: https://github.com/mikyll/JavaFX-MultiplayerLobbySystem/stargazers
+[issues-shield]: https://img.shields.io/github/issues/mikyll/JavaFX-MultiplayerLobbySystem
+[issues-url]: https://github.com/mikyll/JavaFX-MultiplayerLobbySystem/issues
+[license-shield]: https://img.shields.io/github/license/mikyll/JavaFX-MultiplayerLobbySystem
+[license-url]: https://github.com/mikyll/JavaFX-MultiplayerLobbySystem/blob/master/LICENSE
+[linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?logo=linkedin&colorB=0077B5
+[linkedin-url]: https://www.linkedin.com/in/michele-righi/?locale=it_IT
+[github-shield]: https://img.shields.io/github/followers/mikyll.svg?style=social&label=Follow
+[github-url]: https://github.com/mikyll
