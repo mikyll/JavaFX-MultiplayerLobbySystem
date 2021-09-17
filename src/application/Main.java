@@ -13,11 +13,11 @@ public class Main extends Application{
 	@Override
 	public void start(Stage stage) {
 		try {
-			FXMLLoader loader = new FXMLLoader(Main.class.getResource("/view/ViewChat.fxml"));
+			FXMLLoader loader = new FXMLLoader(Main.class.getResource("/view/ViewMultiplayer.fxml"));
 			AnchorPane homeUtente = (AnchorPane) loader.load();
 			Scene scene = new Scene(homeUtente);
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
-			stage.setTitle("Chat");
+			stage.setTitle("JavaFX-MultiplayerLobbySystem");
 			stage.setScene(scene);
 			//stage.setResizable(false);
 			stage.show();
