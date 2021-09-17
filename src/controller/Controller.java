@@ -459,7 +459,7 @@ public class Controller {
 			this.labelErrorNicknameC.setVisible(true);
 			return;
 		}
-		if(!this.checkIP(this.textFieldIP.getText()))
+		if(!this.checkIP(this.textFieldIP.getText()) || this.textFieldIP.getText().isEmpty())
 		{
 			this.showAlert(AlertType.ERROR, "Invalid IP Address", "The address must be X.X.X.X or empty (localhost).");
 			this.labelErrorIP.setVisible(true);

@@ -1,4 +1,4 @@
-module chat {
+module lobbysystem {
 	requires javafx.controls;
 	requires javafx.fxml;
 	requires transitive javafx.base;
