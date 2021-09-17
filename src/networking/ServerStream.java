@@ -22,22 +22,24 @@ import model.chat.MessageType;
 public class ServerStream implements IServer{
 	
 	private static final int PORT = 9001;
-	private int maxNumUsers = 6;
 	private int minToStartGame = 2;
-	
+	private int maxNumUsers = 6;
 	private Controller controller;
 	private String nickname;
+	private boolean users_rejoin;
+	
 	private ServerListener serverListener;
 	
 	private ArrayList<User> users;
 	private ArrayList<ObjectOutputStream> writers;
 	
-	public ServerStream(Controller controller, String nickname, int usersRequired, int maxCapacity)
+	public ServerStream(Controller controller, String nickname, int usersRequired, int maxCapacity, boolean rejoin)
 	{
 		this.controller = controller;
 		this.nickname = nickname;
 		this.minToStartGame = usersRequired;
 		this.maxNumUsers = maxCapacity;
+		this.users_rejoin = rejoin;
 		
 		this.users = new ArrayList<User>();
 		User u = new User(nickname);
@@ -160,6 +162,11 @@ public class ServerStream implements IServer{
 									mReply.setNickname("");
 									mReply.setContent("The room is full");
 								}
+								// the user cannot rejoin after being kicked
+								/*else if(!users_rejoin)
+								{
+									
+								}*/
 								// a username with the same nickname is already inside the room
 								else if(checkDuplicateNickname(incomingMsg.getNickname()))
 								{

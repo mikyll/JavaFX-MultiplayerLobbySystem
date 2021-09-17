@@ -2,6 +2,7 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.Separator?>
@@ -16,7 +17,7 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.Controller">
    <children>
-      <VBox fx:id="vboxMP" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" spacing="20.0" style="-fx-background-color: black;" visible="false">
+      <VBox fx:id="vboxMP" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" spacing="20.0" style="-fx-background-color: black;">
          <padding>
             <Insets left="80.0" right="80.0" />
          </padding>
@@ -39,7 +40,7 @@
             </Button>
          </children>
       </VBox>
-      <VBox fx:id="vboxCreateRoom" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" spacing="20.0" style="-fx-background-color: black;" visible="false">
+      <VBox fx:id="vboxCreateRoom" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: black;" visible="false">
          <padding>
             <Insets left="80.0" right="80.0" />
          </padding>
@@ -50,75 +51,89 @@
                </font>
             </Label>
             <Separator prefHeight="50.0" prefWidth="440.0" visible="false" />
-            <HBox alignment="CENTER_LEFT" prefHeight="30.0" prefWidth="240.0">
+            <VBox prefHeight="200.0" prefWidth="100.0" spacing="20.0">
                <children>
-                  <Label prefHeight="30.0" prefWidth="130.0" text="Nickname:" textFill="WHITE">
-                     <font>
-                        <Font size="18.0" />
-                     </font>
-                  </Label>
-                  <TextField fx:id="textFieldNicknameS" onKeyTyped="#validateNicknameS" prefHeight="30.0" prefWidth="180.0" />
-               </children>
-            </HBox>
-            <HBox alignment="CENTER_LEFT" prefHeight="30.0" prefWidth="240.0">
-               <children>
-                  <Label prefHeight="30.0" prefWidth="130.0" text="Room size:" textFill="WHITE">
-                     <font>
-                        <Font size="18.0" />
-                     </font>
-                  </Label>
-                  <Label prefHeight="30.0" prefWidth="37.0" text="Min:" textFill="WHITE">
-                     <font>
-                        <Font size="16.0" />
-                     </font>
-                  </Label>
-                  <Label id="spinner" fx:id="labelMinRoom" alignment="CENTER" prefHeight="30.0" prefWidth="20.0" style="-fx-background-color: white; -fx-background-radius: 3;" text="2">
-                     <font>
-                        <Font name="System Bold" size="16.0" />
-                     </font>
-                  </Label>
-                  <VBox alignment="CENTER_LEFT" prefHeight="30.0" prefWidth="30.0">
+                  <HBox alignment="CENTER_LEFT" prefHeight="30.0" prefWidth="240.0">
                      <children>
-                        <ImageView fx:id="buttonIncreaseMinRoom" fitHeight="15.0" fitWidth="30.0" onMouseClicked="#increaseMinRoom" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@icon-arrow-up.png" />
-                           </image>
-                        </ImageView>
-                        <ImageView fx:id="buttonDecreaseMinRoom" fitHeight="15.0" fitWidth="30.0" onMouseClicked="#decreaseMinRoom" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@icon-arrow-down.png" />
-                           </image>
-                        </ImageView>
+                        <Label prefHeight="30.0" prefWidth="130.0" text="Nickname:" textFill="WHITE">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Label>
+                        <TextField fx:id="textFieldNicknameS" onKeyTyped="#validateNicknameS" prefHeight="30.0" prefWidth="180.0" />
                      </children>
-                  </VBox>
-                  <Separator orientation="VERTICAL" prefHeight="30.0" prefWidth="6.0" visible="false" />
-                  <Label prefHeight="30.0" prefWidth="37.0" text="Max:" textFill="WHITE">
-                     <font>
-                        <Font size="16.0" />
-                     </font>
-                  </Label>
-                  <Label id="spinner" fx:id="labelMaxRoom" alignment="CENTER" prefHeight="30.0" prefWidth="20.0" style="-fx-background-color: white; -fx-background-radius: 3;" text="6">
-                     <font>
-                        <Font name="System Bold" size="16.0" />
-                     </font>
-                  </Label>
-                  <VBox alignment="CENTER_LEFT" prefHeight="30.0" prefWidth="30.0">
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT" prefHeight="30.0" prefWidth="240.0">
                      <children>
-                        <ImageView fx:id="buttonIncreaseMaxRoom" fitHeight="15.0" fitWidth="30.0" onMouseClicked="#increaseMaxRoom" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@icon-arrow-up.png" />
-                           </image>
-                        </ImageView>
-                        <ImageView fx:id="buttonDecreaseMaxRoom" fitHeight="15.0" fitWidth="30.0" onMouseClicked="#decreaseMaxRoom" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@icon-arrow-down.png" />
-                           </image>
-                        </ImageView>
+                        <Label prefHeight="30.0" prefWidth="130.0" text="Room size:" textFill="WHITE">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Label>
+                        <Label prefHeight="30.0" prefWidth="37.0" text="Min:" textFill="WHITE">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Label>
+                        <Label id="spinner" fx:id="labelMinRoom" alignment="CENTER" prefHeight="30.0" prefWidth="20.0" style="-fx-background-color: white; -fx-background-radius: 3;" text="2">
+                           <font>
+                              <Font name="System Bold" size="16.0" />
+                           </font>
+                        </Label>
+                        <VBox alignment="CENTER_LEFT" prefHeight="30.0" prefWidth="30.0">
+                           <children>
+                              <ImageView fx:id="buttonIncreaseMinRoom" fitHeight="15.0" fitWidth="30.0" onMouseClicked="#increaseMinRoom" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@icon-arrow-up.png" />
+                                 </image>
+                              </ImageView>
+                              <ImageView fx:id="buttonDecreaseMinRoom" fitHeight="15.0" fitWidth="30.0" onMouseClicked="#decreaseMinRoom" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@icon-arrow-down.png" />
+                                 </image>
+                              </ImageView>
+                           </children>
+                        </VBox>
+                        <Separator orientation="VERTICAL" prefHeight="30.0" prefWidth="6.0" visible="false" />
+                        <Label prefHeight="30.0" prefWidth="37.0" text="Max:" textFill="WHITE">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Label>
+                        <Label id="spinner" fx:id="labelMaxRoom" alignment="CENTER" prefHeight="30.0" prefWidth="20.0" style="-fx-background-color: white; -fx-background-radius: 3;" text="6">
+                           <font>
+                              <Font name="System Bold" size="16.0" />
+                           </font>
+                        </Label>
+                        <VBox alignment="CENTER_LEFT" prefHeight="30.0" prefWidth="30.0">
+                           <children>
+                              <ImageView fx:id="buttonIncreaseMaxRoom" fitHeight="15.0" fitWidth="30.0" onMouseClicked="#increaseMaxRoom" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@icon-arrow-up.png" />
+                                 </image>
+                              </ImageView>
+                              <ImageView fx:id="buttonDecreaseMaxRoom" fitHeight="15.0" fitWidth="30.0" onMouseClicked="#decreaseMaxRoom" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@icon-arrow-down.png" />
+                                 </image>
+                              </ImageView>
+                           </children>
+                        </VBox>
                      </children>
-                  </VBox>
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT" prefHeight="35.0" prefWidth="440.0" visible="false">
+                     <children>
+                        <Label prefHeight="30.0" prefWidth="130.0" text="User rejoin:" textFill="WHITE">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Label>
+                        <CheckBox fx:id="checkBoxRejoin" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" prefHeight="35.0" prefWidth="180.0" selected="true" text="Allow users to rejoin the room after being kicked" textAlignment="CENTER" textFill="WHITE" wrapText="true" />
+                     </children>
+                  </HBox>
                </children>
-            </HBox>
-            <Separator prefHeight="50.0" prefWidth="440.0" visible="false" />
+            </VBox>
+            <Separator prefHeight="30.0" prefWidth="440.0" visible="false" />
             <Button fx:id="buttonCNR" mnemonicParsing="false" onAction="#createNewRoom" prefHeight="38.0" prefWidth="220.0" text="Create new room">
                <font>
                   <Font name="System Bold" size="16.0" />
@@ -126,7 +141,7 @@
             </Button>
          </children>
       </VBox>
-      <VBox fx:id="vboxJoinRoom" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" spacing="5.0" style="-fx-background-color: black;">
+      <VBox fx:id="vboxJoinRoom" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" spacing="5.0" style="-fx-background-color: black;" visible="false">
          <padding>
             <Insets left="80.0" right="80.0" />
          </padding>
