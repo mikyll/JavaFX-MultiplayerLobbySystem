@@ -16,6 +16,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
@@ -65,6 +66,7 @@ public class Controller {
 	private Image arrowUpDisabled;
 	private Image arrowDown;
 	private Image arrowDownDisabled;
+	@FXML private CheckBox checkBoxRejoin;
 	@FXML private Button buttonCNR; // button Create New Room
 	
 	// MultiPlayer: Join Existing Room
@@ -387,7 +389,7 @@ public class Controller {
 		this.setServerAddress();
 		
 		// create new room -> start server (if OK switch to Server Room View)
-		this.server = new ServerStream(this, this.textFieldNicknameS.getText(), Integer.parseInt(this.labelMinRoom.getText()), Integer.parseInt(this.labelMaxRoom.getText()));
+		this.server = new ServerStream(this, this.textFieldNicknameS.getText(), Integer.parseInt(this.labelMinRoom.getText()), Integer.parseInt(this.labelMaxRoom.getText()), this.checkBoxRejoin.isSelected());
 		this.client = null;
 		
 		// reset the user list
