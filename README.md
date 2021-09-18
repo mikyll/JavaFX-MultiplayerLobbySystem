@@ -64,12 +64,12 @@ schemes taken from the docs
 	<tr>
 		<td><b>Server: open/close the room</b></td>
 		<td></td>
-		<td width="40%"><img src="https://github.com/mikyll/JavaFX-MultiplayerLobbySystem/blob/main/gfx/example-open-close-room.gif" alt="."/></td>
+		<td width="40%"><img src="https://github.com/mikyll/JavaFX-MultiplayerLobbySystem/blob/main/gfx/example-open-close-room.gif" alt="Open/close room example"/></td>
 	</tr>
 	<tr>
 		<td><b>Server: kick a user</b></td>
 		<td></td>
-		<td width="40%"><img src="" alt="."/></td>
+		<td width="40%"><img src="https://github.com/mikyll/JavaFX-MultiplayerLobbySystem/blob/main/gfx/example-kick.gif" alt="Kick user example"/></td>
 	</tr>
 	<tr>
 		<td><b>Client: set ready/not ready</b></td>
@@ -78,6 +78,11 @@ schemes taken from the docs
 	</tr>
 	<tr>
 		<td><b>Chat</b></td>
+		<td>The chat allows users to communicate in real time, showing the timestamp of the messages and the user that sent it. The chat also shows when users connect or disconnect and when they get kicked out from the server.</td>
+		<td width="40%"><img src="" alt="."/></td>
+	</tr>
+	<tr>
+		<td><b>Disconnection</b></td>
 		<td>The chat allows users to communicate in real time, showing the timestamp of the messages and the user that sent it. The chat also shows when users connect or disconnect and when they get kicked out from the server.</td>
 		<td width="40%"><img src="" alt="."/></td>
 	</tr>
