@@ -53,8 +53,8 @@ schemes taken from the docs
 	</tr>
 	<tr>
 		<td><b>Nickname & IP address validation</b></td>
-		<td>The nickname and address validations happen when the user types a key in the textfields as well as when he confirms.</td>
-		<td width="40%"><img src="" alt="."/></td>
+		<td>The nickname and address validations happen when the user types a key in the textfields as well as when he confirms (that's because the user could cut the text from the field, without typing any key, and the button would remain enabled).</td>
+		<td width="40%"><img src="https://github.com/mikyll/JavaFX-MultiplayerLobbySystem/blob/main/gfx/example-validation.gif" alt="Validation example"/></td>
 	</tr>
 	<tr>
 		<td><b>Server: set min and max room size</b></td>
