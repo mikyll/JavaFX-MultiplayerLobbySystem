@@ -72,7 +72,7 @@ Chat support using JavaFX and socket TCP (stream) to be used for Cluedo app
 	<tr>
 		<td><b>Client: set ready/not ready</b></td>
 		<td>If there's a user that isn't ready, the start button is disabled, even if the minimum required to start a game is reached.</td>
-		<td width="40%"><img src="" alt="."/></td>
+		<td width="40%"><img src="https://github.com/mikyll/JavaFX-MultiplayerLobbySystem/blob/main/gfx/example-ready.gif" alt="."/></td>
 	</tr>
 	<tr>
 		<td><b>Chat</b></td>
