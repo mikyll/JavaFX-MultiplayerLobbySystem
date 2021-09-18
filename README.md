@@ -37,8 +37,6 @@ Chat support using JavaFX and socket TCP (stream) to be used for Cluedo app
 
 
 ### Features
-table "feature-description-gif"
-schemes taken from the docs
 
 <table>
 	<tr>
