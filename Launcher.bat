@@ -1,1 +1,1 @@
-fxjreWin\bin\java -m chat/application.Main
+fxjreWin\bin\java -jar JavaFX-MultiplayerLobbySystem.jar -m lobbysystem/application.Main
