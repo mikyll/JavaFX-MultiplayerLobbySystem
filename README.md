@@ -59,12 +59,12 @@ schemes taken from the docs
 	<tr>
 		<td><b>Server: set min and max room size</b></td>
 		<td>Before creating the room, the server can choose its size: how many users it can contain and how many are required to start the game.</td>
-		<td width="40%"><img src="" alt="."/></td>
+		<td width="40%"><img src="https://github.com/mikyll/JavaFX-MultiplayerLobbySystem/blob/main/gfx/example-room-size.gif" alt="Room size example"/></td>
 	</tr>
 	<tr>
 		<td><b>Server: open/close the room</b></td>
 		<td></td>
-		<td width="40%"><img src="" alt="."/></td>
+		<td width="40%"><img src="https://github.com/mikyll/JavaFX-MultiplayerLobbySystem/blob/main/gfx/example-open-close-room.gif" alt="."/></td>
 	</tr>
 	<tr>
 		<td><b>Server: kick a user</b></td>
