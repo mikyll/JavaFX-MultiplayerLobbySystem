@@ -1,7 +1,5 @@
 package controller;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
@@ -10,7 +8,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import application.Main;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -144,14 +141,10 @@ public class Controller {
 		this.labelMinRoom.setText("" + MIN_USERS);
 		this.labelMaxRoom.setText("" + ROOM_CAPACITY);
 		
-		try {
-			this.arrowUp = new Image(new FileInputStream("src/resources/icon-arrow-up.png"));
-			this.arrowUpDisabled = new Image(new FileInputStream("src/resources/icon-arrow-up-disabled.png"));
-			this.arrowDown = new Image(new FileInputStream("src/resources/icon-arrow-down.png"));
-			this.arrowDownDisabled = new Image(new FileInputStream("src/resources/icon-arrow-down-disabled.png"));
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
+		this.arrowUp = new Image(this.getClass().getResource("/resources/icon-arrow-up.png").toString());
+		this.arrowUpDisabled = new Image(this.getClass().getResource("/resources/icon-arrow-up-disabled.png").toString());
+		this.arrowDown = new Image(this.getClass().getResource("/resources/icon-arrow-down.png").toString());
+		this.arrowDownDisabled = new Image(this.getClass().getResource("/resources/icon-arrow-down-disabled.png").toString());
 		
 		this.buttonDecreaseMinRoom.setDisable(true);
 		this.buttonIncreaseMaxRoom.setDisable(true);
@@ -183,11 +176,7 @@ public class Controller {
 			this.listReadyC.add(l);
 			// identifier image
 			ImageView iv = new ImageView();
-			try {
-				iv.setImage(new Image(new FileInputStream("src/resources/icon-user.png")));
-			} catch (FileNotFoundException e) {
-				e.printStackTrace();
-			}
+			iv.setImage(new Image(this.getClass().getResource("/resources/icon-user.png").toString()));
 			iv.resize(25, 25);
 			hbox.getChildren().add(iv);
 			this.listImage.add(iv);
