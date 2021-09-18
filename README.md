@@ -40,6 +40,24 @@ Chat support using JavaFX and socket TCP (stream) to be used for Cluedo app
 table "feature-description-gif"
 schemes taken from the docs
 
+<table>
+	<tr>
+		<td><b>Feature</b></td>
+		<td><b>Description</b></td>
+		<td width="40%"><b>Demo</b></td>
+	</tr>
+	<tr>
+		<td>Listen server</td>
+    <td>The network topology that has been used is the <i>Listen server</i>: <b>a client can become the server, and will host the game for other clients</b>. Basically, when a client creates a new room it becomes a server, hosting the connection for other clients that will send a request and join the room. This solution could be a problem in case of a game that requires low latency (e.g. FPS), since the client that hosts the match doesn't experience any, but for a boardgame it's perfect, considering it can be built on TCP and the latency isn't a issue at all.</td>
+		<td width="40%"><img src="https://github.com/mikyll/JavaFX-MultiplayerLobbySystem/blob/main/gfx/client-hosted%20(listen%20server).png" alt="Listen server scheme"/></td>
+	</tr>
+  <tr>
+		<td></td>
+    <td></td>
+		<td width="40%"><img src="" alt="."/></td>
+	</tr>
+</table>
+
 ### Documentation
 
 
