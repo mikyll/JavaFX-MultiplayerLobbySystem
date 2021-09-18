@@ -47,38 +47,38 @@ schemes taken from the docs
 		<td width="40%"><b>Demo</b></td>
 	</tr>
 	<tr>
-		<td>Listen server</td>
+		<td><b>Listen server<b/></td>
     		<td>The network topology that has been used is the <i>Listen server</i>: <b>a client can become the server, and will host the game for other clients</b>. Basically, when a client creates a new room it becomes a server, hosting the connection for other clients that will send a request and join the room. This solution could be a problem in case of a game that requires low latency (e.g. FPS), since the client that hosts the match doesn't experience any, but for a boardgame it's perfect, considering it can be built on TCP and the latency isn't a issue at all.</td>
-		<td width="40%"><img src="https://github.com/mikyll/JavaFX-MultiplayerLobbySystem/blob/main/gfx/client-hosted%20(listen%20server).png" alt="Listen server scheme"/></td>
+		<td width="40%"><img src="https://github.com/mikyll/JavaFX-MultiplayerLobbySystem/blob/main/gfx/listen-server-with-legend.png" alt="Listen server scheme"/></td>
 	</tr>
 	<tr>
-		<td>Nickname & IP address validation</td>
-		<td>The nickname and address validations happen when the user types a key the textfields as well as when he confirms</td>
+		<td><b>Nickname & IP address validation</b></td>
+		<td>The nickname and address validations happen when the user types a key in the textfields as well as when he confirms.</td>
 		<td width="40%"><img src="" alt="."/></td>
 	</tr>
 	<tr>
-		<td>Server: set min and max room size</td>
-		<td>Before creating the room, the server can choose its size: how many users it can contain and how many are required to start the game</td>
+		<td><b>Server: set min and max room size</b></td>
+		<td>Before creating the room, the server can choose its size: how many users it can contain and how many are required to start the game.</td>
 		<td width="40%"><img src="" alt="."/></td>
 	</tr>
 	<tr>
-		<td>Server: open/close the room</td>
+		<td><b>Server: open/close the room</b></td>
 		<td></td>
 		<td width="40%"><img src="" alt="."/></td>
 	</tr>
 	<tr>
-		<td>Server: kick a user</td>
+		<td><b>Server: kick a user</b></td>
 		<td></td>
 		<td width="40%"><img src="" alt="."/></td>
 	</tr>
 	<tr>
-		<td>Client: set ready/not ready</td>
-		<td></td>
+		<td><b>Client: set ready/not ready</b></td>
+		<td>If there's a user that isn't ready, the start button is disabled, even if the minimum required to start a game is reached.</td>
 		<td width="40%"><img src="" alt="."/></td>
 	</tr>
 	<tr>
-		<td>Chat</td>
-		<td></td>
+		<td><b>Chat</b></td>
+		<td>The chat allows users to communicate in real time, showing the timestamp of the messages and the user that sent it. The chat also shows when users connect or disconnect and when they get kicked out from the server.</td>
 		<td width="40%"><img src="" alt="."/></td>
 	</tr>
 </table>
