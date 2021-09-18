@@ -19,7 +19,7 @@ public class Main extends Application{
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			stage.setTitle("JavaFX-MultiplayerLobbySystem");
 			stage.setScene(scene);
-			//stage.setResizable(false);
+			stage.setResizable(false);
 			stage.show();
 			this.controller = (Controller) loader.getController();
 			
