@@ -10,8 +10,6 @@
 <h1 align="center">JavaFX-MultiplayerLobbySystem</h1>
 JavaFX lobby system for multiplayer games with chat, ready toggle and kick buttons, using socket TCP by default.
 
-Chat support using JavaFX and socket TCP (stream) to be used for Cluedo app.
-
 ### Demo
 <table style="border: none">
   <tr>
