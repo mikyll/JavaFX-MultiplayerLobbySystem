@@ -61,18 +61,18 @@ Chat support using JavaFX and socket TCP (stream) to be used for Cluedo app
 	</tr>
 	<tr>
 		<td><b>Server: open/close the room</b></td>
-		<td></td>
+		<td>The server can decide whether to close or open the room at will, preventing new users from joining or not.</td>
 		<td width="40%"><img src="https://github.com/mikyll/JavaFX-MultiplayerLobbySystem/blob/main/gfx/example-open-close-room.gif" alt="Open/close room example"/></td>
 	</tr>
 	<tr>
-		<td><b>Server: kick a user</b></td>
-		<td></td>
-		<td width="40%"><img src="https://github.com/mikyll/JavaFX-MultiplayerLobbySystem/blob/main/gfx/example-kick.gif" alt="Kick user example"/></td>
+		<td><b>Client: set ready/not ready</b></td>
+		<td>The clients can set their state to ready or not ready. If everyone is ready, and the minimum user required is reached, the game can start.</td>
+		<td width="40%"><img src="https://github.com/mikyll/JavaFX-MultiplayerLobbySystem/blob/main/gfx/example-ready.gif" alt="."/></td>
 	</tr>
 	<tr>
-		<td><b>Client: set ready/not ready</b></td>
-		<td>If there's a user that isn't ready, the start button is disabled, even if the minimum required to start a game is reached.</td>
-		<td width="40%"><img src="https://github.com/mikyll/JavaFX-MultiplayerLobbySystem/blob/main/gfx/example-ready.gif" alt="."/></td>
+		<td><b>Server: kick a user</b></td>
+		<td>The server can kick any user out of the room. This is useful when the minimum users required to start the game is reached, but someone won't set their state to ready.</td>
+		<td width="40%"><img src="https://github.com/mikyll/JavaFX-MultiplayerLobbySystem/blob/main/gfx/example-kick.gif" alt="Kick user example"/></td>
 	</tr>
 	<tr>
 		<td><b>Chat</b></td>
@@ -81,7 +81,7 @@ Chat support using JavaFX and socket TCP (stream) to be used for Cluedo app
 	</tr>
 	<tr>
 		<td><b>Disconnection</b></td>
-		<td>The chat allows users to communicate in real time, showing the timestamp of the messages and the user that sent it. The chat also shows when users connect or disconnect and when they get kicked out from the server.</td>
+		<td>When the server leave the room or close the application, every user get disconnected.</td>
 		<td width="40%"><img src="" alt="."/></td>
 	</tr>
 </table>
