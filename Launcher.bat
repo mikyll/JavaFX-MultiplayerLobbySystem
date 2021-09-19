@@ -1,1 +1,0 @@
-fxjreWin\bin\java -jar JavaFX-MultiplayerLobbySystem.jar -m lobbysystem/application.Main
