@@ -114,14 +114,13 @@ to add:
 - use this template for CluedoApp
 
 ### Built With
-Per l'implementazione ho utilizzato Java 11 e JavaFX 11, come IDE Eclipse (versione 2020-03 (4.15.0)), e SceneBuilder per la creazione della grafica (file FXML). Vedere i passi seguiti per il [setup del progetto](https://github.com/mikyll/ROQuiz/blob/main/Project%20Setup.md).
+For the implementation I used Java 11 and JavaFX 11, Eclipse IDE (2020-03 (4.15.0)), and SceneBuilder to create the gui (FXML).
 
-versione Java: JavaSE-11 (jdk-11.0.11)<br/>
-versione JavaFX: JavaFX 11 (javafx-sdk-11.0.2)
+Java version: JavaSE-11 (jdk-11.0.11)<br/>
+JavaFX version: JavaFX 11 (javafx-sdk-11.0.2)
 
 ### References
 * [JavaFX-Chat](https://github.com/DomHeal/JavaFX-Chat)
-
 
 
 [downloads-shield]: https://img.shields.io/github/downloads/mikyll/JavaFX-MultiplayerLobbySystem/total
