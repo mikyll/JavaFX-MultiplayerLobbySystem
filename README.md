@@ -97,10 +97,11 @@ to add:
 - ~~move Controller methods (in a proper order)~~
 - ~~fix KickUser (removes the server too). The problem was that goBack(), instead of switchToMP, closed the connection, so client sent KICK and DISCONNECT before closing the socket~~
 - chat text message check length before sending (not more than 200 char?)
-- automatic textarea scrolling, to last message;
+- automatic textarea scrolling, to last message
+- add copy in notes when clicking on a username (inside a room)
 - server can enable/disable the chat(?)
 - catch Connection Reset & SocketException: Interrupted function call: accept failed, thrown when we back from the server room, when no one has been accepted yet
-- fix exception print stack (handle them in a more proper way).
+- fix exception print stack (handle them in a more proper way)
 - add timer after sending READY message
 - fix gui components to have proper dimension
 - add Datagram (UDP) variant
