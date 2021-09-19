@@ -15,8 +15,8 @@ Chat support using JavaFX and socket TCP (stream) to be used for Cluedo app.
 ### Demo
 <table style="border: none">
   <tr>
-    <td width="49.9%"><img src=".gif" alt="Server"/></td>
-    <td width="49.9%"><img src=".gif" alt="Client"/></td>
+    <td width="49.9%"><img src="example-server.gif" alt="Server"/></td>
+    <td width="49.9%"><img src="example-client.gif" alt="Client"/></td>
   </tr>
   <tr>
     <td>Create New Room (Server)</td>
