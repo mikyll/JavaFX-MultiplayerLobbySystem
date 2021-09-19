@@ -10,12 +10,10 @@
 <h1 align="center">JavaFX-MultiplayerLobbySystem</h1>
 JavaFX lobby system for multiplayer games with chat, ready toggle and kick buttons, using socket TCP by default.
 
-Features:
-- chat;
-- ready button;
-- kick user button (only the server, which created the room, can do this).
+Chat support using JavaFX and socket TCP (stream) to be used for Cluedo app.
 
-Chat support using JavaFX and socket TCP (stream) to be used for Cluedo app
+
+<a href="#contribute">contribute</a> 
 
 ### Demo
 
@@ -29,8 +27,6 @@ Chat support using JavaFX and socket TCP (stream) to be used for Cluedo app
     <td>Join Existing Room</td>
   </tr>
 </table>
-
-<a href="#contribuire">contribuire</a> 
 
 
 ### Execution
@@ -115,6 +111,7 @@ to add:
 - add an headless server to handle the room list (when a server creates a room it's inserted into the list, and the client can access that list to see those rooms)
 - add a ban list (nickname/IP)
 - check if the users get disconnected properly when closing the app by the Launcher
+- use this template for CluedoApp
 
 ### Built With
 Per l'implementazione ho utilizzato Java 11 e JavaFX 11, come IDE Eclipse (versione 2020-03 (4.15.0)), e SceneBuilder per la creazione della grafica (file FXML). Vedere i passi seguiti per il [setup del progetto](https://github.com/mikyll/ROQuiz/blob/main/Project%20Setup.md).
