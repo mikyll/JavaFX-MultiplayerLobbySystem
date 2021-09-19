@@ -247,7 +247,7 @@
                   </VBox>
                   <VBox prefHeight="380.0" prefWidth="300.0">
                      <children>
-                        <TextArea fx:id="textAreaChatS" editable="false" minHeight="100.0" prefHeight="350.0" prefWidth="300.0" />
+                        <TextArea fx:id="textAreaChatS" editable="false" minHeight="100.0" prefHeight="350.0" prefWidth="300.0" wrapText="true" />
                         <HBox prefHeight="30.0" prefWidth="300.0">
                            <children>
                               <TextField fx:id="textFieldChatS" onKeyPressed="#enterChatHandleS" prefHeight="30.0" prefWidth="250.0" />
@@ -280,7 +280,7 @@
                   </VBox>
                   <VBox prefHeight="400.0" prefWidth="300.0">
                      <children>
-                        <TextArea fx:id="textAreaChatC" editable="false" prefHeight="370.0" prefWidth="300.0" />
+                        <TextArea fx:id="textAreaChatC" editable="false" prefHeight="370.0" prefWidth="300.0" wrapText="true" />
                         <HBox prefHeight="30.0" prefWidth="300.0">
                            <children>
                               <TextField fx:id="textFieldChatC" minHeight="30.0" minWidth="100.0" onKeyPressed="#enterChatHandleC" prefHeight="30.0" prefWidth="250.0" />
