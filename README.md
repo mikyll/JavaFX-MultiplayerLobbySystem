@@ -47,7 +47,7 @@ Chat support using JavaFX and socket TCP (stream) to be used for Cluedo app
 	<tr>
 		<td><b>Listen server<b/></td>
     		<td>The network topology that has been used is the <i>Listen server</i>: <b>a client can become the server, and will host the game for other clients</b>. Basically, when a client creates a new room it becomes a server, hosting the connection for other clients that will send a request and join the room. This solution could be a problem in case of a game that requires low latency (e.g. FPS), since the client that hosts the match doesn't experience any, but for a boardgame it's perfect, considering it can be built on TCP and the latency isn't a issue at all.</td>
-		<td width="40%"><img src="https://github.com/mikyll/JavaFX-MultiplayerLobbySystem/blob/main/gfx/listen-server-with-legend.png" alt="Listen server scheme"/></td>
+		<td width="40%"><img src="https://github.com/mikyll/JavaFX-MultiplayerLobbySystem/blob/main/gfx/listen-server-with-legend-whitebg.png" alt="Listen server scheme"/></td>
 	</tr>
 	<tr>
 		<td><b>Nickname & IP address validation</b></td>
@@ -67,7 +67,7 @@ Chat support using JavaFX and socket TCP (stream) to be used for Cluedo app
 	<tr>
 		<td><b>Client: set ready/not ready</b></td>
 		<td>The clients can set their state to ready or not ready. If everyone is ready, and the minimum user required is reached, the game can start.</td>
-		<td width="40%"><img src="https://github.com/mikyll/JavaFX-MultiplayerLobbySystem/blob/main/gfx/example-ready.gif" alt="."/></td>
+		<td width="40%"><img src="https://github.com/mikyll/JavaFX-MultiplayerLobbySystem/blob/main/gfx/example-ready.gif" alt="Ready/Not ready example"/></td>
 	</tr>
 	<tr>
 		<td><b>Server: kick a user</b></td>
@@ -77,12 +77,12 @@ Chat support using JavaFX and socket TCP (stream) to be used for Cluedo app
 	<tr>
 		<td><b>Chat</b></td>
 		<td>The chat allows users to communicate in real time, showing the timestamp of the messages and the user that sent it. The chat also shows when users connect or disconnect and when they get kicked out from the server.</td>
-		<td width="40%"><img src="" alt="."/></td>
+		<td width="40%"><img src="https://github.com/mikyll/JavaFX-MultiplayerLobbySystem/blob/main/gfx/example-chat.gif" alt="Chat example"/></td>
 	</tr>
 	<tr>
 		<td><b>Disconnection</b></td>
 		<td>When the server leave the room or close the application, every user get disconnected.</td>
-		<td width="40%"><img src="" alt="."/></td>
+		<td width="40%"><img src="https://github.com/mikyll/JavaFX-MultiplayerLobbySystem/blob/main/gfx/example-disconnection.gif" alt="Disconnection example"/></td>
 	</tr>
 </table>
 
@@ -101,8 +101,10 @@ to add:
 - ~~fix Join Existing Room validation~~
 - ~~move Controller methods (in a proper order)~~
 - ~~fix KickUser (removes the server too). The problem was that goBack(), instead of switchToMP, closed the connection, so client sent KICK and DISCONNECT before closing the socket~~
-- catch Connection Reset & SocketException: Interrupted function call: accept failed, thrown when we back from the server room, when no one has been accepted yet
+- chat text message check length before sending (not more than 200 char?)
 - automatic textarea scrolling, to last message;
+- server can enable/disable the chat(?)
+- catch Connection Reset & SocketException: Interrupted function call: accept failed, thrown when we back from the server room, when no one has been accepted yet
 - fix exception print stack (handle them in a more proper way).
 - add timer after sending READY message
 - fix gui components to have proper dimension
