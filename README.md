@@ -23,8 +23,8 @@ Chat support using JavaFX and socket TCP (stream) to be used for Cluedo app.
     <td width="49.9%"><img src=".gif" alt="Client"/></td>
   </tr>
   <tr>
-    <td>Create New Room</td>
-    <td>Join Existing Room</td>
+    <td>Create New Room (Server)</td>
+    <td>Join Existing Room (Client)</td>
   </tr>
 </table>
 
