@@ -81,7 +81,7 @@ Chat support using JavaFX and socket TCP (stream) to be used for Cluedo app
 	</tr>
 	<tr>
 		<td><b>Disconnection</b></td>
-		<td>When the server leave the room or close the application, every user get disconnected.</td>
+		<td>When the server leave the room or close the application, each connected user get disconnected.</td>
 		<td width="40%"><img src="https://github.com/mikyll/JavaFX-MultiplayerLobbySystem/blob/main/gfx/example-disconnection.gif" alt="Disconnection example"/></td>
 	</tr>
 </table>
