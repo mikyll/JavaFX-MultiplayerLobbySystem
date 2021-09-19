@@ -2,6 +2,6 @@ extra
 deploy
 
 fxjreWin
-createFXWinJRE
-recreateFXWinJRE
-Launcher
+createFXWinJRE.bat
+recreateFXWinJRE.bat
+Launcher.bat
