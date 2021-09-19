@@ -12,11 +12,7 @@ JavaFX lobby system for multiplayer games with chat, ready toggle and kick butto
 
 Chat support using JavaFX and socket TCP (stream) to be used for Cluedo app.
 
-
-<a href="#contribute">contribute</a> 
-
 ### Demo
-
 <table style="border: none">
   <tr>
     <td width="49.9%"><img src=".gif" alt="Server"/></td>
@@ -30,10 +26,11 @@ Chat support using JavaFX and socket TCP (stream) to be used for Cluedo app.
 
 
 ### Execution
-
+1. Download the [latest release](https://github.com/mikyll/JavaFX-MultiplayerLobbySystem/releases/latest).
+2. Extract the content of the archive.
+3. Execute the Launcher.
 
 ### Features
-
 <table>
 	<tr>
 		<td><b>Feature</b></td>
@@ -83,7 +80,9 @@ Chat support using JavaFX and socket TCP (stream) to be used for Cluedo app.
 </table>
 
 ### Documentation
+Read the [full docs](https://github.com/mikyll/JavaFX-MultiplayerLobbySystem/tree/main/docs).
 
++ main schemes
 
 ### Roadmap
 to add:
