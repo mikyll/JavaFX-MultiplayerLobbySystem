@@ -23,7 +23,7 @@
             <Insets left="80.0" right="80.0" />
          </padding>
          <children>
-            <Label prefHeight="50.0" prefWidth="183.0" text="Multiplayer" textFill="WHITE">
+            <Label alignment="CENTER" prefHeight="50.0" prefWidth="400.0" text="Multiplayer" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="30.0" />
                </font>
@@ -42,17 +42,14 @@
          </children>
       </VBox>
       <VBox fx:id="vboxCreateRoom" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: black;" visible="false">
-         <padding>
-            <Insets left="60.0" right="60.0" />
-         </padding>
          <children>
-            <Label prefHeight="50.0" prefWidth="183.0" text="Create Room" textFill="WHITE">
+            <Label alignment="CENTER" prefHeight="50.0" prefWidth="400.0" text="Create Room" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="30.0" />
                </font>
             </Label>
             <Separator prefHeight="50.0" prefWidth="480.0" visible="false" />
-            <VBox prefHeight="200.0" prefWidth="480.0" spacing="20.0">
+            <VBox prefHeight="200.0" prefWidth="600.0" spacing="20.0">
                <children>
                   <HBox alignment="CENTER" prefHeight="30.0" prefWidth="480.0">
                      <children>
@@ -154,13 +151,16 @@
                </font>
             </Button>
          </children>
+         <padding>
+            <Insets left="60.0" right="60.0" />
+         </padding>
       </VBox>
       <VBox fx:id="vboxJoinRoom" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: black;" visible="false">
          <padding>
             <Insets left="60.0" right="60.0" />
          </padding>
          <children>
-            <Label prefHeight="50.0" prefWidth="150.0" text="Join Room" textFill="WHITE">
+            <Label alignment="CENTER" prefHeight="50.0" prefWidth="400.0" text="Join Room" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="30.0" />
                </font>
@@ -250,8 +250,8 @@
                         <TextArea fx:id="textAreaChatS" editable="false" minHeight="100.0" prefHeight="350.0" prefWidth="300.0" wrapText="true" />
                         <HBox prefHeight="30.0" prefWidth="300.0">
                            <children>
-                              <TextField fx:id="textFieldChatS" onKeyPressed="#enterChatHandleS" prefHeight="30.0" prefWidth="250.0" />
-                              <Button fx:id="buttonChatS" mnemonicParsing="false" onAction="#sendMessageS" prefHeight="30.0" prefWidth="50.0" text="Send" />
+                              <TextField fx:id="textFieldChatS" onKeyPressed="#enterChatHandleS" prefHeight="30.0" prefWidth="240.0" />
+                              <Button fx:id="buttonChatS" mnemonicParsing="false" onAction="#sendMessageS" prefHeight="30.0" prefWidth="60.0" text="Send" />
                            </children>
                         </HBox>
                      </children>
@@ -268,7 +268,7 @@
                      <children>
                         <Label prefHeight="30.0" prefWidth="280.0" text="User list:" textFill="WHITE">
                            <font>
-                              <Font size="20.0" />
+                              <Font name="System Bold" size="20.0" />
                            </font>
                         </Label>
                         <ListView fx:id="listViewUsersC" prefHeight="300.0" prefWidth="280.0" style="-fx-background-color: black; -fx-text-fill: white;" />
@@ -283,8 +283,8 @@
                         <TextArea fx:id="textAreaChatC" editable="false" prefHeight="370.0" prefWidth="300.0" wrapText="true" />
                         <HBox prefHeight="30.0" prefWidth="300.0">
                            <children>
-                              <TextField fx:id="textFieldChatC" minHeight="30.0" minWidth="100.0" onKeyPressed="#enterChatHandleC" prefHeight="30.0" prefWidth="250.0" />
-                              <Button fx:id="buttonChatC" mnemonicParsing="false" onAction="#sendMessageC" prefHeight="30.0" prefWidth="50.0" text="Send" />
+                              <TextField fx:id="textFieldChatC" minHeight="30.0" minWidth="100.0" onKeyPressed="#enterChatHandleC" prefHeight="30.0" prefWidth="240.0" />
+                              <Button fx:id="buttonChatC" mnemonicParsing="false" onAction="#sendMessageC" prefHeight="30.0" prefWidth="60.0" text="Send" />
                            </children>
                         </HBox>
                      </children>
