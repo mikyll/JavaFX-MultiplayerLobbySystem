@@ -51,7 +51,7 @@
             <Separator prefHeight="50.0" prefWidth="480.0" visible="false" />
             <VBox prefHeight="200.0" prefWidth="600.0" spacing="20.0">
                <children>
-                  <HBox alignment="CENTER" prefHeight="30.0" prefWidth="480.0">
+                  <HBox alignment="CENTER" prefHeight="30.0" prefWidth="600.0">
                      <children>
                         <Label prefHeight="30.0" prefWidth="150.0" text="Nickname:" textFill="WHITE">
                            <font>
@@ -59,18 +59,21 @@
                            </font>
                         </Label>
                         <TextField fx:id="textFieldNicknameS" onKeyTyped="#validateNicknameS" prefHeight="30.0" prefWidth="180.0" />
-                        <TextFlow fx:id="labelErrorNicknameS" prefHeight="30.0" prefWidth="150.0" visible="false">
+                        <TextFlow fx:id="labelErrorNicknameS" prefHeight="30.0" prefWidth="210.0" visible="false">
                            <children>
-                              <Label prefHeight="18.0" prefWidth="140.0" text="Nickname must be from 3" textFill="RED" />
-                              <Label prefHeight="18.0" prefWidth="140.0" text="to 15 alphanum char long." textFill="RED" />
+                              <Label prefHeight="18.0" prefWidth="200.0" text="Nickname must be from 3" textFill="RED" />
+                              <Label prefHeight="18.0" prefWidth="200.0" text="to 15 alphanum char long." textFill="RED" />
                            </children>
                            <padding>
                               <Insets left="10.0" />
                            </padding>
                         </TextFlow>
                      </children>
+                     <padding>
+                        <Insets left="60.0" />
+                     </padding>
                   </HBox>
-                  <HBox alignment="CENTER_LEFT" prefHeight="30.0" prefWidth="480.0">
+                  <HBox alignment="CENTER_LEFT" prefHeight="30.0" prefWidth="600.0">
                      <children>
                         <Label prefHeight="30.0" prefWidth="150.0" text="Room size:" textFill="WHITE">
                            <font>
@@ -131,6 +134,9 @@
                            </children>
                         </HBox>
                      </children>
+                     <padding>
+                        <Insets left="60.0" right="60.0" />
+                     </padding>
                   </HBox>
                   <HBox alignment="CENTER_LEFT" prefHeight="35.0" prefWidth="480.0" visible="false">
                      <children>
@@ -151,14 +157,8 @@
                </font>
             </Button>
          </children>
-         <padding>
-            <Insets left="60.0" right="60.0" />
-         </padding>
       </VBox>
       <VBox fx:id="vboxJoinRoom" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: black;" visible="false">
-         <padding>
-            <Insets left="60.0" right="60.0" />
-         </padding>
          <children>
             <Label alignment="CENTER" prefHeight="50.0" prefWidth="400.0" text="Join Room" textFill="WHITE">
                <font>
@@ -166,7 +166,7 @@
                </font>
             </Label>
             <Separator prefHeight="50.0" prefWidth="480.0" visible="false" />
-            <VBox prefHeight="200.0" prefWidth="480.0" spacing="20.0">
+            <VBox prefHeight="200.0" prefWidth="600.0" spacing="20.0">
                <children>
                   <HBox alignment="CENTER_LEFT" prefHeight="30.0" prefWidth="240.0">
                      <children>
@@ -176,16 +176,19 @@
                            </font>
                         </Label>
                         <TextField fx:id="textFieldNicknameC" onKeyTyped="#validateNicknameAddressC" prefHeight="30.0" prefWidth="180.0" />
-                        <TextFlow fx:id="labelErrorNicknameC" prefHeight="30.0" prefWidth="150.0" visible="false">
+                        <TextFlow fx:id="labelErrorNicknameC" prefHeight="30.0" prefWidth="210.0" visible="false">
                            <children>
-                              <Label prefHeight="18.0" prefWidth="140.0" text="Nickname must be from 3" textFill="RED" />
-                              <Label prefHeight="18.0" prefWidth="140.0" text="to 15 alphanum char long." textFill="RED" />
+                              <Label prefHeight="18.0" prefWidth="200.0" text="Nickname must be from 3" textFill="RED" />
+                              <Label prefHeight="18.0" prefWidth="200.0" text="to 15 alphanum char long." textFill="RED" />
                            </children>
                            <padding>
                               <Insets left="10.0" />
                            </padding>
                         </TextFlow>
                      </children>
+                     <padding>
+                        <Insets left="60.0" />
+                     </padding>
                   </HBox>
                   <HBox alignment="CENTER_LEFT" prefHeight="30.0" prefWidth="240.0">
                      <children>
@@ -201,10 +204,13 @@
                            </padding>
                         </Label>
                      </children>
+                     <padding>
+                        <Insets left="60.0" right="60.0" />
+                     </padding>
                   </HBox>
                   <HBox fx:id="hboxConnection" alignment="CENTER" prefHeight="30.0" prefWidth="242.0" spacing="10.0" visible="false">
                      <children>
-                        <Label prefHeight="18.0" prefWidth="130.0" text="Connecting to server..." textFill="WHITE" />
+                        <Label alignment="CENTER" prefHeight="18.0" prefWidth="150.0" text="Connecting to server..." textFill="WHITE" />
                         <ImageView fitHeight="20.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../resources/icon-loading.gif" />
@@ -232,7 +238,7 @@
                         <ListView fx:id="listViewUsersS" prefHeight="300.0" prefWidth="300.0" style="-fx-background-color: black; -fx-text-fill: white;" />
                         <HBox alignment="TOP_CENTER" prefHeight="30.0" prefWidth="300.0" spacing="20.0">
                            <children>
-                              <Button fx:id="buttonStartGame" mnemonicParsing="false" onAction="#startGame" prefHeight="30.0" prefWidth="80.0" text="Start game" />
+                              <Button fx:id="buttonStartGame" mnemonicParsing="false" onAction="#startGame" prefHeight="30.0" prefWidth="100.0" text="Start game" />
                               <Button fx:id="buttonOpenClose" mnemonicParsing="false" onAction="#toggleOpenClose" prefHeight="30.0" prefWidth="74.0" text="Open">
                                  <graphic>
                                     <Label fx:id="labelOpenClose" prefHeight="17.0" prefWidth="17.0" style="-fx-background-color: lime;" />
@@ -260,7 +266,7 @@
             </HBox>
          </children>
       </VBox>
-      <VBox fx:id="vboxClientRoom" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" spacing="5.0" style="-fx-background-color: black;" visible="false">
+      <VBox fx:id="vboxClientRoom" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" spacing="5.0" style="-fx-background-color: black;">
          <children>
             <HBox prefHeight="400.0" prefWidth="600.0">
                <children>
