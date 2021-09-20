@@ -655,7 +655,7 @@ public class Controller {
 	private void setServerAddress()
 	{
 		try {
-			this.labelServerIP.setText("Server IP address: " + InetAddress.getLocalHost().toString().split("/")[1]);
+			this.labelServerIP.setText("Server IP address: " + InetAddress.getLocalHost().getHostAddress());
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		}
