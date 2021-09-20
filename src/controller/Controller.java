@@ -186,11 +186,11 @@ public class Controller {
 			// hbox server
 			hbox = new HBox();
 			hbox.setPrefSize(300, 25);
-			hbox.setSpacing(20);
+			hbox.setSpacing(10);
 			hbox.setVisible(false);
 			// username server
 			l = new Label("");
-			l.setPrefWidth(150);
+			l.setPrefWidth(180);
 			l.setTextFill(Paint.valueOf("white"));
 			hbox.getChildren().add(l);
 			this.listUsernameS.add(l);
