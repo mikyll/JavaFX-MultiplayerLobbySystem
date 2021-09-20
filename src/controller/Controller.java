@@ -159,11 +159,11 @@ public class Controller {
 			// hbox client
 			HBox hbox = new HBox();
 			hbox.setPrefSize(280, 25);
-			hbox.setSpacing(20);
+			hbox.setSpacing(10);
 			hbox.setVisible(false);
 			// username client
 			Label l = new Label("");
-			l.setPrefWidth(150);
+			l.setPrefWidth(200);
 			l.setTextFill(Paint.valueOf("white"));
 			hbox.getChildren().add(l);
 			this.listUsernameC.add(l);
@@ -284,6 +284,8 @@ public class Controller {
 	{
 		this.vboxMP.setVisible(false);
 		this.vboxJoinRoom.setVisible(true);
+		
+		this.hboxConnection.setVisible(false);
 		
 		// reset JER fields?
 		
