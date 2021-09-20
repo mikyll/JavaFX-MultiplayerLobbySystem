@@ -84,6 +84,10 @@ public class ServerStream implements IServer{
 				{
 					new Handler(this.listener.accept()).start();
 				}
+			} catch(SocketException e) {
+				if(e.getMessage().contains("accept failed"))
+					System.out.println("Server (" + this.getId() + "): stopped listening for connections");
+				else e.printStackTrace();
 			} catch (IOException e) {
 				System.out.println("Server: error while trying to accept a new connection");
 				e.printStackTrace();
@@ -162,6 +166,13 @@ public class ServerStream implements IServer{
 									mReply.setNickname("");
 									mReply.setContent("The room is full");
 								}
+								// the user is banned
+								/*else if()
+								{
+									mReply.setMsgType(MessageType.CONNECT_FAILED);
+									mReply.setNickname("");
+									mReply.setContent("You've been banned from this room.");
+								}*/
 								// the user cannot rejoin after being kicked
 								/*else if(!users_rejoin)
 								{
