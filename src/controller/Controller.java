@@ -1,10 +1,15 @@
 package controller;
 
+import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.net.InterfaceAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Enumeration;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -654,8 +659,12 @@ public class Controller {
 	}
 	private void setServerAddress()
 	{
-		try {
-			this.labelServerIP.setText("Server IP address: " + InetAddress.getLocalHost().getHostAddress());
+		try(final DatagramSocket socket = new DatagramSocket()) {
+			socket.connect(InetAddress.getByName("8.8.8.8"), 10002);
+			String privateIP = socket.getLocalAddress().getHostAddress();
+			this.labelServerIP.setText("Private Server IP address: " + privateIP);
+		} catch (SocketException e) {
+			e.printStackTrace();
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		}

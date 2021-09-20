@@ -6,6 +6,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.net.BindException;
+import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -32,6 +33,7 @@ public class ServerStream implements IServer{
 	
 	private ArrayList<User> users;
 	private ArrayList<ObjectOutputStream> writers;
+	// private ArrayList<User> banned_users;
 	
 	public ServerStream(Controller controller, String nickname, int usersRequired, int maxCapacity, boolean rejoin)
 	{
@@ -57,10 +59,14 @@ public class ServerStream implements IServer{
 			if(e instanceof BindException)
 			{
 				System.out.println("Server: another socket is already binded to this address and port");
-				try {
-					this.controller.showAlert(AlertType.ERROR, "Room creation failed", "Another socket is already binded to " + InetAddress.getLocalHost().toString().split("/")[1] + ":" + PORT);
+				try(final DatagramSocket socket = new DatagramSocket()) {
+					socket.connect(InetAddress.getByName("8.8.8.8"), 10002);
+					String privateIP = socket.getLocalAddress().getHostAddress();
+					this.controller.showAlert(AlertType.ERROR, "Room creation failed", "Another socket is already binded to " + privateIP + ":" + PORT);
+				} catch (SocketException e1) {
+					e.printStackTrace();
 				} catch (UnknownHostException e1) {
-					e1.printStackTrace();
+					e.printStackTrace();
 				}
 			}
 		}
@@ -141,7 +147,7 @@ public class ServerStream implements IServer{
 					Message incomingMsg = (Message) this.input.readObject();
 					if(incomingMsg != null)
 					{
-						System.out.println("Server (" + this.getId() + "): received " + incomingMsg.toString()); // test
+						System.out.println("Server (" + this.getId() + "): received " + incomingMsg.toString()); // 
 						switch(incomingMsg.getMsgType())
 						{
 							case CONNECT:
@@ -188,6 +194,7 @@ public class ServerStream implements IServer{
 								// the connection can be accepted
 								else
 								{
+									System.out.println("InetAddress: " + this.socket.getRemoteSocketAddress() + ", " + this.socket.getInetAddress() + ", " + this.socket.getLocalAddress() + ", " + this.socket.getLocalSocketAddress()); // test
 									// add user and writer to list
 									User u = new User(incomingMsg.getNickname());
 									users.add(u);

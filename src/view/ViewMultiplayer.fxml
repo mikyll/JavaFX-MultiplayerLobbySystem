@@ -230,7 +230,7 @@
       </VBox>
       <VBox fx:id="vboxServerRoom" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: black;">
          <children>
-            <Label fx:id="labelServerIP" prefHeight="20.0" prefWidth="590.0" text="Server IP address: X.X.X.X" textFill="WHITE" />
+            <Label fx:id="labelServerIP" prefHeight="20.0" prefWidth="590.0" text="Private Server IP address: X.X.X.X" textFill="WHITE" />
             <HBox prefHeight="380.0" prefWidth="600.0">
                <children>
                   <VBox alignment="TOP_CENTER" prefHeight="380.0" prefWidth="300.0">
@@ -288,7 +288,7 @@
             </Label>
             <HBox prefHeight="220.0" prefWidth="400.0">
                <children>
-                  <ListView prefHeight="217.0" prefWidth="400.0" />
+                  <ListView prefHeight="217.0" prefWidth="400.0" style="-fx-background-color: black; -fx-text-fill: white;" />
                </children>
             </HBox>
             <HBox prefHeight="32.0" prefWidth="400.0" spacing="10.0">
