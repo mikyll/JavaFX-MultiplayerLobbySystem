@@ -118,7 +118,8 @@ Java version: JavaSE-11 (jdk-11.0.11)<br/>
 JavaFX version: JavaFX 11 (javafx-sdk-11.0.2)
 
 ### References
-* [JavaFX-Chat](https://github.com/DomHeal/JavaFX-Chat)
+* Idea from: [JavaFX-Chat](https://github.com/DomHeal/JavaFX-Chat) by DomHeal
+* Icons: [Icons8](https://icons8.com/)
 
 
 [downloads-shield]: https://img.shields.io/github/downloads/mikyll/JavaFX-MultiplayerLobbySystem/total
