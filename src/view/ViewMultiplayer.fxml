@@ -18,7 +18,7 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.Controller">
    <children>
-      <VBox fx:id="vboxMP" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" spacing="20.0" style="-fx-background-color: black;" visible="false">
+      <VBox fx:id="vboxMP" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" spacing="20.0" style="-fx-background-color: black;">
          <padding>
             <Insets left="80.0" right="80.0" />
          </padding>
@@ -228,14 +228,14 @@
             </Button>
          </children>
       </VBox>
-      <VBox fx:id="vboxServerRoom" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: black;">
+      <VBox fx:id="vboxServerRoom" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: black;" visible="false">
          <children>
             <Label fx:id="labelServerIP" prefHeight="20.0" prefWidth="590.0" text="Private Server IP address: X.X.X.X" textFill="WHITE" />
             <HBox prefHeight="380.0" prefWidth="600.0">
                <children>
                   <VBox alignment="TOP_CENTER" prefHeight="380.0" prefWidth="300.0">
                      <children>
-                        <ListView fx:id="listViewUsersS" prefHeight="300.0" prefWidth="300.0" style="-fx-background-color: black; -fx-text-fill: white;" />
+                        <ListView id="US" fx:id="listViewUsersS" prefHeight="300.0" prefWidth="300.0" style="-fx-background-color: black; -fx-text-fill: white;" />
                         <HBox alignment="TOP_CENTER" prefHeight="30.0" prefWidth="300.0" spacing="10.0">
                            <children>
                               <Button fx:id="buttonRoomSettings" mnemonicParsing="false" onAction="#openRoomSettings" prefHeight="30.0" prefWidth="30.0">
@@ -275,7 +275,18 @@
             </HBox>
          </children>
       </VBox>
-      <VBox fx:id="vboxRoomSettings" alignment="TOP_RIGHT" layoutX="100.0" layoutY="50.0" prefHeight="300.0" prefWidth="400.0" spacing="5.0" style="-fx-background-color: black;">
+      <VBox fx:id="vboxLabelServerControls" alignment="CENTER" layoutX="188.0" layoutY="30.0" prefHeight="20.0" prefWidth="110.0" style="-fx-background-color: black;" visible="false">
+         <children>
+            <HBox alignment="CENTER_RIGHT" prefHeight="18.0" prefWidth="110.0">
+               <children>
+                  <Label alignment="CENTER" prefWidth="40.0" text="Ready" textFill="WHITE" />
+                  <Label alignment="CENTER" prefWidth="30.0" text="Kick" textFill="WHITE" />
+                  <Label alignment="CENTER" prefWidth="30.0" text="Ban" textFill="WHITE" />
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+      <VBox fx:id="vboxRoomSettings" alignment="TOP_RIGHT" layoutX="100.0" layoutY="50.0" prefHeight="300.0" prefWidth="400.0" spacing="5.0" style="-fx-background-color: black;" visible="false">
          <children>
             <Label alignment="TOP_RIGHT" onMouseClicked="#closeRoomSettings" prefHeight="30.0" prefWidth="30.0">
                <graphic>
@@ -288,14 +299,14 @@
             </Label>
             <HBox prefHeight="220.0" prefWidth="400.0">
                <children>
-                  <ListView prefHeight="217.0" prefWidth="400.0" style="-fx-background-color: black; -fx-text-fill: white;" />
+                  <ListView id="BU" fx:id="listViewBannedUsers" prefHeight="217.0" prefWidth="400.0" style="-fx-background-color: black; -fx-text-fill: white;" />
                </children>
             </HBox>
-            <HBox prefHeight="32.0" prefWidth="400.0" spacing="10.0">
+            <HBox alignment="CENTER" prefHeight="32.0" prefWidth="400.0" spacing="10.0" visible="false">
                <children>
-                  <TextField prefHeight="30.0" prefWidth="140.0" />
-                  <Button mnemonicParsing="false" prefHeight="30.0" prefWidth="110.0" text="Ban Nickname" />
-                  <Button mnemonicParsing="false" prefHeight="30.0" prefWidth="120.0" text="Ban IP address" />
+                  <TextField fx:id="textFieldBanUsername" prefHeight="30.0" prefWidth="150.0" />
+                  <TextField fx:id="textFieldBanAddress" prefHeight="30.0" prefWidth="150.0" />
+                  <Button fx:id="buttonBan" mnemonicParsing="false" onAction="#banUser" prefHeight="30.0" prefWidth="60.0" text="Ban" />
                </children>
             </HBox>
          </children>
@@ -314,7 +325,7 @@
                               <Font name="System Bold" size="20.0" />
                            </font>
                         </Label>
-                        <ListView fx:id="listViewUsersC" prefHeight="300.0" prefWidth="280.0" style="-fx-background-color: black; -fx-text-fill: white;" />
+                        <ListView id="UC" fx:id="listViewUsersC" prefHeight="300.0" prefWidth="280.0" style="-fx-background-color: black; -fx-text-fill: white;" />
                         <Button fx:id="buttonReady" mnemonicParsing="false" onAction="#toggleReady" prefHeight="26.0" prefWidth="90.0" style="-fx-background-color: red;" text="Not ready" />
                      </children>
                      <padding>

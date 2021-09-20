@@ -147,7 +147,7 @@ public class ServerStream implements IServer{
 					Message incomingMsg = (Message) this.input.readObject();
 					if(incomingMsg != null)
 					{
-						System.out.println("Server (" + this.getId() + "): received " + incomingMsg.toString()); // 
+						System.out.println("Server (" + this.getId() + "): received " + incomingMsg.toString());
 						switch(incomingMsg.getMsgType())
 						{
 							case CONNECT:
@@ -172,7 +172,14 @@ public class ServerStream implements IServer{
 									mReply.setNickname("");
 									mReply.setContent("The room is full");
 								}
-								// the user is banned
+								// the username is banned
+								/*else if()
+								{
+									mReply.setMsgType(MessageType.CONNECT_FAILED);
+									mReply.setNickname("");
+									mReply.setContent("You've been banned from this room.");
+								}*/
+								// this IP address is banned
 								/*else if()
 								{
 									mReply.setMsgType(MessageType.CONNECT_FAILED);
@@ -196,7 +203,7 @@ public class ServerStream implements IServer{
 								{
 									System.out.println("InetAddress: " + this.socket.getRemoteSocketAddress() + ", " + this.socket.getInetAddress() + ", " + this.socket.getLocalAddress() + ", " + this.socket.getLocalSocketAddress()); // test
 									// add user and writer to list
-									User u = new User(incomingMsg.getNickname());
+									User u = new User(incomingMsg.getNickname(), this.socket.getInetAddress());
 									users.add(u);
 									writers.add(this.output);
 									controller.addUser(u);
@@ -389,6 +396,29 @@ public class ServerStream implements IServer{
 				return false;
 		}
 		return this.users.size() >= this.minToStartGame ? true : false;
+	}
+	
+	@Override
+	public User sendBanUser(String banNickname)
+	{
+		Message msg = new Message(MessageType.BAN, controller.getCurrentTimestamp(), banNickname, "You have been banned from the room");
+		User result = null;
+		// send ban to everyone (the nickname indicates which user is getting banned)
+		this.sendMessage(msg);
+		
+		// remove user and writer
+		for(int i = 1; i < this.users.size(); i++)
+		{
+			if(this.users.get(i).getNickname().equals(banNickname))
+			{
+				result = this.users.get(i);
+				this.users.remove(i);
+				this.writers.remove(i);
+				break;
+			}
+		}
+		
+		return result;
 	}
 	
 	private void forwardMessage(Message msg)

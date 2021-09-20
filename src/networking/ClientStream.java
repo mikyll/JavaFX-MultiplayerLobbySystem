@@ -148,6 +148,31 @@ public class ClientStream implements IClient {
 								
 								break;
 							}
+							case BAN:
+							{
+								// this user got banned
+								if(incomingMsg.getNickname().equals(nickname))
+								{
+									// switch view
+									controller.switchToMP();
+									
+									// close connection (?)
+									//this.socket.close();
+									
+									// show alert
+									controller.showAlert(AlertType.INFORMATION, "Disconnected from server", incomingMsg.getContent());
+								}
+								// another user got banned
+								else
+								{
+									controller.removeUser(incomingMsg.getNickname());
+									
+									// add the message to the chat textArea
+									controller.addToTextArea(incomingMsg.getTimestamp() + " " + incomingMsg.getNickname() + " has been banned");
+								}
+								
+								break;
+							}
 							case DISCONNECT:
 							{
 								// the room has been closed (connection lost from the server)
