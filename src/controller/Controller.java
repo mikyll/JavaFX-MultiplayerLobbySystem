@@ -190,7 +190,7 @@ public class Controller {
 			hbox.setVisible(false);
 			// username server
 			l = new Label("");
-			l.setPrefWidth(180);
+			l.setPrefWidth(200);
 			l.setTextFill(Paint.valueOf("white"));
 			hbox.getChildren().add(l);
 			this.listUsernameS.add(l);
@@ -203,7 +203,7 @@ public class Controller {
 			this.listReadyS.add(l);
 			// kick button
 			Button b = new Button("Kick");
-			b.setPrefSize(70, 20);
+			b.setPrefSize(50, 20);
 			b.setStyle("-fx-font-size: 15.0");
 			b.setOnAction(this::kickUser);
 			b.setVisible(i == 0 ? false : true); // NB: visible only if i >= 1
