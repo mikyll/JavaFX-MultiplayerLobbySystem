@@ -286,17 +286,25 @@
             </HBox>
          </children>
       </VBox>
-      <VBox fx:id="vboxRoomSettings" alignment="TOP_RIGHT" layoutX="100.0" layoutY="50.0" prefHeight="300.0" prefWidth="400.0" spacing="5.0" style="-fx-background-color: black;" visible="false">
+      <VBox fx:id="vboxRoomSettings" alignment="TOP_RIGHT" layoutX="100.0" layoutY="50.0" prefHeight="300.0" prefWidth="400.0" spacing="5.0" style="-fx-background-color: black;">
          <children>
-            <Label alignment="TOP_RIGHT" onMouseClicked="#closeRoomSettings" prefHeight="30.0" prefWidth="30.0">
-               <graphic>
-                  <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../resources/icon-close-white36.png" />
-                     </image>
-                  </ImageView>
-               </graphic>
-            </Label>
+            <HBox alignment="BOTTOM_RIGHT" prefHeight="30.0" prefWidth="400.0" spacing="10.0">
+               <children>
+                  <Separator orientation="VERTICAL" prefHeight="30.0" prefWidth="10.0" visible="false" />
+                  <Label prefHeight="18.0" prefWidth="130.0" text="Nickname" textFill="WHITE" />
+                  <Label prefWidth="130.0" text="Address" textFill="WHITE" />
+                  <Separator orientation="VERTICAL" prefHeight="30.0" prefWidth="64.0" visible="false" />
+                  <Label alignment="TOP_RIGHT" onMouseClicked="#closeRoomSettings" prefHeight="30.0" prefWidth="30.0">
+                     <graphic>
+                        <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../resources/icon-close-white36.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Label>
+               </children>
+            </HBox>
             <HBox prefHeight="220.0" prefWidth="400.0">
                <children>
                   <ListView id="BU" fx:id="listViewBannedUsers" prefHeight="217.0" prefWidth="400.0" style="-fx-background-color: black; -fx-text-fill: white;" />

@@ -8,4 +8,5 @@ public interface IServer {
 	public void sendClose();
 	public boolean checkCanStartGame();
 	public User sendBanUser(String banNickname);
+	public void removeBan(String address);
 }

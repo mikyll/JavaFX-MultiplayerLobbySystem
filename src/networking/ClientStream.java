@@ -200,7 +200,7 @@ public class ClientStream implements IClient {
 							}
 							default:
 							{
-								System.out.println("Client: invalid message type received: " + incomingMsg.getMsgType());
+								System.out.println("Client: received unknow message type: " + incomingMsg.toString());
 								break;
 							}
 						}
@@ -213,10 +213,13 @@ public class ClientStream implements IClient {
 					controller.showAlert(AlertType.ERROR, "Connection failed", e.getMessage());
 					controller.showConnectingBox(false);
 				}
-				else e.printStackTrace();
-			} catch (IOException e) {
-				System.out.println("Errore stream");
+				else if(e.getMessage().equals("Connection reset"))
+				{
+					System.out.println("Stream closed");
+				}
 				e.printStackTrace();
+			} catch (IOException e) {
+				System.out.println("Stream closed");
 			} catch (ClassNotFoundException e) {
 				e.printStackTrace();
 			}

@@ -13,6 +13,7 @@ import java.util.regex.Pattern;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
@@ -447,6 +448,7 @@ public class Controller {
 		this.connectedUsers = 1;
 		
 		// reset Banned Users list
+		this.listViewBannedUsers.getItems().clear();
 		this.listBannedUsername = new ArrayList<Label>();
 		this.listBannedAddress = new ArrayList<Label>();
 		this.listRemoveBan = new ArrayList<Button>();
@@ -544,8 +546,6 @@ public class Controller {
 		{
 			if(this.listImageBan.get(i).equals(event.getTarget()))
 			{
-				System.out.println("Server: banned user " + this.listUsernameS.get(i).getText());
-				
 				// remove user from the listView
 				this.removeUser(this.listUsernameS.get(i).getText());
 				
@@ -555,14 +555,12 @@ public class Controller {
 				// ban and send Kick message
 				User u = this.server.sendBanUser(this.listUsernameS.get(i).getText());
 				this.addBannedUser(u.getNickname(), u.getAddress().getHostAddress());
-				//this.server.sendKickUser(this.listUsernameS.get(i).getText());
+				
+				System.out.println("Server: banned user " + u.getNickname() + " (" + u.getAddress().getHostAddress() + ")");
 				
 				break;
 			}
 		}
-		//this.server.banUser(this.);
-		// NB: pendere l'IP dal server
-		this.addBannedUser("", "");
 	}
 	@FXML public void openRoomSettings()
 	{
@@ -576,6 +574,28 @@ public class Controller {
 		this.buttonChatSendS.setDisable(true);
 		
 		this.vboxRoomSettings.setVisible(true);
+	}
+	@FXML public void removeBan(ActionEvent event)
+	{
+		// get the button index
+		for(int i = 0; i < this.listViewBannedUsers.getItems().size(); i++)
+		{
+			if(this.listRemoveBan.get(i).equals(event.getTarget()))
+			{
+				System.out.println("Server: user " + this.listBannedUsername.get(i).getText() + " (" + this.listBannedAddress.get(i).getText() + ") is no longer banned");
+				
+				// remove banned user from server
+				this.server.removeBan(this.listBannedAddress.get(i).getText());
+				
+				// add ban message to the textArea
+				this.addToTextArea(this.getCurrentTimestamp() + " " + this.listBannedUsername.get(i).getText() + " has is no longer banned");
+				
+				// remove  banned user from the listView
+				this.listViewBannedUsers.getItems().remove((HBox) this.listRemoveBan.get(i).getParent());
+				
+				break;
+			}
+		}
 	}
 	@FXML public void closeRoomSettings()
 	{
@@ -924,22 +944,22 @@ public class Controller {
 		hbox.setSpacing(10);
 		// banned username
 		Label l = new Label(nickname);
-		l.setPrefHeight(25);
+		l.setPrefSize(130, 25);
 		l.setTextFill(Paint.valueOf("white"));
 		hbox.getChildren().add(l);
 		this.listBannedUsername.add(l);
 		// banned address
 		l = new Label();
-		l.setPrefHeight(25);
+		l.setPrefSize(130, 25);
 		l.setTextFill(Paint.valueOf("white"));
 		l.setText(address.isEmpty() ? "" : address);
 		hbox.getChildren().add(l);
 		this.listBannedAddress.add(l);
 		// remove ban
 		Button b = new Button("Remove");
-		b.setPrefSize(90, 20);
+		b.setPrefSize(100, 20);
 		b.setStyle("-fx-font-size: 15.0");
-		//b.setOnAction(this::removeBan);
+		b.setOnAction(this::removeBan);
 		hbox.getChildren().add(b);
 		this.listRemoveBan.add(b);
 		
