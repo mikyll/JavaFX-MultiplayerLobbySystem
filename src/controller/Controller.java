@@ -46,6 +46,7 @@ public class Controller {
 	private NavState state;
 	
 	@FXML private VBox vboxBack;
+	@FXML private Button buttonBack;
 	
 	// MultiPlayer
 	@FXML private VBox vboxMP;
@@ -79,33 +80,35 @@ public class Controller {
 	@FXML private Button buttonJER;
 	
 	// MultiPlayer: Server
+	private IServer server;
 	@FXML private VBox vboxServerRoom;
 	@FXML private Label labelServerIP;
-	@FXML private TextArea textAreaChatS;
-	@FXML private TextField textFieldChatS;
-	@FXML private Button buttonChatS;
-	@FXML private Button buttonStartGame;
-	@FXML private Button buttonOpenClose;
-	@FXML private Label labelOpenClose;
 	@FXML private ListView<HBox> listViewUsersS;
-	private IServer server;
 	private ArrayList<Label> listUsernameS;
 	private ArrayList<Label> listReadyS;
 	private ArrayList<Button> listKick;
+	@FXML private Button buttonRoomSettings;
+	@FXML private Button buttonStartGame;
+	@FXML private Button buttonOpenClose;
+	@FXML private Label labelOpenClose;
+	@FXML private TextArea textAreaChatS;
+	@FXML private TextField textFieldChatS;
+	@FXML private Button buttonChatSendS;
+	
+	// MultiPlayer: RoomSettings
+	@FXML private VBox vboxRoomSettings;
 	
 	// MultiPlayer: Client
-	@FXML private VBox vboxClientRoom;
-	@FXML private TextArea textAreaChatC;
-	@FXML private TextField textFieldChatC;
-	@FXML private Button buttonChatC;
-	@FXML private Button buttonReady;
-	@FXML private ListView<HBox> listViewUsersC;
 	private IClient client;
+	@FXML private VBox vboxClientRoom;
+	@FXML private ListView<HBox> listViewUsersC;
 	private ArrayList<Label> listUsernameC;
 	private ArrayList<Label> listReadyC;
 	private ArrayList<ImageView> listImage;
-	
-	
+	@FXML private Button buttonReady;
+	@FXML private TextArea textAreaChatC;
+	@FXML private TextField textFieldChatC;
+	@FXML private Button buttonChatSendC;
 	
 	private int connectedUsers;
 	
@@ -122,6 +125,7 @@ public class Controller {
 		this.vboxCreateRoom.setVisible(false);
 		this.vboxJoinRoom.setVisible(false);
 		this.vboxServerRoom.setVisible(false);
+		this.vboxRoomSettings.setVisible(false);
 		this.vboxClientRoom.setVisible(false);
 		
 		this.tformatter = new SimpleDateFormat("[HH:mm:ss]");
@@ -496,6 +500,32 @@ public class Controller {
 			}
 		}
 	}
+	@FXML public void openRoomSettings()
+	{
+		System.out.println("Open settings");
+		
+		this.buttonBack.setDisable(true);
+		this.buttonRoomSettings.setDisable(true);
+		this.buttonStartGame.setDisable(true);
+		this.buttonOpenClose.setDisable(true);
+		this.textFieldChatS.setDisable(true);
+		this.buttonChatSendS.setDisable(true);
+		
+		this.vboxRoomSettings.setVisible(true);
+	}
+	@FXML public void closeRoomSettings()
+	{
+		System.out.println("Close settings");
+		
+		this.buttonBack.setDisable(false);
+		this.buttonRoomSettings.setDisable(false);
+		this.buttonStartGame.setDisable(!this.server.checkCanStartGame());
+		this.buttonOpenClose.setDisable(false);
+		this.textFieldChatS.setDisable(false);
+		this.buttonChatSendS.setDisable(false);
+		
+		this.vboxRoomSettings.setVisible(false);
+	}
 	@FXML public void toggleOpenClose(ActionEvent event)
 	{
 		// close the room
@@ -693,13 +723,15 @@ public class Controller {
 	{
 		if(this.state == NavState.MP_CLIENT)
 		{
-			for(int i = 0; i < ROOM_CAPACITY; i++)
-			{
-				this.listViewUsersC.getItems().get(i).setVisible(false);
-				this.listUsernameC.get(i).setText("");
-				this.listReadyC.get(i).setStyle("-fx-background-color: red");
-				this.listImage.get(i).setVisible(false);
-			}
+			Platform.runLater(() -> {
+				for(int i = 0; i < ROOM_CAPACITY; i++)
+				{
+					this.listViewUsersC.getItems().get(i).setVisible(false);
+					this.listUsernameC.get(i).setText("");
+					this.listReadyC.get(i).setStyle("-fx-background-color: red");
+					this.listImage.get(i).setVisible(false);
+				}
+			});
 		}
 		else if(this.state == NavState.MP_SERVER)
 		{
@@ -800,7 +832,7 @@ public class Controller {
 	}
 	public void enableStartGame(boolean value)
 	{
-		this.buttonStartGame.setDisable(!value);
+		this.buttonStartGame.setDisable(!value || this.vboxRoomSettings.isVisible());
 	}
 	public void closeConnection()
 	{

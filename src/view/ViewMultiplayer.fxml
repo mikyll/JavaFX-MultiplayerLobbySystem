@@ -18,7 +18,7 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.Controller">
    <children>
-      <VBox fx:id="vboxMP" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" spacing="20.0" style="-fx-background-color: black;">
+      <VBox fx:id="vboxMP" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" spacing="20.0" style="-fx-background-color: black;" visible="false">
          <padding>
             <Insets left="80.0" right="80.0" />
          </padding>
@@ -228,7 +228,7 @@
             </Button>
          </children>
       </VBox>
-      <VBox fx:id="vboxServerRoom" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: black;" visible="false">
+      <VBox fx:id="vboxServerRoom" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: black;">
          <children>
             <Label fx:id="labelServerIP" prefHeight="20.0" prefWidth="590.0" text="Server IP address: X.X.X.X" textFill="WHITE" />
             <HBox prefHeight="380.0" prefWidth="600.0">
@@ -236,17 +236,26 @@
                   <VBox alignment="TOP_CENTER" prefHeight="380.0" prefWidth="300.0">
                      <children>
                         <ListView fx:id="listViewUsersS" prefHeight="300.0" prefWidth="300.0" style="-fx-background-color: black; -fx-text-fill: white;" />
-                        <HBox alignment="TOP_CENTER" prefHeight="30.0" prefWidth="300.0" spacing="20.0">
+                        <HBox alignment="TOP_CENTER" prefHeight="30.0" prefWidth="300.0" spacing="10.0">
                            <children>
+                              <Button fx:id="buttonRoomSettings" mnemonicParsing="false" onAction="#openRoomSettings" prefHeight="30.0" prefWidth="30.0">
+                                 <graphic>
+                                    <ImageView fitHeight="18.0" fitWidth="18.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../resources/icon-settings.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </Button>
                               <Button fx:id="buttonStartGame" mnemonicParsing="false" onAction="#startGame" prefHeight="30.0" prefWidth="100.0" text="Start game" />
-                              <Button fx:id="buttonOpenClose" mnemonicParsing="false" onAction="#toggleOpenClose" prefHeight="30.0" prefWidth="74.0" text="Open">
+                              <Button fx:id="buttonOpenClose" mnemonicParsing="false" onAction="#toggleOpenClose" prefHeight="30.0" prefWidth="80.0" text="Open">
                                  <graphic>
                                     <Label fx:id="labelOpenClose" prefHeight="17.0" prefWidth="17.0" style="-fx-background-color: lime;" />
                                  </graphic>
                               </Button>
                            </children>
                            <padding>
-                              <Insets left="87.0" />
+                              <Insets left="45.0" />
                            </padding>
                         </HBox>
                      </children>
@@ -257,7 +266,7 @@
                         <HBox prefHeight="30.0" prefWidth="300.0">
                            <children>
                               <TextField fx:id="textFieldChatS" onKeyPressed="#enterChatHandleS" prefHeight="30.0" prefWidth="240.0" />
-                              <Button fx:id="buttonChatS" mnemonicParsing="false" onAction="#sendMessageS" prefHeight="30.0" prefWidth="60.0" text="Send" />
+                              <Button fx:id="buttonChatSendS" mnemonicParsing="false" onAction="#sendMessageS" prefHeight="30.0" prefWidth="60.0" text="Send" />
                            </children>
                         </HBox>
                      </children>
@@ -266,7 +275,35 @@
             </HBox>
          </children>
       </VBox>
-      <VBox fx:id="vboxClientRoom" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" spacing="5.0" style="-fx-background-color: black;">
+      <VBox fx:id="vboxRoomSettings" alignment="TOP_RIGHT" layoutX="100.0" layoutY="50.0" prefHeight="300.0" prefWidth="400.0" spacing="5.0" style="-fx-background-color: black;">
+         <children>
+            <Label alignment="TOP_RIGHT" onMouseClicked="#closeRoomSettings" prefHeight="30.0" prefWidth="30.0">
+               <graphic>
+                  <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../resources/icon-close-white36.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Label>
+            <HBox prefHeight="220.0" prefWidth="400.0">
+               <children>
+                  <ListView prefHeight="217.0" prefWidth="400.0" />
+               </children>
+            </HBox>
+            <HBox prefHeight="32.0" prefWidth="400.0" spacing="10.0">
+               <children>
+                  <TextField prefHeight="30.0" prefWidth="140.0" />
+                  <Button mnemonicParsing="false" prefHeight="30.0" prefWidth="110.0" text="Ban Nickname" />
+                  <Button mnemonicParsing="false" prefHeight="30.0" prefWidth="120.0" text="Ban IP address" />
+               </children>
+            </HBox>
+         </children>
+         <padding>
+            <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+         </padding>
+      </VBox>
+      <VBox fx:id="vboxClientRoom" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" spacing="5.0" style="-fx-background-color: black;" visible="false">
          <children>
             <HBox prefHeight="400.0" prefWidth="600.0">
                <children>
@@ -290,7 +327,7 @@
                         <HBox prefHeight="30.0" prefWidth="300.0">
                            <children>
                               <TextField fx:id="textFieldChatC" minHeight="30.0" minWidth="100.0" onKeyPressed="#enterChatHandleC" prefHeight="30.0" prefWidth="240.0" />
-                              <Button fx:id="buttonChatC" mnemonicParsing="false" onAction="#sendMessageC" prefHeight="30.0" prefWidth="60.0" text="Send" />
+                              <Button fx:id="buttonChatSendC" mnemonicParsing="false" onAction="#sendMessageC" prefHeight="30.0" prefWidth="60.0" text="Send" />
                            </children>
                         </HBox>
                      </children>
