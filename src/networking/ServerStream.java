@@ -159,8 +159,20 @@ public class ServerStream implements IServer{
 								mReply.setTimestamp(controller.getCurrentTimestamp());
 								
 								// check if the connection can happen
+								// the user is banned
+								if(isBanned(this.socket.getInetAddress()))
+								{
+									mReply.setMsgType(MessageType.CONNECT_FAILED);
+									mReply.setNickname("");
+									mReply.setContent("You've been banned from this room");
+								}
+								// check if there is already a connection for this address
+								/*if()
+								{
+									
+								}*/
 								// the room is closed
-								if(!controller.isRoomOpen())
+								else if(!controller.isRoomOpen())
 								{
 									mReply.setMsgType(MessageType.CONNECT_FAILED);
 									mReply.setNickname("");
@@ -172,13 +184,6 @@ public class ServerStream implements IServer{
 									mReply.setMsgType(MessageType.CONNECT_FAILED);
 									mReply.setNickname("");
 									mReply.setContent("The room is full");
-								}
-								// the user is banned
-								else if(isBanned(this.socket.getInetAddress()))
-								{
-									mReply.setMsgType(MessageType.CONNECT_FAILED);
-									mReply.setNickname("");
-									mReply.setContent("You've been banned from this room");
 								}
 								// the user cannot rejoin after being kicked
 								/*else if(!users_rejoin)
@@ -395,6 +400,7 @@ public class ServerStream implements IServer{
 	@Override
 	public User sendBanUser(String banNickname)
 	{
+		System.out.println("Ban user: " + banNickname); // test
 		Message msg = new Message(MessageType.BAN, controller.getCurrentTimestamp(), banNickname, "You have been banned from the room");
 		User result = null;
 		// send ban to everyone (the nickname indicates which user is getting banned)
@@ -417,20 +423,26 @@ public class ServerStream implements IServer{
 	}
 	
 	@Override
-	public void removeBan(String address)
+	public boolean removeBan(String address)
 	{
+		System.out.println("Remove Ban: " + address); // test
+		for(User u : this.bannedUsers)
+		{
+			System.out.println(u.getAddress().toString());
+		}
 		for(User u : this.bannedUsers)
 		{
 			try {
 				if(InetAddress.getByName(address).equals(u.getAddress()))
 				{
 					this.bannedUsers.remove(u);
-					break;
+					return true;
 				}
 			} catch (UnknownHostException e) {
 				e.printStackTrace();
 			}
 		}
+		return false;
 	}
 	
 	private void forwardMessage(Message msg)

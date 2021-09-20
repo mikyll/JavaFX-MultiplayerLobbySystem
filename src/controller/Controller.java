@@ -13,7 +13,6 @@ import java.util.regex.Pattern;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
@@ -541,6 +540,7 @@ public class Controller {
 	}
 	@FXML public void banUser(MouseEvent event)
 	{
+		// check if there is already an entry with that address, in case just kick him out
 		// get the button index
 		for(int i = 1; i < this.connectedUsers; i++)
 		{
@@ -577,6 +577,7 @@ public class Controller {
 	}
 	@FXML public void removeBan(ActionEvent event)
 	{
+		System.out.println("Remove ban selected"); // test
 		// get the button index
 		for(int i = 0; i < this.listViewBannedUsers.getItems().size(); i++)
 		{
@@ -585,13 +586,19 @@ public class Controller {
 				System.out.println("Server: user " + this.listBannedUsername.get(i).getText() + " (" + this.listBannedAddress.get(i).getText() + ") is no longer banned");
 				
 				// remove banned user from server
-				this.server.removeBan(this.listBannedAddress.get(i).getText());
+				boolean result = this.server.removeBan(this.listBannedAddress.get(i).getText());
 				
-				// add ban message to the textArea
-				this.addToTextArea(this.getCurrentTimestamp() + " " + this.listBannedUsername.get(i).getText() + " has is no longer banned");
+				if(result)
+				{
+					// add ban message to the textArea
+					this.addToTextArea(this.getCurrentTimestamp() + " " + this.listBannedUsername.get(i).getText() + " has is no longer banned");
+				}
 				
 				// remove  banned user from the listView
 				this.listViewBannedUsers.getItems().remove((HBox) this.listRemoveBan.get(i).getParent());
+				this.listBannedUsername.remove(i);
+				this.listBannedAddress.remove(i);
+				this.listRemoveBan.remove(i);
 				
 				break;
 			}

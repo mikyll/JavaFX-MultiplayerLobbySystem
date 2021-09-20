@@ -286,7 +286,7 @@
             </HBox>
          </children>
       </VBox>
-      <VBox fx:id="vboxRoomSettings" alignment="TOP_RIGHT" layoutX="100.0" layoutY="50.0" prefHeight="300.0" prefWidth="400.0" spacing="5.0" style="-fx-background-color: black;">
+      <VBox fx:id="vboxRoomSettings" alignment="TOP_RIGHT" layoutX="100.0" layoutY="50.0" prefHeight="300.0" prefWidth="400.0" spacing="5.0" style="-fx-background-color: black;" visible="false">
          <children>
             <HBox alignment="BOTTOM_RIGHT" prefHeight="30.0" prefWidth="400.0" spacing="10.0">
                <children>
