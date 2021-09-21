@@ -89,8 +89,8 @@ public class Controller {
 	@FXML private ListView<HBox> listViewUsersS;
 	private ArrayList<Label> listUsernameS;
 	private ArrayList<Label> listReadyS;
-	private ArrayList<ImageView> listImageKick;
-	private ArrayList<ImageView> listImageBan;
+	private ArrayList<Label> listLabelKick;
+	private ArrayList<Label> listLabelBan;
 	@FXML private Button buttonRoomSettings;
 	@FXML private Button buttonStartGame;
 	@FXML private Button buttonOpenClose;
@@ -152,8 +152,8 @@ public class Controller {
 		this.listReadyC = new ArrayList<Label>();
 		this.listReadyS = new ArrayList<Label>();
 		this.listImagePlayer = new ArrayList<ImageView>();
-		this.listImageKick = new ArrayList<ImageView>();
-		this.listImageBan = new ArrayList<ImageView>();
+		this.listLabelKick = new ArrayList<Label>();
+		this.listLabelBan = new ArrayList<Label>();
 		
 		this.labelMinRoom.setText("" + MIN_USERS);
 		this.labelMaxRoom.setText("" + ROOM_CAPACITY);
@@ -192,8 +192,7 @@ public class Controller {
 			hbox.getChildren().add(l);
 			this.listReadyC.add(l);
 			// identifier image
-			ImageView iv = new ImageView();
-			iv.setImage(new Image(this.getClass().getResource("/resources/icon-user.png").toString()));
+			ImageView iv = new ImageView(new Image(this.getClass().getResource("/resources/icon-user.png").toString()));
 			iv.resize(25, 25);
 			hbox.getChildren().add(iv);
 			this.listImagePlayer.add(iv);
@@ -219,32 +218,23 @@ public class Controller {
 			hbox.getChildren().add(l);
 			this.listReadyS.add(l);
 			// kick button
-			iv = new ImageView();
-			iv.setImage(new Image(this.getClass().getResource("/resources/icon-kick.png").toString()));
+			l = new Label();
+			iv = new ImageView(new Image(this.getClass().getResource("/resources/icon-kick.png").toString()));
 			iv.resize(25, 25);
-			iv.setOnMouseClicked(this::kickUser);
-			iv.setVisible(i == 0 ? false : true);
-			hbox.getChildren().add(iv);
-			this.listImageKick.add(iv);
+			l.setGraphic(iv);
+			l.setOnMouseClicked(this::kickUser);
+			l.setVisible(i == 0 ? false : true);
+			hbox.getChildren().add(l);
+			this.listLabelKick.add(l);
 			// ban button
-			iv = new ImageView();
-			iv.setImage(new Image(this.getClass().getResource("/resources/icon-ban.png").toString()));
+			l = new Label();
+			iv = new ImageView(new Image(this.getClass().getResource("/resources/icon-ban.png").toString()));
 			iv.resize(25, 25);
-			iv.setOnMouseClicked(this::banUser);
-			iv.setVisible(i == 0 ? false : true);
-			hbox.getChildren().add(iv);
-			this.listImageBan.add(iv);
-			
-			/*
-			// ban button
-			Button b = new Button("Kick");
-			b.setPrefSize(70, 20);
-			b.setStyle("-fx-font-size: 15.0");
-			b.setOnAction(this::kickUser);
-			b.setVisible(i == 0 ? false : true); // NB: visible only if i >= 1
-			hbox.getChildren().add(b);
-			this.listKick.add(b);
-			*/
+			l.setGraphic(iv);
+			l.setOnMouseClicked(this::banUser);
+			l.setVisible(i == 0 ? false : true);
+			hbox.getChildren().add(l);
+			this.listLabelBan.add(l);
 			
 			this.listViewUsersS.getItems().add(hbox);
 		}
@@ -521,7 +511,7 @@ public class Controller {
 		// get the button index
 		for(int i = 1; i < this.connectedUsers; i++)
 		{
-			if(this.listImageKick.get(i).equals(event.getTarget()))
+			if(this.listLabelKick.get(i).equals(event.getTarget()))
 			{
 				System.out.println("Server: kicked user " + this.listUsernameS.get(i).getText());
 				
@@ -544,7 +534,7 @@ public class Controller {
 		// get the button index
 		for(int i = 1; i < this.connectedUsers; i++)
 		{
-			if(this.listImageBan.get(i).equals(event.getTarget()))
+			if(this.listLabelBan.get(i).equals(event.getTarget()))
 			{
 				// remove user from the listView
 				this.removeUser(this.listUsernameS.get(i).getText());
@@ -593,10 +583,15 @@ public class Controller {
 					// add ban message to the textArea
 					this.addToTextArea(this.getCurrentTimestamp() + " " + this.listBannedUsername.get(i).getText() + " has is no longer banned");
 				}
+				
+				// remove labels
 				this.listBannedUsername.remove(i);
 				this.listBannedAddress.remove(i);
+				
 				// remove  banned user from the listView
 				this.listViewBannedUsers.getItems().remove((HBox) this.listRemoveBan.get(i).getParent());
+				
+				// remove button
 				this.listRemoveBan.remove(i);
 				
 				break;
@@ -870,6 +865,7 @@ public class Controller {
 				{
 					if(found)
 					{
+						// we move every entry up by 1, overriding the one to remove
 						this.listUsernameC.get(i - 1).setText(this.listUsernameC.get(i).getText());
 						this.listReadyC.get(i - 1).setStyle(this.listReadyC.get(i).getStyle());
 						this.listImagePlayer.get(i - 1).setVisible(this.listImagePlayer.get(i).isVisible());
@@ -877,6 +873,7 @@ public class Controller {
 					if(this.listUsernameC.get(i).getText().equals(nickname))
 						found = true;
 				}
+				// we hide the last entry
 				this.listViewUsersC.getItems().get(this.connectedUsers - 1).setVisible(false);
 				this.listUsernameC.get(this.connectedUsers - 1).setText("");
 				this.listReadyC.get(this.connectedUsers - 1).setStyle("-fx-background-color: red");
@@ -890,12 +887,14 @@ public class Controller {
 				{
 					if(found)
 					{
+						// we move every entry up by 1, overriding the one to remove
 						this.listUsernameS.get(i - 1).setText(this.listUsernameS.get(i).getText());
 						this.listReadyS.get(i - 1).setStyle(this.listReadyS.get(i).getStyle());
 					}
 					if(this.listUsernameS.get(i).getText().equals(nickname))
 						found = true;
 				}
+				// we hide the last entry
 				this.listViewUsersS.getItems().get(this.connectedUsers - 1).setVisible(false);
 				this.listUsernameS.get(this.connectedUsers - 1).setText("");
 				this.listReadyS.get(this.connectedUsers - 1).setStyle("-fx-background-color: red");
