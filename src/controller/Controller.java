@@ -569,16 +569,6 @@ public class Controller {
 		
 		this.vboxRoomSettings.setVisible(true);
 	}
-	@FXML public void setBinAnimationOn(MouseEvent event)
-	{
-		ImageView iv = (ImageView) ((Label) event.getTarget()).getChildrenUnmodifiable().get(0);
-		iv.setImage(new Image(this.getClass().getResource("/resources/icon-trash-bin-animated.gif").toString()));
-	}
-	@FXML public void setBinAnimationOff(MouseEvent event)
-	{
-		ImageView iv = (ImageView) ((Label) event.getTarget()).getChildrenUnmodifiable().get(0);
-		iv.setImage(new Image(this.getClass().getResource("/resources/icon-trash-bin.png").toString()));
-	}
 	@FXML public void removeBan(MouseEvent event)
 	{
 		System.out.println("Remove ban selected"); // test
@@ -987,5 +977,15 @@ public class Controller {
 		this.listRemoveBan.add(l);
 		
 		this.listViewBannedUsers.getItems().add(hbox);
+	}
+	private void setBinAnimationOn(MouseEvent event)
+	{
+		ImageView iv = (ImageView) ((Label) event.getTarget()).getChildrenUnmodifiable().get(0);
+		iv.setImage(new Image(this.getClass().getResource("/resources/icon-trash-bin-animated.gif").toString()));
+	}
+	private void setBinAnimationOff(MouseEvent event)
+	{
+		ImageView iv = (ImageView) ((Label) event.getTarget()).getChildrenUnmodifiable().get(0);
+		iv.setImage(new Image(this.getClass().getResource("/resources/icon-trash-bin.png").toString()));
 	}
 }
