@@ -101,6 +101,7 @@ to add:
 - ~~fix KickUser (removes the server too). The problem was that goBack(), instead of switchToMP, closed the connection, so client sent KICK and DISCONNECT before closing the socket~~
 - ~~SocketException: Interrupted function call: accept failed, thrown when we back from the server room, when no one has been accepted yet~~
 - ~~add a ban list (nickname/IP)~~
+- add banned user throws null pointer exception on Linux, fix it
 - show private and public IP address and be able to copy it
 - chat text message check length before sending (not more than 200 char?)
 - automatic textarea scrolling, to last message
