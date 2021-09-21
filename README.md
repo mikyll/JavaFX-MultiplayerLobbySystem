@@ -95,10 +95,13 @@ to add:
 - ~~add on close function to disconnect and stop the threads before closing the app~~
 - ~~add "start game" button which enables when the room has the minimum users required~~
 - ~~add open/close checkbox to allow users to join~~
+- ~~check if the users get disconnected properly when closing the app by the Launcher~~
 - ~~change the "this.client != null" check with NavState.MP_CLIENT (same for the server)~~
 - ~~fix Join Existing Room validation~~
 - ~~move Controller methods (in a proper order)~~
 - ~~fix KickUser (removes the server too). The problem was that goBack(), instead of switchToMP, closed the connection, so client sent KICK and DISCONNECT before closing the socket~~
+- ~~fix exception print stack (handle them in a more proper way)~~
+- ~~catch Connection Reset~~
 - ~~SocketException: Interrupted function call: accept failed, thrown when we back from the server room, when no one has been accepted yet~~
 - ~~add a ban list (nickname/IP)~~
 - add banned user throws null pointer exception on Linux, fix it
@@ -107,8 +110,6 @@ to add:
 - automatic textarea scrolling, to last message
 - add copy in notes when clicking on a username (inside a room)
 - server can enable/disable the chat(?)
-- catch Connection Reset
-- fix exception print stack (handle them in a more proper way)
 - add timer after sending READY message
 - fix gui components to have proper dimension
 - add Datagram (UDP) variant
@@ -116,7 +117,6 @@ to add:
 - create a logger (?) and log messages to file too
 - create a class for my Spinner (MikyllSpinner ?)
 - add an headless server to handle the room list (when a server creates a room it's inserted into the list, and the client can access that list to see those rooms)
-- check if the users get disconnected properly when closing the app by the Launcher
 - use this template for CluedoApp
 
 ### Built With
