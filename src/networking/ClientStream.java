@@ -148,6 +148,31 @@ public class ClientStream implements IClient {
 								
 								break;
 							}
+							case BAN:
+							{
+								// this user got banned
+								if(incomingMsg.getNickname().equals(nickname))
+								{
+									// switch view
+									controller.switchToMP();
+									
+									// close connection (?)
+									//this.socket.close();
+									
+									// show alert
+									controller.showAlert(AlertType.INFORMATION, "Disconnected from server", incomingMsg.getContent());
+								}
+								// another user got banned
+								else
+								{
+									controller.removeUser(incomingMsg.getNickname());
+									
+									// add the message to the chat textArea
+									controller.addToTextArea(incomingMsg.getTimestamp() + " " + incomingMsg.getNickname() + " has been banned");
+								}
+								
+								break;
+							}
 							case DISCONNECT:
 							{
 								// the room has been closed (connection lost from the server)
@@ -175,7 +200,7 @@ public class ClientStream implements IClient {
 							}
 							default:
 							{
-								System.out.println("Client: invalid message type received: " + incomingMsg.getMsgType());
+								System.out.println("Client: received unknow message type: " + incomingMsg.toString());
 								break;
 							}
 						}
@@ -188,10 +213,13 @@ public class ClientStream implements IClient {
 					controller.showAlert(AlertType.ERROR, "Connection failed", e.getMessage());
 					controller.showConnectingBox(false);
 				}
-				else e.printStackTrace();
-			} catch (IOException e) {
-				System.out.println("Errore stream");
+				else if(e.getMessage().equals("Connection reset"))
+				{
+					System.out.println("Stream closed");
+				}
 				e.printStackTrace();
+			} catch (IOException e) {
+				System.out.println("Stream closed");
 			} catch (ClassNotFoundException e) {
 				e.printStackTrace();
 			}

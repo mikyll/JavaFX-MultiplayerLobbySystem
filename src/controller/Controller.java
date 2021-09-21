@@ -1,6 +1,8 @@
 package controller;
 
+import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -37,8 +39,8 @@ import networking.IServer;
 import networking.ServerStream;
 
 public class Controller {
-	private static final int MIN_USERS = 2; // users required to start
-	private static final int ROOM_CAPACITY = 6;
+	private static final int MIN_USERS = 2; // default min users required to start
+	private static final int ROOM_CAPACITY = 6; // default max room capacity
 	
 	private static final Pattern PATTERN_NICKNAME = Pattern.compile("^[a-zA-Z0-9]{3,15}$");
 	private static final Pattern PATTERN_IP = Pattern.compile("^(([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.){3}([01]?\\d\\d?|2[0-4]\\d|25[0-5])$");
@@ -46,6 +48,7 @@ public class Controller {
 	private NavState state;
 	
 	@FXML private VBox vboxBack;
+	@FXML private Button buttonBack;
 	
 	// MultiPlayer
 	@FXML private VBox vboxMP;
@@ -79,33 +82,44 @@ public class Controller {
 	@FXML private Button buttonJER;
 	
 	// MultiPlayer: Server
+	private IServer server;
 	@FXML private VBox vboxServerRoom;
 	@FXML private Label labelServerIP;
-	@FXML private TextArea textAreaChatS;
-	@FXML private TextField textFieldChatS;
-	@FXML private Button buttonChatS;
+	@FXML private VBox vboxLabelServerControls;
+	@FXML private ListView<HBox> listViewUsersS;
+	private ArrayList<Label> listUsernameS;
+	private ArrayList<Label> listReadyS;
+	private ArrayList<ImageView> listImageKick;
+	private ArrayList<ImageView> listImageBan;
+	@FXML private Button buttonRoomSettings;
 	@FXML private Button buttonStartGame;
 	@FXML private Button buttonOpenClose;
 	@FXML private Label labelOpenClose;
-	@FXML private ListView<HBox> listViewUsersS;
-	private IServer server;
-	private ArrayList<Label> listUsernameS;
-	private ArrayList<Label> listReadyS;
-	private ArrayList<Button> listKick;
+	@FXML private TextArea textAreaChatS;
+	@FXML private TextField textFieldChatS;
+	@FXML private Button buttonChatSendS;
+	
+	// MultiPlayer: RoomSettings
+	@FXML private VBox vboxRoomSettings;
+	@FXML private ListView<HBox> listViewBannedUsers;
+	private ArrayList<Label> listBannedUsername;
+	private ArrayList<Label> listBannedAddress;
+	private ArrayList<Button> listRemoveBan;
+	@FXML private TextField textFieldBanUsername;
+	@FXML private TextField textFieldBanAddress;
+	@FXML private Button buttonBan;
 	
 	// MultiPlayer: Client
-	@FXML private VBox vboxClientRoom;
-	@FXML private TextArea textAreaChatC;
-	@FXML private TextField textFieldChatC;
-	@FXML private Button buttonChatC;
-	@FXML private Button buttonReady;
-	@FXML private ListView<HBox> listViewUsersC;
 	private IClient client;
+	@FXML private VBox vboxClientRoom;
+	@FXML private ListView<HBox> listViewUsersC;
 	private ArrayList<Label> listUsernameC;
 	private ArrayList<Label> listReadyC;
-	private ArrayList<ImageView> listImage;
-	
-	
+	private ArrayList<ImageView> listImagePlayer;
+	@FXML private Button buttonReady;
+	@FXML private TextArea textAreaChatC;
+	@FXML private TextField textFieldChatC;
+	@FXML private Button buttonChatSendC;
 	
 	private int connectedUsers;
 	
@@ -122,6 +136,8 @@ public class Controller {
 		this.vboxCreateRoom.setVisible(false);
 		this.vboxJoinRoom.setVisible(false);
 		this.vboxServerRoom.setVisible(false);
+		this.vboxLabelServerControls.setVisible(false);
+		this.vboxRoomSettings.setVisible(false);
 		this.vboxClientRoom.setVisible(false);
 		
 		this.tformatter = new SimpleDateFormat("[HH:mm:ss]");
@@ -135,8 +151,9 @@ public class Controller {
 		this.listUsernameS = new ArrayList<Label>();
 		this.listReadyC = new ArrayList<Label>();
 		this.listReadyS = new ArrayList<Label>();
-		this.listImage = new ArrayList<ImageView>();
-		this.listKick = new ArrayList<Button>();
+		this.listImagePlayer = new ArrayList<ImageView>();
+		this.listImageKick = new ArrayList<ImageView>();
+		this.listImageBan = new ArrayList<ImageView>();
 		
 		this.labelMinRoom.setText("" + MIN_USERS);
 		this.labelMaxRoom.setText("" + ROOM_CAPACITY);
@@ -179,7 +196,7 @@ public class Controller {
 			iv.setImage(new Image(this.getClass().getResource("/resources/icon-user.png").toString()));
 			iv.resize(25, 25);
 			hbox.getChildren().add(iv);
-			this.listImage.add(iv);
+			this.listImagePlayer.add(iv);
 			
 			this.listViewUsersC.getItems().add(hbox);
 			
@@ -202,6 +219,24 @@ public class Controller {
 			hbox.getChildren().add(l);
 			this.listReadyS.add(l);
 			// kick button
+			iv = new ImageView();
+			iv.setImage(new Image(this.getClass().getResource("/resources/icon-kick.png").toString()));
+			iv.resize(25, 25);
+			iv.setOnMouseClicked(this::kickUser);
+			iv.setVisible(i == 0 ? false : true);
+			hbox.getChildren().add(iv);
+			this.listImageKick.add(iv);
+			// ban button
+			iv = new ImageView();
+			iv.setImage(new Image(this.getClass().getResource("/resources/icon-ban.png").toString()));
+			iv.resize(25, 25);
+			iv.setOnMouseClicked(this::banUser);
+			iv.setVisible(i == 0 ? false : true);
+			hbox.getChildren().add(iv);
+			this.listImageBan.add(iv);
+			
+			/*
+			// ban button
 			Button b = new Button("Kick");
 			b.setPrefSize(70, 20);
 			b.setStyle("-fx-font-size: 15.0");
@@ -209,13 +244,13 @@ public class Controller {
 			b.setVisible(i == 0 ? false : true); // NB: visible only if i >= 1
 			hbox.getChildren().add(b);
 			this.listKick.add(b);
+			*/
 			
 			this.listViewUsersS.getItems().add(hbox);
 		}
 		
 		connectedUsers = 0;
 	}
-	
 	// Multiplayer callbacks
 	@FXML public void goBack(ActionEvent event)
 	{
@@ -249,6 +284,7 @@ public class Controller {
 			{
 				this.closeConnection();
 				this.vboxServerRoom.setVisible(false);
+				this.vboxLabelServerControls.setVisible(false);
 				this.vboxMP.setVisible(true);
 				
 				this.state = NavState.MULTIPLAYER;
@@ -409,6 +445,12 @@ public class Controller {
 		this.listViewUsersS.getItems().get(0).setVisible(true);
 		
 		this.connectedUsers = 1;
+		
+		// reset Banned Users list
+		this.listViewBannedUsers.getItems().clear();
+		this.listBannedUsername = new ArrayList<Label>();
+		this.listBannedAddress = new ArrayList<Label>();
+		this.listRemoveBan = new ArrayList<Button>();
 	}
 	
 	// MultiPlayer: Join Existing Room callbacks
@@ -474,12 +516,12 @@ public class Controller {
 	}
 	
 	// MultiPlayer: Server callbacks
-	@FXML public void kickUser(ActionEvent event)
+	@FXML public void kickUser(MouseEvent event)
 	{
 		// get the button index
 		for(int i = 1; i < this.connectedUsers; i++)
 		{
-			if(this.listKick.get(i).equals(event.getTarget()))
+			if(this.listImageKick.get(i).equals(event.getTarget()))
 			{
 				System.out.println("Server: kicked user " + this.listUsernameS.get(i).getText());
 				
@@ -495,6 +537,84 @@ public class Controller {
 				break;
 			}
 		}
+	}
+	@FXML public void banUser(MouseEvent event)
+	{
+		// check if there is already an entry with that address, in case just kick him out
+		// get the button index
+		for(int i = 1; i < this.connectedUsers; i++)
+		{
+			if(this.listImageBan.get(i).equals(event.getTarget()))
+			{
+				// remove user from the listView
+				this.removeUser(this.listUsernameS.get(i).getText());
+				
+				// add ban message to the textArea
+				this.addToTextArea(this.getCurrentTimestamp() + " " + this.listUsernameS.get(i).getText() + " has been banned");
+				
+				// ban and send Kick message
+				User u = this.server.sendBanUser(this.listUsernameS.get(i).getText());
+				this.addBannedUser(u.getNickname(), u.getAddress().getHostAddress());
+				
+				System.out.println("Server: banned user " + u.getNickname() + " (" + u.getAddress().getHostAddress() + ")");
+				
+				break;
+			}
+		}
+	}
+	@FXML public void openRoomSettings()
+	{
+		System.out.println("Open settings");
+		
+		this.buttonBack.setDisable(true);
+		this.buttonRoomSettings.setDisable(true);
+		this.buttonStartGame.setDisable(true);
+		this.buttonOpenClose.setDisable(true);
+		this.textFieldChatS.setDisable(true);
+		this.buttonChatSendS.setDisable(true);
+		
+		this.vboxRoomSettings.setVisible(true);
+	}
+	@FXML public void removeBan(ActionEvent event)
+	{
+		System.out.println("Remove ban selected"); // test
+		// get the button index
+		for(int i = 0; i < this.listViewBannedUsers.getItems().size(); i++)
+		{
+			if(this.listRemoveBan.get(i).equals(event.getTarget()))
+			{
+				System.out.println("Server: user " + this.listBannedUsername.get(i).getText() + " (" + this.listBannedAddress.get(i).getText() + ") is no longer banned");
+				
+				// remove banned user from server
+				boolean result = this.server.removeBan(this.listBannedAddress.get(i).getText());
+				
+				if(result)
+				{
+					// add ban message to the textArea
+					this.addToTextArea(this.getCurrentTimestamp() + " " + this.listBannedUsername.get(i).getText() + " has is no longer banned");
+				}
+				this.listBannedUsername.remove(i);
+				this.listBannedAddress.remove(i);
+				// remove  banned user from the listView
+				this.listViewBannedUsers.getItems().remove((HBox) this.listRemoveBan.get(i).getParent());
+				this.listRemoveBan.remove(i);
+				
+				break;
+			}
+		}
+	}
+	@FXML public void closeRoomSettings()
+	{
+		System.out.println("Close settings");
+		
+		this.buttonBack.setDisable(false);
+		this.buttonRoomSettings.setDisable(false);
+		this.buttonStartGame.setDisable(!this.server.checkCanStartGame());
+		this.buttonOpenClose.setDisable(false);
+		this.textFieldChatS.setDisable(false);
+		this.buttonChatSendS.setDisable(false);
+		
+		this.vboxRoomSettings.setVisible(false);
 	}
 	@FXML public void toggleOpenClose(ActionEvent event)
 	{
@@ -593,6 +713,7 @@ public class Controller {
 		else if (this.state == NavState.MP_SERVER)
 		{
 			this.vboxServerRoom.setVisible(false);
+			this.vboxLabelServerControls.setVisible(false);
 			this.vboxMP.setVisible(true);
 			
 			this.state = NavState.MULTIPLAYER;
@@ -602,6 +723,7 @@ public class Controller {
 	{
 		this.vboxCreateRoom.setVisible(false);
 		this.vboxServerRoom.setVisible(true);
+		this.vboxLabelServerControls.setVisible(true);
 		
 		this.state = NavState.MP_SERVER;
 	}
@@ -624,8 +746,12 @@ public class Controller {
 	}
 	private void setServerAddress()
 	{
-		try {
-			this.labelServerIP.setText("Server IP address: " + InetAddress.getLocalHost().toString().split("/")[1]);
+		try(final DatagramSocket socket = new DatagramSocket()) {
+			socket.connect(InetAddress.getByName("8.8.8.8"), 10002);
+			String privateIP = socket.getLocalAddress().getHostAddress();
+			this.labelServerIP.setText("Private Server IP address: " + privateIP);
+		} catch (SocketException e) {
+			e.printStackTrace();
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		}
@@ -693,13 +819,15 @@ public class Controller {
 	{
 		if(this.state == NavState.MP_CLIENT)
 		{
-			for(int i = 0; i < ROOM_CAPACITY; i++)
-			{
-				this.listViewUsersC.getItems().get(i).setVisible(false);
-				this.listUsernameC.get(i).setText("");
-				this.listReadyC.get(i).setStyle("-fx-background-color: red");
-				this.listImage.get(i).setVisible(false);
-			}
+			Platform.runLater(() -> {
+				for(int i = 0; i < ROOM_CAPACITY; i++)
+				{
+					this.listViewUsersC.getItems().get(i).setVisible(false);
+					this.listUsernameC.get(i).setText("");
+					this.listReadyC.get(i).setStyle("-fx-background-color: red");
+					this.listImagePlayer.get(i).setVisible(false);
+				}
+			});
 		}
 		else if(this.state == NavState.MP_SERVER)
 		{
@@ -744,7 +872,7 @@ public class Controller {
 					{
 						this.listUsernameC.get(i - 1).setText(this.listUsernameC.get(i).getText());
 						this.listReadyC.get(i - 1).setStyle(this.listReadyC.get(i).getStyle());
-						this.listImage.get(i - 1).setVisible(this.listImage.get(i).isVisible());
+						this.listImagePlayer.get(i - 1).setVisible(this.listImagePlayer.get(i).isVisible());
 					}
 					if(this.listUsernameC.get(i).getText().equals(nickname))
 						found = true;
@@ -752,7 +880,7 @@ public class Controller {
 				this.listViewUsersC.getItems().get(this.connectedUsers - 1).setVisible(false);
 				this.listUsernameC.get(this.connectedUsers - 1).setText("");
 				this.listReadyC.get(this.connectedUsers - 1).setStyle("-fx-background-color: red");
-				this.listImage.get(this.connectedUsers - 1).setVisible(false);
+				this.listImagePlayer.get(this.connectedUsers - 1).setVisible(false);
 				this.connectedUsers--;
 			}
 			else if(this.state == NavState.MP_SERVER)
@@ -788,7 +916,7 @@ public class Controller {
 					this.listUsernameC.get(i).setText(u.getNickname());
 					this.listViewUsersC.getItems().get(i).setVisible(true);
 					this.listReadyC.get(i).setStyle(u.isReady() ? "-fx-background-color: lime" : "-fx-background-color: red");
-					this.listImage.get(i).setVisible(this.textFieldNicknameC.getText().equals(users.get(i).getNickname()) ? true : false);
+					this.listImagePlayer.get(i).setVisible(this.textFieldNicknameC.getText().equals(users.get(i).getNickname()) ? true : false);
 				}
 				this.connectedUsers = users.size();
 			}
@@ -800,7 +928,7 @@ public class Controller {
 	}
 	public void enableStartGame(boolean value)
 	{
-		this.buttonStartGame.setDisable(!value);
+		this.buttonStartGame.setDisable(!value || this.vboxRoomSettings.isVisible());
 	}
 	public void closeConnection()
 	{
@@ -815,4 +943,32 @@ public class Controller {
 			this.server = null;
 		}
     }
+	private void addBannedUser(String nickname, String address)
+	{
+		HBox hbox = new HBox();
+		hbox.setPrefSize(400, 25);
+		hbox.setSpacing(10);
+		// banned username
+		Label l = new Label(nickname);
+		l.setPrefSize(130, 25);
+		l.setTextFill(Paint.valueOf("white"));
+		hbox.getChildren().add(l);
+		this.listBannedUsername.add(l);
+		// banned address
+		l = new Label();
+		l.setPrefSize(130, 25);
+		l.setTextFill(Paint.valueOf("white"));
+		l.setText(address.isEmpty() ? "" : address);
+		hbox.getChildren().add(l);
+		this.listBannedAddress.add(l);
+		// remove ban
+		Button b = new Button("Remove");
+		b.setPrefSize(100, 20);
+		b.setStyle("-fx-font-size: 15.0");
+		b.setOnAction(this::removeBan);
+		hbox.getChildren().add(b);
+		this.listRemoveBan.add(b);
+		
+		this.listViewBannedUsers.getItems().add(hbox);
+	}
 }

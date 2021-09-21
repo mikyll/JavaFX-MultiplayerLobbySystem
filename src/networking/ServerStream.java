@@ -6,6 +6,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.net.BindException;
+import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -32,6 +33,7 @@ public class ServerStream implements IServer{
 	
 	private ArrayList<User> users;
 	private ArrayList<ObjectOutputStream> writers;
+	private ArrayList<User> bannedUsers;
 	
 	public ServerStream(Controller controller, String nickname, int usersRequired, int maxCapacity, boolean rejoin)
 	{
@@ -47,6 +49,7 @@ public class ServerStream implements IServer{
 		this.users.add(u);
 		this.writers = new ArrayList<ObjectOutputStream>();
 		this.writers.add(null);
+		this.bannedUsers = new ArrayList<User>();
 		
 		try {
 			this.serverListener = new ServerListener(PORT);
@@ -57,10 +60,14 @@ public class ServerStream implements IServer{
 			if(e instanceof BindException)
 			{
 				System.out.println("Server: another socket is already binded to this address and port");
-				try {
-					this.controller.showAlert(AlertType.ERROR, "Room creation failed", "Another socket is already binded to " + InetAddress.getLocalHost().toString().split("/")[1] + ":" + PORT);
+				try(final DatagramSocket socket = new DatagramSocket()) {
+					socket.connect(InetAddress.getByName("8.8.8.8"), 10002);
+					String privateIP = socket.getLocalAddress().getHostAddress();
+					this.controller.showAlert(AlertType.ERROR, "Room creation failed", "Another socket is already binded to " + privateIP + ":" + PORT);
+				} catch (SocketException e1) {
+					e.printStackTrace();
 				} catch (UnknownHostException e1) {
-					e1.printStackTrace();
+					e.printStackTrace();
 				}
 			}
 		}
@@ -84,6 +91,10 @@ public class ServerStream implements IServer{
 				{
 					new Handler(this.listener.accept()).start();
 				}
+			} catch(SocketException e) {
+				if(e.getMessage().contains("accept failed"))
+					System.out.println("Server (" + this.getId() + "): stopped listening for connections");
+				else e.printStackTrace();
 			} catch (IOException e) {
 				System.out.println("Server: error while trying to accept a new connection");
 				e.printStackTrace();
@@ -137,7 +148,7 @@ public class ServerStream implements IServer{
 					Message incomingMsg = (Message) this.input.readObject();
 					if(incomingMsg != null)
 					{
-						System.out.println("Server (" + this.getId() + "): received " + incomingMsg.toString()); // test
+						System.out.println("Server (" + this.getId() + "): received " + incomingMsg.toString());
 						switch(incomingMsg.getMsgType())
 						{
 							case CONNECT:
@@ -148,8 +159,20 @@ public class ServerStream implements IServer{
 								mReply.setTimestamp(controller.getCurrentTimestamp());
 								
 								// check if the connection can happen
+								// the user is banned
+								if(isBanned(this.socket.getInetAddress()))
+								{
+									mReply.setMsgType(MessageType.CONNECT_FAILED);
+									mReply.setNickname("");
+									mReply.setContent("You've been banned from this room");
+								}
+								// check if there is already a connection for this address
+								/*if()
+								{
+									
+								}*/
 								// the room is closed
-								if(!controller.isRoomOpen())
+								else if(!controller.isRoomOpen())
 								{
 									mReply.setMsgType(MessageType.CONNECT_FAILED);
 									mReply.setNickname("");
@@ -178,7 +201,7 @@ public class ServerStream implements IServer{
 								else
 								{
 									// add user and writer to list
-									User u = new User(incomingMsg.getNickname());
+									User u = new User(incomingMsg.getNickname(), this.socket.getInetAddress());
 									users.add(u);
 									writers.add(this.output);
 									controller.addUser(u);
@@ -269,7 +292,7 @@ public class ServerStream implements IServer{
 							}
 							default:
 							{
-								System.out.println("Server: invalid message type received: " + incomingMsg.getMsgType().toString());
+								System.out.println("Server: received unknow message type: " + incomingMsg.toString());
 								break;
 							}
 						}
@@ -278,9 +301,10 @@ public class ServerStream implements IServer{
 				
 			} catch(SocketException e) {
 				// "Connection reset" when the other endpoint disconnects
-				
+				if(e.getMessage().contains("Connection reset"))
+					System.out.println("Stream closed");
 				// "java.net.SocketException: Socket closed" - received DISCONNECT
-				if(e.getMessage().contains("Socket closed"))
+				else if(e.getMessage().contains("Socket closed"))
 					System.out.println("Socket closed");
 				else e.printStackTrace();
 			} catch (IOException e) {
@@ -373,6 +397,54 @@ public class ServerStream implements IServer{
 		return this.users.size() >= this.minToStartGame ? true : false;
 	}
 	
+	@Override
+	public User sendBanUser(String banNickname)
+	{
+		System.out.println("Ban user: " + banNickname); // test
+		Message msg = new Message(MessageType.BAN, controller.getCurrentTimestamp(), banNickname, "You have been banned from the room");
+		User result = null;
+		// send ban to everyone (the nickname indicates which user is getting banned)
+		this.sendMessage(msg);
+		
+		// remove user and writer
+		for(int i = 1; i < this.users.size(); i++)
+		{
+			if(this.users.get(i).getNickname().equals(banNickname))
+			{
+				result = this.users.get(i);
+				this.bannedUsers.add(result);
+				this.users.remove(i);
+				this.writers.remove(i);
+				break;
+			}
+		}
+		
+		return result;
+	}
+	
+	@Override
+	public boolean removeBan(String address)
+	{
+		System.out.println("Remove Ban: " + address); // test
+		for(User u : this.bannedUsers)
+		{
+			System.out.println(u.getAddress().toString());
+		}
+		for(User u : this.bannedUsers)
+		{
+			try {
+				if(InetAddress.getByName(address).equals(u.getAddress()))
+				{
+					this.bannedUsers.remove(u);
+					return true;
+				}
+			} catch (UnknownHostException e) {
+				e.printStackTrace();
+			}
+		}
+		return false;
+	}
+	
 	private void forwardMessage(Message msg)
 	{
 		// forward the message to each connected client, except the one that sent the message first
@@ -410,5 +482,13 @@ public class ServerStream implements IServer{
 		}
 		
 		return list;
+	}
+	
+	private boolean isBanned(InetAddress bannedAddress)
+	{
+		for(User u : this.bannedUsers)
+			if(u.getAddress().equals(bannedAddress))
+				return true;
+		return false;	
 	}
 }

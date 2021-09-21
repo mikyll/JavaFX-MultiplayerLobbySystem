@@ -66,6 +66,11 @@ JavaFX lobby system for multiplayer games with chat, ready toggle and kick butto
 		<td width="40%"><img src="https://github.com/mikyll/JavaFX-MultiplayerLobbySystem/blob/main/gfx/example-kick.gif" alt="Kick user example"/></td>
 	</tr>
 	<tr>
+		<td><b>Server: ban a user</b></td>
+		<td>The server can ban any user out of the room.</td>
+		<td width="40%"><img src="" alt="Ban user example"/></td>
+	</tr>
+	<tr>
 		<td><b>Chat</b></td>
 		<td>The chat allows users to communicate in real time, showing the timestamp of the messages and the user that sent it. The chat also shows when users connect or disconnect and when they get kicked out from the server.</td>
 		<td width="40%"><img src="https://github.com/mikyll/JavaFX-MultiplayerLobbySystem/blob/main/gfx/example-chat.gif" alt="Chat example"/></td>
@@ -94,11 +99,14 @@ to add:
 - ~~fix Join Existing Room validation~~
 - ~~move Controller methods (in a proper order)~~
 - ~~fix KickUser (removes the server too). The problem was that goBack(), instead of switchToMP, closed the connection, so client sent KICK and DISCONNECT before closing the socket~~
+- ~~SocketException: Interrupted function call: accept failed, thrown when we back from the server room, when no one has been accepted yet~~
+- ~~add a ban list (nickname/IP)~~
+- show private and public IP address and be able to copy it
 - chat text message check length before sending (not more than 200 char?)
 - automatic textarea scrolling, to last message
 - add copy in notes when clicking on a username (inside a room)
 - server can enable/disable the chat(?)
-- catch Connection Reset & SocketException: Interrupted function call: accept failed, thrown when we back from the server room, when no one has been accepted yet
+- catch Connection Reset
 - fix exception print stack (handle them in a more proper way)
 - add timer after sending READY message
 - fix gui components to have proper dimension
@@ -107,7 +115,6 @@ to add:
 - create a logger (?) and log messages to file too
 - create a class for my Spinner (MikyllSpinner ?)
 - add an headless server to handle the room list (when a server creates a room it's inserted into the list, and the client can access that list to see those rooms)
-- add a ban list (nickname/IP)
 - check if the users get disconnected properly when closing the app by the Launcher
 - use this template for CluedoApp
 
@@ -118,7 +125,9 @@ Java version: JavaSE-11 (jdk-11.0.11)<br/>
 JavaFX version: JavaFX 11 (javafx-sdk-11.0.2)
 
 ### References
-* [JavaFX-Chat](https://github.com/DomHeal/JavaFX-Chat)
+* Idea from: [JavaFX-Chat](https://github.com/DomHeal/JavaFX-Chat) by DomHeal
+* Icons: [Icons8](https://icons8.com/)
+* [Getting the IP address](https://stackoverflow.com/questions/9481865/getting-the-ip-address-of-the-current-machine-using-java)
 
 
 [downloads-shield]: https://img.shields.io/github/downloads/mikyll/JavaFX-MultiplayerLobbySystem/total
