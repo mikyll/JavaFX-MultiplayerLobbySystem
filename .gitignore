@@ -7,3 +7,4 @@ recreateFXWinJRE.bat
 createFXLinJRE.sh
 recreateFXLinJRE.sh
 Launcher.bat
+LauncherJAR.bat
