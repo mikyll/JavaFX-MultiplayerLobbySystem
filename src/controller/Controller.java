@@ -593,11 +593,10 @@ public class Controller {
 					// add ban message to the textArea
 					this.addToTextArea(this.getCurrentTimestamp() + " " + this.listBannedUsername.get(i).getText() + " has is no longer banned");
 				}
-				
-				// remove  banned user from the listView
-				this.listViewBannedUsers.getItems().remove((HBox) this.listRemoveBan.get(i).getParent());
 				this.listBannedUsername.remove(i);
 				this.listBannedAddress.remove(i);
+				// remove  banned user from the listView
+				this.listViewBannedUsers.getItems().remove((HBox) this.listRemoveBan.get(i).getParent());
 				this.listRemoveBan.remove(i);
 				
 				break;
