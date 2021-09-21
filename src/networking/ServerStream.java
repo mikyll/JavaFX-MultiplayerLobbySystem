@@ -366,38 +366,6 @@ public class ServerStream implements IServer{
 	}
 	
 	@Override
-	public void sendClose()
-	{
-		Message msg = new Message(MessageType.DISCONNECT, controller.getCurrentTimestamp(), this.nickname, "Server room closed");
-
-		// send the message to each user except the server (NB: it's not a normal sendMessage
-		for(int i = 1; i < this.users.size(); i++)
-		{
-			msg.setNickname(this.users.get(i).getNickname());
-			try {
-				this.writers.get(i).writeObject(msg);
-			} catch (IOException e) {
-				// remove the writer at index i?
-				e.printStackTrace();
-			}
-		}
-		
-		// close the socket
-		this.serverListener.closeSocket();
-	}
-	
-	@Override
-	public boolean checkCanStartGame()
-	{
-		for(User u : this.users)
-		{
-			if(!u.isReady())
-				return false;
-		}
-		return this.users.size() >= this.minToStartGame ? true : false;
-	}
-	
-	@Override
 	public User sendBanUser(String banNickname)
 	{
 		System.out.println("Ban user: " + banNickname); // test
@@ -443,6 +411,38 @@ public class ServerStream implements IServer{
 			}
 		}
 		return false;
+	}
+	
+	@Override
+	public boolean checkCanStartGame()
+	{
+		for(User u : this.users)
+		{
+			if(!u.isReady())
+				return false;
+		}
+		return this.users.size() >= this.minToStartGame ? true : false;
+	}
+	
+	@Override
+	public void sendClose()
+	{
+		Message msg = new Message(MessageType.DISCONNECT, controller.getCurrentTimestamp(), this.nickname, "Server room closed");
+
+		// send the message to each user except the server (NB: it's not a normal sendMessage
+		for(int i = 1; i < this.users.size(); i++)
+		{
+			msg.setNickname(this.users.get(i).getNickname());
+			try {
+				this.writers.get(i).writeObject(msg);
+			} catch (IOException e) {
+				// remove the writer at index i?
+				e.printStackTrace();
+			}
+		}
+		
+		// close the socket
+		this.serverListener.closeSocket();
 	}
 	
 	private void forwardMessage(Message msg)
