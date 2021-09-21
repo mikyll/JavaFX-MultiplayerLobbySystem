@@ -217,7 +217,7 @@ public class ClientStream implements IClient {
 				{
 					System.out.println("Stream closed");
 				}
-				e.printStackTrace();
+				else e.printStackTrace();
 			} catch (IOException e) {
 				System.out.println("Stream closed");
 			} catch (ClassNotFoundException e) {

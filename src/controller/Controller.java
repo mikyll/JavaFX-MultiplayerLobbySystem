@@ -21,6 +21,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -104,7 +105,7 @@ public class Controller {
 	@FXML private ListView<HBox> listViewBannedUsers;
 	private ArrayList<Label> listBannedUsername;
 	private ArrayList<Label> listBannedAddress;
-	private ArrayList<Button> listRemoveBan;
+	private ArrayList<Label> listRemoveBan;
 	@FXML private TextField textFieldBanUsername;
 	@FXML private TextField textFieldBanAddress;
 	@FXML private Button buttonBan;
@@ -214,6 +215,7 @@ public class Controller {
 			l = new Label("");
 			l.setPrefSize(25, 25);
 			l.setStyle(i == 0 ? "-fx-background-color: lime" : "-fx-background-color: red");
+			l.setTooltip(new Tooltip("is ready?"));
 			l.setVisible(i == 0 ? false : true);
 			hbox.getChildren().add(l);
 			this.listReadyS.add(l);
@@ -223,6 +225,7 @@ public class Controller {
 			iv.resize(25, 25);
 			l.setGraphic(iv);
 			l.setOnMouseClicked(this::kickUser);
+			l.setTooltip(new Tooltip("kick the user"));
 			l.setVisible(i == 0 ? false : true);
 			hbox.getChildren().add(l);
 			this.listLabelKick.add(l);
@@ -232,6 +235,7 @@ public class Controller {
 			iv.resize(25, 25);
 			l.setGraphic(iv);
 			l.setOnMouseClicked(this::banUser);
+			l.setTooltip(new Tooltip("ban the user"));
 			l.setVisible(i == 0 ? false : true);
 			hbox.getChildren().add(l);
 			this.listLabelBan.add(l);
@@ -440,7 +444,7 @@ public class Controller {
 		this.listViewBannedUsers.getItems().clear();
 		this.listBannedUsername = new ArrayList<Label>();
 		this.listBannedAddress = new ArrayList<Label>();
-		this.listRemoveBan = new ArrayList<Button>();
+		this.listRemoveBan = new ArrayList<Label>();
 	}
 	
 	// MultiPlayer: Join Existing Room callbacks
@@ -565,7 +569,17 @@ public class Controller {
 		
 		this.vboxRoomSettings.setVisible(true);
 	}
-	@FXML public void removeBan(ActionEvent event)
+	@FXML public void setBinAnimationOn(MouseEvent event)
+	{
+		ImageView iv = (ImageView) ((Label) event.getTarget()).getChildrenUnmodifiable().get(0);
+		iv.setImage(new Image(this.getClass().getResource("/resources/icon-trash-bin-animated.gif").toString()));
+	}
+	@FXML public void setBinAnimationOff(MouseEvent event)
+	{
+		ImageView iv = (ImageView) ((Label) event.getTarget()).getChildrenUnmodifiable().get(0);
+		iv.setImage(new Image(this.getClass().getResource("/resources/icon-trash-bin.png").toString()));
+	}
+	@FXML public void removeBan(MouseEvent event)
 	{
 		System.out.println("Remove ban selected"); // test
 		// get the button index
@@ -954,19 +968,23 @@ public class Controller {
 		hbox.getChildren().add(l);
 		this.listBannedUsername.add(l);
 		// banned address
-		l = new Label();
+		l = new Label(address);
 		l.setPrefSize(130, 25);
 		l.setTextFill(Paint.valueOf("white"));
-		l.setText(address.isEmpty() ? "" : address);
 		hbox.getChildren().add(l);
 		this.listBannedAddress.add(l);
 		// remove ban
-		Button b = new Button("Remove");
-		b.setPrefSize(100, 20);
-		b.setStyle("-fx-font-size: 15.0");
-		b.setOnAction(this::removeBan);
-		hbox.getChildren().add(b);
-		this.listRemoveBan.add(b);
+		l = new Label();
+		ImageView iv = new ImageView(new Image(this.getClass().getResource("/resources/icon-trash-bin.png").toString()));
+		iv.resize(25, 25);
+		l.setGraphic(iv);
+		l.setPrefSize(25, 25);
+		l.setTooltip(new Tooltip("remove the ban for that user"));
+		hbox.getChildren().add(l);
+		l.setOnMouseClicked(this::removeBan);
+		l.setOnMouseEntered(this::setBinAnimationOn);
+		l.setOnMouseExited(this::setBinAnimationOff);
+		this.listRemoveBan.add(l);
 		
 		this.listViewBannedUsers.getItems().add(hbox);
 	}
