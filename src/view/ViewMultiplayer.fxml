@@ -290,11 +290,12 @@
          <children>
             <HBox alignment="BOTTOM_RIGHT" prefHeight="30.0" prefWidth="400.0">
                <children>
-                  <Separator orientation="VERTICAL" prefHeight="30.0" prefWidth="10.0" visible="false" />
-                  <Label prefHeight="18.0" prefWidth="140.0" text="Nickname" textFill="WHITE" />
-                  <Separator orientation="VERTICAL" prefHeight="30.0" prefWidth="10.0" visible="false" />
-                  <Label prefWidth="140.0" text="Address" textFill="WHITE" />
-                  <Separator orientation="VERTICAL" prefHeight="30.0" prefWidth="74.0" visible="false" />
+                  <Separator orientation="VERTICAL" prefHeight="30.0" prefWidth="98.0" visible="false" />
+                  <Label alignment="CENTER" prefHeight="18.0" prefWidth="200.0" text="Ban list" textFill="WHITE">
+                     <font>
+                        <Font size="24.0" />
+                     </font></Label>
+                  <Separator orientation="VERTICAL" prefHeight="30.0" prefWidth="68.0" visible="false" />
                   <Label alignment="TOP_RIGHT" onMouseClicked="#closeRoomSettings" prefHeight="30.0" prefWidth="30.0">
                      <graphic>
                         <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
@@ -306,9 +307,17 @@
                   </Label>
                </children>
             </HBox>
-            <HBox prefHeight="220.0" prefWidth="400.0">
+            <HBox alignment="CENTER_LEFT" prefHeight="30.0" prefWidth="400.0">
                <children>
-                  <ListView id="BU" fx:id="listViewBannedUsers" prefHeight="217.0" prefWidth="400.0" style="-fx-background-color: black; -fx-text-fill: white;" />
+                  <Separator orientation="VERTICAL" prefHeight="30.0" prefWidth="10.0" visible="false" />
+                  <Label prefHeight="18.0" prefWidth="140.0" text="Nickname" textFill="WHITE" />
+                  <Label prefWidth="140.0" text="Address" textFill="WHITE" />
+                  <Label onMouseClicked="#closeRoomSettings" prefHeight="25.0" prefWidth="106.0" text="Remove ban" textFill="WHITE" />
+               </children>
+            </HBox>
+            <HBox prefHeight="200.0" prefWidth="400.0">
+               <children>
+                  <ListView id="BU" fx:id="listViewBannedUsers" prefHeight="200.0" prefWidth="400.0" style="-fx-background-color: black; -fx-text-fill: white;" />
                </children>
             </HBox>
             <HBox alignment="CENTER" prefHeight="32.0" prefWidth="400.0" spacing="10.0" visible="false">
