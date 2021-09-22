@@ -330,12 +330,15 @@ public class Controller {
 		{
 			this.buttonCNR.setDisable(false);
 			this.labelErrorNicknameS.setVisible(false);
+			this.buttonCNR.setDisable(true);
+			this.textFieldNicknameS.setStyle("-fx-border-width: 0px; -fx-focus-color: #039ED3;");
 		}
 		// nickname NOT
 		else
 		{
 			this.buttonCNR.setDisable(true);
 			this.labelErrorNicknameS.setVisible(true);
+			this.textFieldNicknameS.setStyle("-fx-text-box-border: red; -fx-focus-color: red;");
 		}
 	}
 	@FXML public void increaseMinRoom(MouseEvent event)
@@ -456,6 +459,10 @@ public class Controller {
 			this.buttonJER.setDisable(false);
 			this.labelErrorNicknameC.setVisible(false);
 			this.labelErrorIP.setVisible(false);
+			// reset borders & focus (nickname)
+			this.textFieldNicknameC.setStyle("-fx-border-width: 0px; -fx-focus-color: #039ED3;");
+			// reset borders & focus (address)
+			this.textFieldIP.setStyle("-fx-border-width: 0px; -fx-focus-color: #039ED3;");			
 		}
 		// nickname OK & address NOT (nor empty)
 		else if(this.checkNickname(this.textFieldNicknameC.getText()) && !(checkIP(this.textFieldIP.getText()) || this.textFieldIP.getText().isEmpty()))
@@ -463,6 +470,10 @@ public class Controller {
 			this.buttonJER.setDisable(true);
 			this.labelErrorNicknameC.setVisible(false);
 			this.labelErrorIP.setVisible(true);
+			// reset borders & focus (nickname)
+			this.textFieldNicknameC.setStyle("-fx-border-width: 0px; -fx-focus-color: #039ED3;");
+			// reset borders & focus (address)
+			this.textFieldIP.setStyle("-fx-text-box-border: red; -fx-focus-color: red;");		
 		}
 		// nickname NOT & address OK (or empty)
 		else if(!this.checkNickname(this.textFieldNicknameC.getText()) && (checkIP(this.textFieldIP.getText()) || this.textFieldIP.getText().isEmpty()))
@@ -470,6 +481,10 @@ public class Controller {
 			this.buttonJER.setDisable(true);
 			this.labelErrorNicknameC.setVisible(true);
 			this.labelErrorIP.setVisible(false);
+			// red borders & focus (nickname)
+			this.textFieldNicknameC.setStyle("-fx-text-box-border: red; -fx-focus-color: red;");
+			// reset borders & focus (address)
+			this.textFieldIP.setStyle("-fx-border-width: 0px; -fx-focus-color: #039ED3;");
 		}
 		// nickname NOT & address NOT (nor empty)
 		else
@@ -477,6 +492,11 @@ public class Controller {
 			this.buttonJER.setDisable(true);
 			this.labelErrorNicknameC.setVisible(true);
 			this.labelErrorIP.setVisible(true);
+			// red borders & focus (nickname)
+			this.textFieldNicknameC.setStyle("-fx-text-box-border: red; -fx-focus-color: red;");
+			// red borders & focus (address)
+			this.textFieldIP.setStyle("-fx-text-box-border: red; -fx-focus-color: red;");
+					
 		}
 	}
 	@FXML public void joinExistingRoom(ActionEvent event) 
@@ -690,12 +710,12 @@ public class Controller {
 	}
 	
 	// utilities
-	private boolean checkNickname(String text)
+	public boolean checkNickname(String text)
 	{
 		// if OK return true
 		return PATTERN_NICKNAME.matcher(text).matches() ? true : false;
 	}
-	private boolean checkIP(String text)
+	public boolean checkIP(String text)
 	{
 		// if OK return true
 		return PATTERN_IP.matcher(text).matches() ? true : false;

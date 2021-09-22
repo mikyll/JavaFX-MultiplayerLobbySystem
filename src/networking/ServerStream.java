@@ -390,6 +390,23 @@ public class ServerStream implements IServer{
 		return result;
 	}
 	
+	/*@Override
+	public boolean sendBanUser(String banNickname, String banAddress)
+	{
+		if(!this.controller.checkNickname(banNickname) || !this.controller.checkIP(banAddress))
+			return false;
+		
+		for(User u : this.bannedUsers)
+		{
+			if(banNickname.equals(u.getNickname()) && banAddress.equals(u.getAddress().getHostAddress()))
+		}
+		if(!this.bannedUsers.contains(this.bannedUsers.contains()))
+		{
+			return true;
+		}
+		return false;
+	}*/
+	
 	@Override
 	public boolean removeBan(String address)
 	{
