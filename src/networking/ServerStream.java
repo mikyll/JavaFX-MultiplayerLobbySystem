@@ -400,6 +400,7 @@ public class ServerStream implements IServer{
 		try {
 			User u = new User(banNickname, InetAddress.getByName(banAddress));
 			this.bannedUsers.add(u);
+			
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		}

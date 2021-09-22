@@ -681,12 +681,16 @@ public class Controller {
 		}
 		
 		String banAddress = this.textFieldBanAddress.getText().isEmpty() ? "127.0.0.1" : this.textFieldBanAddress.getText();
-		if(!this.server.sendBanUser(this.textFieldBanNickname.getText(), banAddress))
+		if(this.server.sendBanUser(this.textFieldBanNickname.getText(), banAddress))
+		{
+			this.addBannedUser(this.textFieldBanNickname.getText(), banAddress);
+			this.addToTextArea(this.getCurrentTimestamp() + " " + this.textFieldBanNickname.getText() + " has been banned");
+		}
+		else
 		{
 			this.showAlert(AlertType.ERROR, "Failed to add ban entry", "The entry already exist");
 			this.buttonBan.setDisable(true);
 		}
-		else this.addBannedUser(this.textFieldBanNickname.getText(), banAddress);
 	}
 	@FXML public void closeRoomSettings()
 	{
