@@ -286,7 +286,7 @@
             </HBox>
          </children>
       </VBox>
-      <VBox fx:id="vboxRoomSettings" alignment="TOP_RIGHT" layoutX="100.0" layoutY="50.0" prefHeight="300.0" prefWidth="400.0" spacing="5.0" style="-fx-background-color: black;">
+      <VBox fx:id="vboxRoomSettings" alignment="TOP_RIGHT" layoutX="100.0" layoutY="50.0" prefHeight="300.0" prefWidth="400.0" spacing="5.0" style="-fx-background-color: black;" visible="false">
          <children>
             <HBox alignment="BOTTOM_RIGHT" prefHeight="30.0" prefWidth="400.0">
                <children>
@@ -320,11 +320,11 @@
                   <ListView id="BU" fx:id="listViewBannedUsers" prefHeight="200.0" prefWidth="400.0" style="-fx-background-color: black; -fx-text-fill: white;" />
                </children>
             </HBox>
-            <HBox alignment="CENTER" prefHeight="32.0" prefWidth="400.0" spacing="10.0" visible="false">
+            <HBox alignment="CENTER" prefHeight="32.0" prefWidth="400.0" spacing="10.0">
                <children>
-                  <TextField fx:id="textFieldBanUsername" prefHeight="30.0" prefWidth="150.0" />
-                  <TextField fx:id="textFieldBanAddress" prefHeight="30.0" prefWidth="150.0" />
-                  <Button fx:id="buttonBan" mnemonicParsing="false" onAction="#banUser" prefHeight="30.0" prefWidth="60.0" text="Ban" />
+                  <TextField fx:id="textFieldBanNickname" onKeyTyped="#validateBanNicknameAndAddress" prefHeight="30.0" prefWidth="150.0" promptText="Nickname" />
+                  <TextField fx:id="textFieldBanAddress" onKeyTyped="#validateBanNicknameAndAddress" prefHeight="30.0" prefWidth="150.0" promptText="Address" />
+                  <Button fx:id="buttonBan" disable="true" mnemonicParsing="false" onAction="#addManualBan" prefHeight="30.0" prefWidth="60.0" text="Ban" />
                </children>
             </HBox>
          </children>

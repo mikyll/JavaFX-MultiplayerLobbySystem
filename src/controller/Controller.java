@@ -88,7 +88,7 @@ public class Controller {
 	@FXML private Label labelServerIP;
 	@FXML private VBox vboxLabelServerControls;
 	@FXML private ListView<HBox> listViewUsersS;
-	private ArrayList<Label> listUsernameS;
+	private ArrayList<Label> listNicknameS;
 	private ArrayList<Label> listReadyS;
 	private ArrayList<Label> listLabelKick;
 	private ArrayList<Label> listLabelBan;
@@ -103,10 +103,10 @@ public class Controller {
 	// MultiPlayer: RoomSettings
 	@FXML private VBox vboxRoomSettings;
 	@FXML private ListView<HBox> listViewBannedUsers;
-	private ArrayList<Label> listBannedUsername;
+	private ArrayList<Label> listBannedNickname;
 	private ArrayList<Label> listBannedAddress;
 	private ArrayList<Label> listRemoveBan;
-	@FXML private TextField textFieldBanUsername;
+	@FXML private TextField textFieldBanNickname;
 	@FXML private TextField textFieldBanAddress;
 	@FXML private Button buttonBan;
 	
@@ -114,7 +114,7 @@ public class Controller {
 	private IClient client;
 	@FXML private VBox vboxClientRoom;
 	@FXML private ListView<HBox> listViewUsersC;
-	private ArrayList<Label> listUsernameC;
+	private ArrayList<Label> listNicknameC;
 	private ArrayList<Label> listReadyC;
 	private ArrayList<ImageView> listImagePlayer;
 	@FXML private Button buttonReady;
@@ -148,8 +148,8 @@ public class Controller {
 		this.buttonJER.setDisable(true);
 		this.labelErrorIP.setVisible(false);
 		
-		this.listUsernameC = new ArrayList<Label>();
-		this.listUsernameS = new ArrayList<Label>();
+		this.listNicknameC = new ArrayList<Label>();
+		this.listNicknameS = new ArrayList<Label>();
 		this.listReadyC = new ArrayList<Label>();
 		this.listReadyS = new ArrayList<Label>();
 		this.listImagePlayer = new ArrayList<ImageView>();
@@ -179,12 +179,12 @@ public class Controller {
 			hbox.setPrefSize(280, 25);
 			hbox.setSpacing(10);
 			hbox.setVisible(false);
-			// username client
+			// nickname client
 			Label l = new Label("");
 			l.setPrefWidth(200);
 			l.setTextFill(Paint.valueOf("white"));
 			hbox.getChildren().add(l);
-			this.listUsernameC.add(l);
+			this.listNicknameC.add(l);
 			// ready client
 			l = new Label("");
 			l.setPrefSize(25, 25);
@@ -205,12 +205,12 @@ public class Controller {
 			hbox.setPrefSize(300, 25);
 			hbox.setSpacing(10);
 			hbox.setVisible(false);
-			// username server
+			// nickname server
 			l = new Label("");
 			l.setPrefWidth(180);
 			l.setTextFill(Paint.valueOf("white"));
 			hbox.getChildren().add(l);
-			this.listUsernameS.add(l);
+			this.listNicknameS.add(l);
 			// ready server
 			l = new Label("");
 			l.setPrefSize(25, 25);
@@ -330,7 +330,6 @@ public class Controller {
 		{
 			this.buttonCNR.setDisable(false);
 			this.labelErrorNicknameS.setVisible(false);
-			this.buttonCNR.setDisable(true);
 			this.textFieldNicknameS.setStyle("-fx-border-width: 0px; -fx-focus-color: #039ED3;");
 		}
 		// nickname NOT
@@ -418,7 +417,9 @@ public class Controller {
 		if(!this.checkNickname(this.textFieldNicknameS.getText()))
 		{
 			this.showAlert(AlertType.ERROR, "Invalid nickname", "The nickname bust be from 3 to 15 alphanumeric char long.");
+			this.buttonCNR.setDisable(true);
 			this.labelErrorNicknameS.setVisible(true);
+			this.textFieldNicknameS.setStyle("-fx-text-box-border: red; -fx-focus-color: red;");
 			return;
 		}
 		
@@ -438,14 +439,14 @@ public class Controller {
 		this.labelOpenClose.setStyle("-fx-background-color: lime");
 		
 		// set the first list element (the server) to visibile
-		this.listUsernameS.get(0).setText(this.textFieldNicknameS.getText());
+		this.listNicknameS.get(0).setText(this.textFieldNicknameS.getText());
 		this.listViewUsersS.getItems().get(0).setVisible(true);
 		
 		this.connectedUsers = 1;
 		
 		// reset Banned Users list
 		this.listViewBannedUsers.getItems().clear();
-		this.listBannedUsername = new ArrayList<Label>();
+		this.listBannedNickname = new ArrayList<Label>();
 		this.listBannedAddress = new ArrayList<Label>();
 		this.listRemoveBan = new ArrayList<Label>();
 	}
@@ -504,13 +505,17 @@ public class Controller {
 		if(!this.checkNickname(this.textFieldNicknameC.getText()))
 		{
 			this.showAlert(AlertType.ERROR, "Invalid nickname", "The nickname bust be from 3 to 15 alphanumeric char long.");
+			this.buttonJER.setDisable(true);
 			this.labelErrorNicknameC.setVisible(true);
+			this.textFieldNicknameC.setStyle("-fx-text-box-border: red; -fx-focus-color: red;");
 			return;
 		}
 		if(!this.checkIP(this.textFieldIP.getText()) && !this.textFieldIP.getText().isEmpty())
 		{
 			this.showAlert(AlertType.ERROR, "Invalid IP Address", "The address must be X.X.X.X or empty (localhost).");
+			this.buttonJER.setDisable(true);
 			this.labelErrorIP.setVisible(true);
+			this.textFieldIP.setStyle("-fx-text-box-border: red; -fx-focus-color: red;");
 			return;
 		}
 		
@@ -537,16 +542,16 @@ public class Controller {
 		{
 			if(this.listLabelKick.get(i).equals(event.getTarget()))
 			{
-				System.out.println("Server: kicked user " + this.listUsernameS.get(i).getText());
+				System.out.println("Server: kicked user " + this.listNicknameS.get(i).getText());
 				
 				// remove user from the listView
-				this.removeUser(this.listUsernameS.get(i).getText());
+				this.removeUser(this.listNicknameS.get(i).getText());
 				
 				// add kick message to the textArea
-				this.addToTextArea(this.getCurrentTimestamp() + " " + this.listUsernameS.get(i).getText() + " has been kicked out");
+				this.addToTextArea(this.getCurrentTimestamp() + " " + this.listNicknameS.get(i).getText() + " has been kicked out");
 				
 				// send Kick message
-				this.server.sendKickUser(this.listUsernameS.get(i).getText());
+				this.server.sendKickUser(this.listNicknameS.get(i).getText());
 				
 				break;
 			}
@@ -561,13 +566,13 @@ public class Controller {
 			if(this.listLabelBan.get(i).equals(event.getTarget()))
 			{
 				// remove user from the listView
-				this.removeUser(this.listUsernameS.get(i).getText());
+				this.removeUser(this.listNicknameS.get(i).getText());
 				
 				// add ban message to the textArea
-				this.addToTextArea(this.getCurrentTimestamp() + " " + this.listUsernameS.get(i).getText() + " has been banned");
+				this.addToTextArea(this.getCurrentTimestamp() + " " + this.listNicknameS.get(i).getText() + " has been banned");
 				
 				// ban and send Kick message
-				User u = this.server.sendBanUser(this.listUsernameS.get(i).getText());
+				User u = this.server.sendBanUser(this.listNicknameS.get(i).getText());
 				this.addBannedUser(u.getNickname(), u.getAddress().getHostAddress());
 				
 				System.out.println("Server: banned user " + u.getNickname() + " (" + u.getAddress().getHostAddress() + ")");
@@ -588,6 +593,11 @@ public class Controller {
 		this.buttonChatSendS.setDisable(true);
 		
 		this.vboxRoomSettings.setVisible(true);
+		this.textFieldBanNickname.setText("");
+		this.textFieldBanNickname.setStyle("-fx-border-width: 0px; -fx-focus-color: #039ED3;");
+		this.textFieldBanAddress.setText("");
+		this.textFieldBanAddress.setStyle("-fx-border-width: 0px; -fx-focus-color: #039ED3;");
+		this.buttonBan.setDisable(true);
 	}
 	@FXML public void removeBan(MouseEvent event)
 	{
@@ -597,7 +607,7 @@ public class Controller {
 		{
 			if(this.listRemoveBan.get(i).equals(event.getTarget()))
 			{
-				System.out.println("Server: user " + this.listBannedUsername.get(i).getText() + " (" + this.listBannedAddress.get(i).getText() + ") is no longer banned");
+				System.out.println("Server: user " + this.listBannedNickname.get(i).getText() + " (" + this.listBannedAddress.get(i).getText() + ") is no longer banned");
 				
 				// remove banned user from server
 				boolean result = this.server.removeBan(this.listBannedAddress.get(i).getText());
@@ -605,11 +615,11 @@ public class Controller {
 				if(result)
 				{
 					// add ban message to the textArea
-					this.addToTextArea(this.getCurrentTimestamp() + " " + this.listBannedUsername.get(i).getText() + " has is no longer banned");
+					this.addToTextArea(this.getCurrentTimestamp() + " " + this.listBannedNickname.get(i).getText() + " has is no longer banned");
 				}
 				
 				// remove labels
-				this.listBannedUsername.remove(i);
+				this.listBannedNickname.remove(i);
 				this.listBannedAddress.remove(i);
 				
 				// remove  banned user from the listView
@@ -621,6 +631,62 @@ public class Controller {
 				break;
 			}
 		}
+	}
+	@FXML public void validateBanNicknameAndAddress()
+	{
+		// nickname OK & address OK (or empty)
+		if(this.checkNickname(this.textFieldBanNickname.getText()) && (this.checkIP(this.textFieldBanAddress.getText()) || this.textFieldBanAddress.getText().isEmpty()))
+		{
+			this.buttonBan.setDisable(false);
+			this.textFieldBanNickname.setStyle("-fx-border-width: 0px; -fx-focus-color: #039ED3;");
+			this.textFieldBanAddress.setStyle("-fx-border-width: 0px; -fx-focus-color: #039ED3;");			
+		}
+		// nickname OK & address NOT (nor empty)
+		else if(this.checkNickname(this.textFieldBanNickname.getText()) && !(checkIP(this.textFieldBanAddress.getText()) || this.textFieldBanAddress.getText().isEmpty()))
+		{
+			this.buttonBan.setDisable(true);
+			this.textFieldBanNickname.setStyle("-fx-border-width: 0px; -fx-focus-color: #039ED3;");
+			this.textFieldBanAddress.setStyle("-fx-text-box-border: red; -fx-focus-color: red;");		
+		}
+		// nickname NOT & address OK (or empty)
+		else if(!this.checkNickname(this.textFieldBanNickname.getText()) && (checkIP(this.textFieldBanAddress.getText()) || this.textFieldBanAddress.getText().isEmpty()))
+		{
+			this.buttonBan.setDisable(true);
+			this.textFieldBanNickname.setStyle("-fx-text-box-border: red; -fx-focus-color: red;");
+			this.textFieldBanAddress.setStyle("-fx-border-width: 0px; -fx-focus-color: #039ED3;");
+		}
+		// nickname NOT & address NOT (nor empty)
+		else
+		{
+			this.buttonBan.setDisable(true);
+			this.textFieldBanNickname.setStyle("-fx-text-box-border: red; -fx-focus-color: red;");
+			this.textFieldBanAddress.setStyle("-fx-text-box-border: red; -fx-focus-color: red;");
+		}
+	}
+	@FXML public void addManualBan(ActionEvent event)
+	{
+		if(!this.checkNickname(this.textFieldBanNickname.getText()))
+		{
+			this.showAlert(AlertType.ERROR, "Invalid nickname", "The nickname bust be from 3 to 15 alphanumeric char long.");
+			this.buttonBan.setDisable(true);
+			this.textFieldBanNickname.setStyle("-fx-text-box-border: red; -fx-focus-color: red;");
+			return;
+		}
+		if(!this.checkIP(this.textFieldBanAddress.getText()) && !this.textFieldBanAddress.getText().isEmpty())
+		{
+			this.showAlert(AlertType.ERROR, "Invalid IP Address", "The address must be X.X.X.X or empty (localhost).");
+			this.buttonBan.setDisable(true);
+			this.textFieldBanAddress.setStyle("-fx-text-box-border: red; -fx-focus-color: red;");
+			return;
+		}
+		
+		String banAddress = this.textFieldBanAddress.getText().isEmpty() ? "127.0.0.1" : this.textFieldBanAddress.getText();
+		if(!this.server.sendBanUser(this.textFieldBanNickname.getText(), banAddress))
+		{
+			this.showAlert(AlertType.ERROR, "Failed to add ban entry", "The entry already exist");
+			this.buttonBan.setDisable(true);
+		}
+		else this.addBannedUser(this.textFieldBanNickname.getText(), banAddress);
 	}
 	@FXML public void closeRoomSettings()
 	{
@@ -657,9 +723,9 @@ public class Controller {
 			this.server.sendChatMessage(msg);
 		this.textFieldChatS.setText("");
 	}
-	@FXML public void enterChatHandleS(KeyEvent e)
+	@FXML public void enterChatHandleS(KeyEvent event)
 	{
-		if(e.getCode().equals(KeyCode.ENTER))
+		if(this.state == NavState.MP_SERVER && event.getCode().equals(KeyCode.ENTER))
 		{
 			String msg = this.textFieldChatS.getText();
 			if(!msg.isEmpty() && !msg.isBlank())
@@ -698,9 +764,9 @@ public class Controller {
 			this.client.sendChatMessage(msg);
 		this.textFieldChatC.setText("");
 	}
-	@FXML public void enterChatHandleC(KeyEvent e)
+	@FXML public void enterChatHandleC(KeyEvent event)
 	{
-		if(e.getCode().equals(KeyCode.ENTER))
+		if(this.state == NavState.MP_CLIENT && event.getCode().equals(KeyCode.ENTER))
 		{
 			String msg = this.textFieldChatC.getText();
 			if(!msg.isEmpty() && !msg.isBlank())
@@ -710,12 +776,12 @@ public class Controller {
 	}
 	
 	// utilities
-	public boolean checkNickname(String text)
+	private boolean checkNickname(String text)
 	{
 		// if OK return true
 		return PATTERN_NICKNAME.matcher(text).matches() ? true : false;
 	}
-	public boolean checkIP(String text)
+	private boolean checkIP(String text)
 	{
 		// if OK return true
 		return PATTERN_IP.matcher(text).matches() ? true : false;
@@ -815,7 +881,7 @@ public class Controller {
 		{
 			for(int i = 0; i < this.listViewUsersC.getItems().size(); i++)
 			{
-				if(nickname.equals(this.listUsernameC.get(i).getText()))
+				if(nickname.equals(this.listNicknameC.get(i).getText()))
 				{
 					this.listReadyC.get(i).setStyle(ready ? "-fx-background-color: lime" : "-fx-background-color: red");
 					break;
@@ -826,7 +892,7 @@ public class Controller {
 		{
 			for(int i = 0; i < this.listViewUsersS.getItems().size(); i++)
 			{
-				if(nickname.equals(this.listUsernameS.get(i).getText()))
+				if(nickname.equals(this.listNicknameS.get(i).getText()))
 				{
 					this.listReadyS.get(i).setStyle(ready ? "-fx-background-color: lime" : "-fx-background-color: red");
 					break;
@@ -842,7 +908,7 @@ public class Controller {
 				for(int i = 0; i < ROOM_CAPACITY; i++)
 				{
 					this.listViewUsersC.getItems().get(i).setVisible(false);
-					this.listUsernameC.get(i).setText("");
+					this.listNicknameC.get(i).setText("");
 					this.listReadyC.get(i).setStyle("-fx-background-color: red");
 					this.listImagePlayer.get(i).setVisible(false);
 				}
@@ -853,7 +919,7 @@ public class Controller {
 			for(int i = 0; i < ROOM_CAPACITY; i++)
 			{
 				this.listViewUsersS.getItems().get(i).setVisible(false);
-				this.listUsernameS.get(i).setText("");
+				this.listNicknameS.get(i).setText("");
 				this.listReadyS.get(i).setStyle("-fx-background-color: red");
 			}
 		}
@@ -863,13 +929,13 @@ public class Controller {
 		Platform.runLater(() -> {
 			if(this.state == NavState.MP_CLIENT)
 			{
-				this.listUsernameC.get(this.connectedUsers).setText(u.getNickname());
+				this.listNicknameC.get(this.connectedUsers).setText(u.getNickname());
 				this.listViewUsersC.getItems().get(this.connectedUsers).setVisible(true);
 				this.connectedUsers++;
 			}
 			else if(this.state == NavState.MP_SERVER)
 			{
-				this.listUsernameS.get(this.connectedUsers).setText(u.getNickname());
+				this.listNicknameS.get(this.connectedUsers).setText(u.getNickname());
 				this.listViewUsersS.getItems().get(this.connectedUsers).setVisible(true);
 				this.connectedUsers++;
 				
@@ -890,16 +956,16 @@ public class Controller {
 					if(found)
 					{
 						// we move every entry up by 1, overriding the one to remove
-						this.listUsernameC.get(i - 1).setText(this.listUsernameC.get(i).getText());
+						this.listNicknameC.get(i - 1).setText(this.listNicknameC.get(i).getText());
 						this.listReadyC.get(i - 1).setStyle(this.listReadyC.get(i).getStyle());
 						this.listImagePlayer.get(i - 1).setVisible(this.listImagePlayer.get(i).isVisible());
 					}
-					if(this.listUsernameC.get(i).getText().equals(nickname))
+					if(this.listNicknameC.get(i).getText().equals(nickname))
 						found = true;
 				}
 				// we hide the last entry
 				this.listViewUsersC.getItems().get(this.connectedUsers - 1).setVisible(false);
-				this.listUsernameC.get(this.connectedUsers - 1).setText("");
+				this.listNicknameC.get(this.connectedUsers - 1).setText("");
 				this.listReadyC.get(this.connectedUsers - 1).setStyle("-fx-background-color: red");
 				this.listImagePlayer.get(this.connectedUsers - 1).setVisible(false);
 				this.connectedUsers--;
@@ -912,15 +978,15 @@ public class Controller {
 					if(found)
 					{
 						// we move every entry up by 1, overriding the one to remove
-						this.listUsernameS.get(i - 1).setText(this.listUsernameS.get(i).getText());
+						this.listNicknameS.get(i - 1).setText(this.listNicknameS.get(i).getText());
 						this.listReadyS.get(i - 1).setStyle(this.listReadyS.get(i).getStyle());
 					}
-					if(this.listUsernameS.get(i).getText().equals(nickname))
+					if(this.listNicknameS.get(i).getText().equals(nickname))
 						found = true;
 				}
 				// we hide the last entry
 				this.listViewUsersS.getItems().get(this.connectedUsers - 1).setVisible(false);
-				this.listUsernameS.get(this.connectedUsers - 1).setText("");
+				this.listNicknameS.get(this.connectedUsers - 1).setText("");
 				this.listReadyS.get(this.connectedUsers - 1).setStyle("-fx-background-color: red");
 				this.connectedUsers--;
 				
@@ -936,7 +1002,7 @@ public class Controller {
 				for(int i = 0; i < users.size(); i++)
 				{
 					User u = users.get(i);
-					this.listUsernameC.get(i).setText(u.getNickname());
+					this.listNicknameC.get(i).setText(u.getNickname());
 					this.listViewUsersC.getItems().get(i).setVisible(true);
 					this.listReadyC.get(i).setStyle(u.isReady() ? "-fx-background-color: lime" : "-fx-background-color: red");
 					this.listImagePlayer.get(i).setVisible(this.textFieldNicknameC.getText().equals(users.get(i).getNickname()) ? true : false);
@@ -971,12 +1037,12 @@ public class Controller {
 		HBox hbox = new HBox();
 		hbox.setPrefSize(400, 25);
 		hbox.setSpacing(10);
-		// banned username
+		// banned nickname
 		Label l = new Label(nickname);
 		l.setPrefSize(130, 25);
 		l.setTextFill(Paint.valueOf("white"));
 		hbox.getChildren().add(l);
-		this.listBannedUsername.add(l);
+		this.listBannedNickname.add(l);
 		// banned address
 		l = new Label(address);
 		l.setPrefSize(130, 25);
