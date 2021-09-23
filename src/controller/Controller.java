@@ -11,6 +11,8 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -170,6 +172,22 @@ public class Controller {
 		this.buttonDecreaseMinRoom.setImage(this.arrowDownDisabled);
 		this.buttonIncreaseMaxRoom.setImage(this.arrowUpDisabled);
 		this.buttonDecreaseMaxRoom.setImage(this.arrowDown);
+		
+		// set automatic chat scrolling to bottom
+		this.textAreaChatS.textProperty().addListener(new ChangeListener<Object>() {
+		    @Override
+		    public void changed(ObservableValue<?> observable, Object oldValue,
+		            Object newValue) {
+		    	textAreaChatS.setScrollTop(Double.MAX_VALUE); //this will scroll to the bottom
+		    }
+		});
+		this.textAreaChatC.textProperty().addListener(new ChangeListener<Object>() {
+		    @Override
+		    public void changed(ObservableValue<?> observable, Object oldValue,
+		            Object newValue) {
+		    	textAreaChatC.setScrollTop(Double.MAX_VALUE); //this will scroll to the bottom
+		    }
+		});
 		
 		// popolate the ListView with HBox and set them not visible
 		for(int i = 0; i < ROOM_CAPACITY; i++)
@@ -867,12 +885,12 @@ public class Controller {
 		{
 			if(this.textAreaChatC.getText().isEmpty())
 				this.textAreaChatC.setText(text);
-			else this.textAreaChatC.setText(this.textAreaChatC.getText() + "\n" + text);
+			else this.textAreaChatC.appendText("\n" + text);
 		}
 		// server
 		else if(this.state == NavState.MP_SERVER)
 		{
-			this.textAreaChatS.setText(this.textAreaChatS.getText() + "\n" + text);
+			this.textAreaChatS.appendText("\n" + text);
 		}
 	}
 	public void addToTextArea(Message message)
