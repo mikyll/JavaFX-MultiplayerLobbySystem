@@ -104,10 +104,10 @@ to add:
 - ~~catch Connection Reset~~
 - ~~SocketException: Interrupted function call: accept failed, thrown when we back from the server room, when no one has been accepted yet~~
 - ~~add a ban list (nickname/IP)~~
+- ~~automatic textarea scrolling, to last message~~
 - add banned user throws null pointer exception on Linux, fix it
 - show private and public IP address and be able to copy it
 - chat text message check length before sending (not more than 200 char?)
-- automatic textarea scrolling, to last message
 - add copy in notes when clicking on a username (inside a room)
 - server can enable/disable the chat(?)
 - add timer after sending READY message
