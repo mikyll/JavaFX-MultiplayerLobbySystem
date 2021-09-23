@@ -108,7 +108,7 @@ to add:
 - add banned user throws null pointer exception on Linux, fix it
 - show private and public IP address and be able to copy it
 - chat text message check length before sending (not more than 200 char?)
-- add copy in notes when clicking on a username (inside a room)
+- add copy in clipboard when clicking on a username (inside a room)
 - server can enable/disable the chat(?)
 - add timer after sending READY message
 - fix gui components to have proper dimension
