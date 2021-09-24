@@ -105,6 +105,7 @@ to add:
 - ~~SocketException: Interrupted function call: accept failed, thrown when we back from the server room, when no one has been accepted yet~~
 - ~~add a ban list (nickname/IP)~~
 - ~~automatic textarea scrolling, to last message~~
+- catch java.net.SocketException: Socket closed, when server accepts a connection, the client leaves and the server goes back
 - add banned user throws null pointer exception on Linux, fix it
 - show private and public IP address and be able to copy it
 - chat text message check length before sending (not more than 200 char?)
