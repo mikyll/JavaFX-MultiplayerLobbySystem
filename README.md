@@ -106,7 +106,7 @@ to add:
 - ~~add a ban list (nickname/IP)~~
 - ~~automatic textarea scrolling, to last message~~
 - catch java.net.SocketException: Socket closed, when server accepts a connection, the client leaves and the server goes back
-- add banned user throws null pointer exception on Linux, fix it
+- add banned user throws null pointer exception on Linux, fix it and make a working build
 - show private and public IP address and be able to copy it
 - chat text message check length before sending (not more than 200 char?)
 - add copy in clipboard when clicking on a username (inside a room)
