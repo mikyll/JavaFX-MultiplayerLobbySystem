@@ -94,6 +94,9 @@ public class ServerStream implements IServer{
 			} catch(SocketException e) {
 				if(e.getMessage().contains("accept failed"))
 					System.out.println("Server (" + this.getId() + "): stopped listening for connections");
+				else if(e.getMessage().contains("Socket closed")) {
+					System.out.println("Server (" + this.getId() + "): stopped listening for connections");
+				}
 				else e.printStackTrace();
 			} catch (IOException e) {
 				System.out.println("Server: error while trying to accept a new connection");
