@@ -2,9 +2,12 @@ extra
 deploy
 
 fxjreWin
+fxjreLin
 createFXWinJRE.bat
 recreateFXWinJRE.bat
 createFXLinJRE.sh
 recreateFXLinJRE.sh
 Launcher.bat
 LauncherJAR.bat
+Launcher.sh
+LauncherJAR.sh
