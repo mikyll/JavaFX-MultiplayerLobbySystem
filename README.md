@@ -77,7 +77,7 @@ JavaFX lobby system for multiplayer games with chat, ready toggle and kick butto
 	</tr>
 	<tr>
 		<td><b>Disconnection</b></td>
-		<td>When the server leave the room or close the application, each connected user get disconnected.</td>
+		<td>When the server leaves the room or closes the application, each connected user get disconnected.</td>
 		<td width="40%"><img src="https://github.com/mikyll/JavaFX-MultiplayerLobbySystem/blob/main/gfx/example-disconnection.gif" alt="Disconnection example"/></td>
 	</tr>
 </table>
