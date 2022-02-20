@@ -116,7 +116,6 @@ to add:
 - add Datagram (UDP) variant
 - add HTTP/websocket variant(?)
 - create a logger (?) and log messages to file too
-- create a class for my Spinner (MikyllSpinner ?)
 - add an headless server to handle the room list (when a server creates a room it's inserted into the list, and the client can access that list to see those rooms)
 - use this template for CluedoApp
 
