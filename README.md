@@ -38,32 +38,32 @@ JavaFX lobby system for multiplayer games with chat, ready toggle and kick butto
 	<tr>
 		<td><b>Listen server<b/></td>
     		<td>The network topology that has been used is the <i>Listen server</i>: <b>a client can become the server, and will host the game for other clients</b>. Basically, when a client creates a new room it becomes a server, hosting the connection for other clients that will send a request and join the room.</td>
-		<td align="center"><img src="https://github.com/mikyll/JavaFX-MultiplayerLobbySystem/blob/main/gfx/listen-server-with-legend-whitebg.png" alt="Listen server scheme"/></td>
+		<td align="center"><img src="./gfx/listen-server-with-legend-whitebg.png" alt="Listen server scheme"/></td>
 	</tr>
 	<tr>
 		<td><b>Nickname & IP address validation</b></td>
 		<td>The nickname and address validations happen when the user types a key in the textfields as well as when he confirms (that's because the user could cut the text from the field, without typing any key, and the button would remain enabled).</td>
-		<td align="center"><img src="https://github.com/mikyll/JavaFX-MultiplayerLobbySystem/blob/main/gfx/example-validation.gif" alt="Validation example"/></td>
+		<td align="center"><img src="./gfx/example-validation.gif" alt="Validation example"/></td>
 	</tr>
 	<tr>
 		<td><b>Server: set min and max room size</b></td>
 		<td>Before creating the room, the server can choose its size: how many users it can contain and how many are required to start the game.</td>
-		<td align="center"><img src="https://github.com/mikyll/JavaFX-MultiplayerLobbySystem/blob/main/gfx/example-room-size.gif" alt="Room size example"/></td>
+		<td align="center"><img src="./gfx/example-room-size.gif" alt="Room size example"/></td>
 	</tr>
 	<tr>
 		<td><b>Server: open/close the room</b></td>
 		<td>The server can decide whether to close or open the room at will, preventing new users from joining or not.</td>
-		<td align="center"><img src="https://github.com/mikyll/JavaFX-MultiplayerLobbySystem/blob/main/gfx/example-open-close-room.gif" alt="Open/close room example"/></td>
+		<td align="center"><img src="./gfx/example-open-close-room.gif" alt="Open/close room example"/></td>
 	</tr>
 	<tr>
 		<td><b>Client: set ready/not ready</b></td>
 		<td>The clients can set their state to ready or not ready. If everyone is ready, and the minimum user required is reached, the game can start.</td>
-		<td align="center"><img src="https://github.com/mikyll/JavaFX-MultiplayerLobbySystem/blob/main/gfx/example-ready.gif" alt="Ready/Not ready example"/></td>
+		<td align="center"><img src="./gfx/example-ready.gif" alt="Ready/Not ready example"/></td>
 	</tr>
 	<tr>
 		<td><b>Server: kick a user</b></td>
 		<td>The server can kick any user out of the room. This is useful when the minimum users required to start the game is reached, but someone won't set their state to ready.</td>
-		<td align="center"><img src="https://github.com/mikyll/JavaFX-MultiplayerLobbySystem/blob/main/gfx/example-kick.gif" alt="Kick user example"/></td>
+		<td align="center"><img src="./gfx/example-kick.gif" alt="Kick user example"/></td>
 	</tr>
 	<tr>
 		<td><b>Server: ban a user</b></td>
@@ -73,17 +73,17 @@ JavaFX lobby system for multiplayer games with chat, ready toggle and kick butto
 	<tr>
 		<td><b>Chat</b></td>
 		<td>The chat allows users to communicate in real time, showing the timestamp of the messages and the user that sent it. The chat also shows when users connect or disconnect and when they get kicked out from the server.</td>
-		<td align="center"><img src="https://github.com/mikyll/JavaFX-MultiplayerLobbySystem/blob/main/gfx/example-chat.gif" alt="Chat example"/></td>
+		<td align="center"><img src="./gfx/example-chat.gif" alt="Chat example"/></td>
 	</tr>
 	<tr>
 		<td><b>Disconnection</b></td>
 		<td>When the server leaves the room or closes the application, each connected user get disconnected.</td>
-		<td align="center"><img src="https://github.com/mikyll/JavaFX-MultiplayerLobbySystem/blob/main/gfx/example-disconnection.gif" alt="Disconnection example"/></td>
+		<td align="center"><img src="./gfx/example-disconnection.gif" alt="Disconnection example"/></td>
 	</tr>
 </table>
 
 ### Documentation
-Read the [full docs](https://github.com/mikyll/JavaFX-MultiplayerLobbySystem/tree/main/docs).
+Read the [full docs](./docs).
 
 + main schemes
 
