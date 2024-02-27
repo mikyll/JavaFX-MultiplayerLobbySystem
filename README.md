@@ -1,14 +1,20 @@
+<div align="center">
+
 [![Downloads][downloads-shield]][downloads-url]
 [![Contributors][contributors-shield]][contributors-url]
 [![Forks][forks-shield]][forks-url]
 [![Stargazers][stars-shield]][stars-url]
 [![Issues][issues-shield]][issues-url]
 [![MIT License][license-shield]][license-url]
-[![LinkedIn][linkedin-shield]][linkedin-url]
-[![GitHub followers][github-shield]][github-url]
+<br />
+[![Java][java-shield]][java-url]
+[![Eclipse][eclipse-shield]][eclipse-url]
 
-<h1 align="center">JavaFX-MultiplayerLobbySystem</h1>
+# JavaFX-MultiplayerLobbySystem
 JavaFX lobby system for multiplayer games with chat, ready toggle and kick buttons, using socket TCP by default.
+
+</div>
+
 
 ### Demo
 <table style="border: none">
@@ -130,19 +136,31 @@ JavaFX version: JavaFX 11 (javafx-sdk-11.0.2)
 * Icons: [Icons8](https://icons8.com/)
 * [Getting the IP address](https://stackoverflow.com/questions/9481865/getting-the-ip-address-of-the-current-machine-using-java)
 
+<div align="center">
+
+[![LinkedIn][linkedin-shield]][linkedin-url]
+[![GitHub followers][github-shield]][github-url]
+
+</div>
 
 [downloads-shield]: https://img.shields.io/github/downloads/mikyll/JavaFX-MultiplayerLobbySystem/total
 [downloads-url]: https://github.com/mikyll/JavaFX-MultiplayerLobbySystem/releases/latest
 [contributors-shield]: https://img.shields.io/github/contributors/mikyll/JavaFX-MultiplayerLobbySystem
 [contributors-url]: https://github.com/mikyll/JavaFX-MultiplayerLobbySystem/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/mikyll/JavaFX-MultiplayerLobbySystem
+[forks-shield]: https://img.shields.io/github/forks/mikyll/JavaFX-MultiplayerLobbySystem?style=flat
 [forks-url]: https://github.com/mikyll/JavaFX-MultiplayerLobbySystem/network/members
-[stars-shield]: https://img.shields.io/github/stars/mikyll/JavaFX-MultiplayerLobbySystem
+[stars-shield]: https://img.shields.io/github/stars/mikyll/JavaFX-MultiplayerLobbySystem?style=flat
 [stars-url]: https://github.com/mikyll/JavaFX-MultiplayerLobbySystem/stargazers
 [issues-shield]: https://img.shields.io/github/issues/mikyll/JavaFX-MultiplayerLobbySystem
 [issues-url]: https://github.com/mikyll/JavaFX-MultiplayerLobbySystem/issues
 [license-shield]: https://img.shields.io/github/license/mikyll/JavaFX-MultiplayerLobbySystem
 [license-url]: https://github.com/mikyll/JavaFX-MultiplayerLobbySystem/blob/master/LICENSE
+
+[java-shield]: https://custom-icon-badges.herokuapp.com/badge/Java-ED8B00?logo=java&logoColor=white
+[java-url]: https://www.java.com
+[eclipse-shield]: https://img.shields.io/badge/Eclipse-40317B.svg?logo=Eclipse&logoColor=white
+[eclipse-url]: https://www.eclipse.org/
+
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?logo=linkedin&colorB=0077B5
 [linkedin-url]: https://www.linkedin.com/in/michele-righi/?locale=it_IT
 [github-shield]: https://img.shields.io/github/followers/mikyll.svg?style=social&label=Follow
