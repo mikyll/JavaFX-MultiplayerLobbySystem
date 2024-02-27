@@ -15,19 +15,19 @@ JavaFX lobby system for multiplayer games with chat, ready toggle and kick butto
 
 </div>
 
-
+<!--
 ### Demo
 <table style="border: none">
-  <tr>
-    <td align="center" width="49.9%"><img src="example-server.gif" alt="Server"/></td>
-    <td align="center" width="49.9%"><img src="example-client.gif" alt="Client"/></td>
+  <tr align="center">
+    <td width="49.9%"><img src="gfx/example-server.gif" alt="Server"/></td>
+    <td width="49.9%"><img src="gfx/example-client.gif" alt="Client"/></td>
   </tr>
-  <tr>
-    <td>Create New Room (Server)</td>
-    <td>Join Existing Room (Client)</td>
+  <tr align="center">
+    <td><b>Create New Room (Server)</b></td>
+    <td><b>Join Existing Room (Client)</b></td>
   </tr>
 </table>
-
+-->
 
 ### Execution
 1. Download the [latest release](https://github.com/mikyll/JavaFX-MultiplayerLobbySystem/releases/latest).
