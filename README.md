@@ -11,7 +11,7 @@
 [![Eclipse][eclipse-shield]][eclipse-url]
 
 # JavaFX-MultiplayerLobbySystem
-JavaFX lobby system for multiplayer games with chat, ready toggle and kick/ban buttons, using TCP socket by default.
+JavaFX lobby system for multiplayer games with chat, ready toggle and kick/ban buttons, using TCP sockets by default.
 
 </div>
 
